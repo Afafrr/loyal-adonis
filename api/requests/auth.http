@@ -1,0 +1,88 @@
+###
+# Auth API — VS Code REST Client
+#
+# Start the API before sending requests:
+#   npm run dev
+#
+# REST Client remembers the session cookies received from the API by default
+# and sends them with subsequent requests to the same host. Run the CSRF
+# request before registration or sign-in. Run it again after authentication
+# and after sign-out because these operations may reset the session.
+
+@baseUrl = http://localhost:3000/api/v1
+@email = client2@example.com
+@password = password123
+
+### Get a CSRF token for the current session
+# @name csrf
+GET {{baseUrl}}/csrf
+Accept: application/json
+
+### Registration (automatically signs in the new user)
+# @name register
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: application/json
+X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
+
+{
+  "user": {
+    "email": "{{email}}",
+    "password": "{{password}}",
+    "password_confirmation": "{{password}}"
+  }
+}
+
+### Sign in
+# @name login
+POST {{baseUrl}}/users/sign_in
+Content-Type: application/json
+Accept: application/json
+X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
+
+{
+  "user": {
+    "email": "{{email}}",
+    "password": "{{password}}"
+  }
+}
+
+### Get the current user (expected: 200)
+# @name me
+GET {{baseUrl}}/me
+Accept: application/json
+
+### Sign out (expected: 204)
+# @name logout
+DELETE {{baseUrl}}/users/sign_out
+Accept: application/json
+X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
+
+### Sign in with an invalid password after signing out (expected: 401)
+# @name invalidLogin
+POST {{baseUrl}}/users/sign_in
+Content-Type: application/json
+Accept: application/json
+X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
+
+{
+  "user": {
+    "email": "{{email}}",
+    "password": "incorrect-password"
+  }
+}
+
+### Registration with mismatched passwords (expected: 422)
+# @name invalidRegistration
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: application/json
+X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
+
+{
+  "user": {
+    "email": "invalid-registration@example.com",
+    "password": "password123",
+    "password_confirmation": "different-password"
+  }
+}

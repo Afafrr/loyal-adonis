@@ -1,0 +1,18 @@
+###
+# NTAG 424 DNA encrypted scan — VS Code REST Client
+#
+# Start the API before sending the request:
+#   npm run dev
+#
+# This endpoint requires an authenticated session. Run the CSRF and sign-in
+# requests from auth.http first. REST Client shares cookies for the same host.
+# Encrypted PICC data, encrypted file data, and CMAC come from the tag URL.
+
+@baseUrl = http://localhost:3000/api/v1
+@piccData = 8314399577DCFFE9798B4C4714FB89EE
+@enc = D0E3028A46AFCBA11B9DB95E36C55762
+@cmac = 6F586B688126B57C
+
+### Verify an encrypted NTAG 424 DNA scan with SDMFileData
+GET {{baseUrl}}/tag_scan?picc_data={{piccData}}&enc={{enc}}&cmac={{cmac}}
+Accept: application/json
