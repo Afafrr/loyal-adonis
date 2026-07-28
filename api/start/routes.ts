@@ -25,12 +25,14 @@ router
 
     router.post('users', [RegistrationsController, 'store']).as('users.register')
     router.post('users/sign_in', [SessionsController, 'store']).as('users.signIn')
-    router
-      .delete('users/sign_out', [SessionsController, 'destroy'])
-      .use(middleware.auth())
-      .as('users.signOut')
 
-    router.get('me', [UsersController, 'show']).use(middleware.auth()).as('users.me')
-    router.get('tag_scan', [TagScanController, 'show']).use(middleware.auth()).as('tagScan')
+    // Protected routes
+    router
+      .group(() => {
+        router.delete('users/sign_out', [SessionsController, 'destroy']).as('users.signOut')
+        router.get('me', [UsersController, 'show']).as('users.me')
+        router.get('tag_scan', [TagScanController, 'show']).as('tagScan')
+      })
+      .use(middleware.auth())
   })
   .prefix('/api/v1')
