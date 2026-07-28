@@ -11,6 +11,10 @@
 */
 
 process.env.NODE_ENV = 'test'
+// Let Adonis load DATABASE_URL from .env.test instead of using the
+// development URL injected by Docker Compose.
+delete process.env.DATABASE_URL
+delete process.env.PORT
 
 import 'reflect-metadata'
 import { Ignitor, prettyPrintError } from '@adonisjs/core'
