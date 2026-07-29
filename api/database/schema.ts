@@ -36,16 +36,7 @@ export class LoyaltyAccountSchema extends BaseModel {
 }
 
 export class LoyaltyProgramSchema extends BaseModel {
-  static $columns = [
-    'active',
-    'companyId',
-    'createdAt',
-    'id',
-    'name',
-    'rewardTitle',
-    'stampsRequired',
-    'updatedAt',
-  ] as const
+  static $columns = ['active', 'companyId', 'createdAt', 'id', 'name', 'rewardTitle', 'stampsRequired', 'updatedAt'] as const
   $columns = LoyaltyProgramSchema.$columns
   @column()
   declare active: boolean
@@ -66,15 +57,7 @@ export class LoyaltyProgramSchema extends BaseModel {
 }
 
 export class NfcTagSchema extends BaseModel {
-  static $columns = [
-    'active',
-    'createdAt',
-    'id',
-    'identifier',
-    'lastAcceptedCounter',
-    'updatedAt',
-    'venueId',
-  ] as const
+  static $columns = ['active', 'createdAt', 'id', 'identifier', 'lastAcceptedCounter', 'updatedAt', 'venueId'] as const
   $columns = NfcTagSchema.$columns
   @column()
   declare active: boolean
@@ -93,14 +76,7 @@ export class NfcTagSchema extends BaseModel {
 }
 
 export class StampSchema extends BaseModel {
-  static $columns = [
-    'createdAt',
-    'id',
-    'loyaltyAccountId',
-    'nfcCounter',
-    'nfcTagId',
-    'updatedAt',
-  ] as const
+  static $columns = ['createdAt', 'id', 'loyaltyAccountId', 'nfcCounter', 'nfcTagId', 'updatedAt'] as const
   $columns = StampSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -117,16 +93,7 @@ export class StampSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = [
-    'createdAt',
-    'email',
-    'encryptedPassword',
-    'id',
-    'rememberCreatedAt',
-    'resetPasswordSentAt',
-    'resetPasswordToken',
-    'updatedAt',
-  ] as const
+  static $columns = ['createdAt', 'email', 'encryptedPassword', 'id', 'rememberCreatedAt', 'resetPasswordSentAt', 'resetPasswordToken', 'updatedAt'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
