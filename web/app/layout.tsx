@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Loyal Nest',
-  description: 'Loyal Nest application',
+  title: 'Sign in | Loyal Nest',
+  description: 'Sign in to your Loyal Nest account',
 };
 
 export default function RootLayout({

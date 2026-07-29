@@ -8,7 +8,8 @@
 # requests from auth.http first. REST Client shares cookies for the same host.
 # Encrypted PICC data, encrypted file data, and CMAC come from the tag URL.
 
-@baseUrl = http://localhost:3333@piccData = 8314399577DCFFE9798B4C4714FB89EE
+@baseUrl = http://localhost:3333
+@piccData = 8314399577DCFFE9798B4C4714FB89EE
 @enc = D0E3028A46AFCBA11B9DB95E36C55762
 @cmac = 6F586B688126B57C
 
