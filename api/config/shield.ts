@@ -42,7 +42,7 @@ const shieldConfig = defineConfig({
     /**
      * Expose an encrypted XSRF-TOKEN cookie for frontend HTTP clients.
      */
-    enableXsrfCookie: false,
+    enableXsrfCookie: true,
 
     /**
      * HTTP methods protected by CSRF validation.

@@ -1,13 +1,12 @@
 import { test } from '@japa/runner'
 
 test.group('CSRF', () => {
-  test('returns a token for state-changing requests', async ({ client, assert }) => {
-    const response = await client.get('/api/v1/csrf')
+  test('sets an XSRF cookie for state-changing requests', async ({ client }) => {
+    const response = await client.get('/up')
 
     response.assertStatus(200)
     response.assertCookie('_loyal_session')
-    assert.isString(response.body().csrf_token)
-    assert.isNotEmpty(response.body().csrf_token)
+    response.assertCookie('XSRF-TOKEN')
   })
 
   test('rejects a state-changing request without a token', async ({ client }) => {

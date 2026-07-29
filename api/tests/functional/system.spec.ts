@@ -21,11 +21,11 @@ test.group('System endpoints', () => {
   test('allows credentialed CORS requests from the configured frontend', async ({ client }) => {
     const response = await client
       .options('/api/v1/users')
-      .header('Origin', 'http://localhost:3001')
+      .header('Origin', 'http://localhost:3000')
       .header('Access-Control-Request-Method', 'POST')
 
     response.assertStatus(204)
-    response.assertHeader('access-control-allow-origin', 'http://localhost:3001')
+    response.assertHeader('access-control-allow-origin', 'http://localhost:3000')
     response.assertHeader('access-control-allow-credentials', 'true')
   })
 })

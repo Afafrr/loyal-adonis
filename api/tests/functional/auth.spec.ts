@@ -8,7 +8,7 @@ test.group('Authentication', () => {
     const response = await client
       .post('/api/v1/users')
       .header('Cookie', csrf.cookie)
-      .header('X-CSRF-Token', csrf.token)
+      .header('X-XSRF-TOKEN', csrf.token)
       .json({
         user: {
           email: ' NEW-USER@example.com ',
@@ -28,7 +28,7 @@ test.group('Authentication', () => {
     const response = await client
       .post('/api/v1/users')
       .header('Cookie', csrf.cookie)
-      .header('X-CSRF-Token', csrf.token)
+      .header('X-XSRF-TOKEN', csrf.token)
       .json({
         user: {
           email: 'invalid-email',
@@ -81,7 +81,7 @@ test.group('Authentication', () => {
     const logout = await client
       .delete('/api/v1/users/sign_out')
       .header('Cookie', csrf.cookie)
-      .header('X-CSRF-Token', csrf.token)
+      .header('X-XSRF-TOKEN', csrf.token)
 
     logout.assertStatus(204)
 
