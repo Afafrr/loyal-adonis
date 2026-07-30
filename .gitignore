@@ -4,3 +4,5 @@ api/build/
 api/node_modules/
 api/tmp/*
 !api/tmp/.gitkeep
+
+notes.md
