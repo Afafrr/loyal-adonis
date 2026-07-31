@@ -9,9 +9,9 @@
 # Encrypted PICC data, encrypted file data, and CMAC come from the tag URL.
 
 @baseUrl = http://localhost:3333/api/v1
-@piccData = 8314399577DCFFE9798B4C4714FB89EE
-@enc = D0E3028A46AFCBA11B9DB95E36C55762
-@cmac = 6F586B688126B57C
+@piccData = A0381B865380C7C8C6EF42190DDE5E56
+@enc = 9692DB303A155945B65F3CE7108BC690
+@cmac = A66F57C738769417
 
 ### Get a CSRF token for the authenticated session
 # @name csrf
@@ -20,6 +20,19 @@ Accept: application/json
 
 ### Accept an encrypted NTAG 424 DNA scan and add a stamp
 POST {{baseUrl}}/tag_scans
+Content-Type: application/json
+X-CSRF-Token: {{csrf.response.headers.X-CSRF-Token}}
+Accept: application/json
+
+{
+  "picc_data": "{{piccData}}",
+  "enc": "{{enc}}",
+  "cmac": "{{cmac}}"
+}
+
+### Inspect an encrypted NTAG 424 DNA scan before registering a new tag (development only)
+# This verifies and returns the decrypted UID and read counter. It does not create a tag or stamp.
+POST {{baseUrl}}/dev/nfc_tags/inspect
 Content-Type: application/json
 X-CSRF-Token: {{csrf.response.headers.X-CSRF-Token}}
 Accept: application/json
