@@ -43,7 +43,7 @@ Gotowe requesty dla rozszerzenia VS Code REST Client znajdują się w
 - `POST /api/v1/users/sign_in`
 - `DELETE /api/v1/users/sign_out`
 - `GET /api/v1/me`
-- `GET /api/v1/tag_scan?picc_data=...&enc=...&cmac=...`
+- `POST /api/v1/tag_scans`
 
 Żądania zmieniające stan wymagają cookie `_loyal_session` oraz tokena CSRF.
 AdonisJS udostępnia token w cookie `XSRF-TOKEN`, a klient przeglądarkowy powinien

@@ -4,8 +4,8 @@
 # Start the API before sending the request:
 #   npm run dev
 #
-# This endpoint requires an authenticated session. Run the CSRF and sign-in
-# requests from auth.http first. REST Client shares cookies for the same host.
+# This endpoint requires an authenticated session. Sign in through auth.http
+# first; REST Client retains its cookies for localhost by default.
 # Encrypted PICC data, encrypted file data, and CMAC come from the tag URL.
 
 @baseUrl = http://localhost:3333/api/v1
@@ -13,6 +13,19 @@
 @enc = D0E3028A46AFCBA11B9DB95E36C55762
 @cmac = 6F586B688126B57C
 
-### Verify an encrypted NTAG 424 DNA scan with SDMFileData
-GET {{baseUrl}}/tag_scan?picc_data={{piccData}}&enc={{enc}}&cmac={{cmac}}
+### Get a CSRF token for the authenticated session
+# @name csrf
+GET http://localhost:3333/up
 Accept: application/json
+
+### Accept an encrypted NTAG 424 DNA scan and add a stamp
+POST {{baseUrl}}/tag_scans
+Content-Type: application/json
+X-CSRF-Token: {{csrf.response.headers.X-CSRF-Token}}
+Accept: application/json
+
+{
+  "picc_data": "{{piccData}}",
+  "enc": "{{enc}}",
+  "cmac": "{{cmac}}"
+}

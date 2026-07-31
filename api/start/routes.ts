@@ -28,7 +28,7 @@ router
       .group(() => {
         router.delete('users/sign_out', [SessionsController, 'destroy']).as('users.signOut')
         router.get('me', [UsersController, 'show']).as('users.me')
-        router.get('tag_scan', [TagScanController, 'show']).as('tagScan')
+        router.post('tag_scans', [TagScanController, 'store']).as('tagScans.create')
       })
       .use(middleware.auth())
   })

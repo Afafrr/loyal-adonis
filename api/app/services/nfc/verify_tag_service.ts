@@ -1,33 +1,52 @@
 import env from '#start/env'
 
-export interface NfcVerificationResponse {
-  status: number
-  body: string
+export interface VerifiedNfcTag {
+  identifier: string
+  readCounter: number
 }
 
-interface VerifyTagParams {
+export interface NfcVerificationResponse {
+  status: number
+  tag: VerifiedNfcTag | null
+}
+
+export interface VerifyTagParams {
   piccData: string
   enc: string
   cmac: string
 }
 
-export default class VerifyTagService {
-  constructor(private readonly params: VerifyTagParams) {}
+export async function verifyTag(params: VerifyTagParams): Promise<NfcVerificationResponse> {
+  const baseUrl = env.get('NFC_SERVICE_URL') ?? 'http://127.0.0.1:5000'
+  const url = new URL('/api/tag', baseUrl)
+  url.searchParams.set('picc_data', params.piccData)
+  url.searchParams.set('enc', params.enc)
+  url.searchParams.set('cmac', params.cmac)
 
-  async call(): Promise<NfcVerificationResponse> {
-    const baseUrl = env.get('NFC_SERVICE_URL') ?? 'http://127.0.0.1:5000'
-    const url = new URL('/api/tag', baseUrl)
-    url.searchParams.set('picc_data', this.params.piccData)
-    url.searchParams.set('enc', this.params.enc)
-    url.searchParams.set('cmac', this.params.cmac)
+  const upstream = await fetch(url, {
+    signal: AbortSignal.timeout(7_000),
+  })
 
-    const upstream = await fetch(url, {
-      signal: AbortSignal.timeout(7_000),
-    })
+  const body: unknown = await upstream.json().catch(() => null)
 
-    return {
-      status: upstream.status,
-      body: await upstream.text(),
-    }
+  return {
+    status: upstream.status,
+    tag: upstream.ok ? verifiedTag(body) : null,
+  }
+}
+
+function verifiedTag(body: unknown): VerifiedNfcTag | null {
+  if (!body || typeof body !== 'object') return null
+
+  const result = body as Record<string, unknown>
+
+  const { uid, read_ctr: readCounter } = result
+  if (typeof uid !== 'string' || !/^[0-9a-f]{14}$/i.test(uid)) return null
+  if (typeof readCounter !== 'number' || !Number.isSafeInteger(readCounter) || readCounter < 0)
+    return null
+
+  return {
+    identifier: uid.toUpperCase(),
+    readCounter,
   }
 }

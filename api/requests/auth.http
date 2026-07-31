@@ -13,9 +13,8 @@
 @email = client2@example.com
 @password = password123
 
-### Get a CSRF token for the current session
 # @name csrf
-GET {{baseUrl}}/csrf
+GET http://localhost:3333/up
 Accept: application/json
 
 ### Registration (automatically signs in the new user)
@@ -23,7 +22,7 @@ Accept: application/json
 POST {{baseUrl}}/users
 Content-Type: application/json
 Accept: application/json
-X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
+X-CSRF-Token: {{csrf.response.headers.X-CSRF-Token}}
 
 {
   "user": {
@@ -38,7 +37,7 @@ X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
 POST {{baseUrl}}/users/sign_in
 Content-Type: application/json
 Accept: application/json
-X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
+X-CSRF-Token: {{csrf.response.headers.X-CSRF-Token}}
 
 {
   "user": {
@@ -56,14 +55,14 @@ Accept: application/json
 # @name logout
 DELETE {{baseUrl}}/users/sign_out
 Accept: application/json
-X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
+X-CSRF-Token: {{csrf.response.headers.X-CSRF-Token}}
 
 ### Sign in with an invalid password after signing out (expected: 401)
 # @name invalidLogin
 POST {{baseUrl}}/users/sign_in
 Content-Type: application/json
 Accept: application/json
-X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
+X-CSRF-Token: {{csrf.response.headers.X-CSRF-Token}}
 
 {
   "user": {
@@ -77,7 +76,7 @@ X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
 POST {{baseUrl}}/users
 Content-Type: application/json
 Accept: application/json
-X-CSRF-Token: {{csrf.response.body.$.csrf_token}}
+X-CSRF-Token: {{csrf.response.headers.X-CSRF-Token}}
 
 {
   "user": {

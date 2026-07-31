@@ -1,25 +1,36 @@
-import VerifyTagService from '#services/nfc/verify_tag_service'
+import { tagScanValidator } from '#validators/tag_scan'
+import { recordTagScan, TagScanError } from '#services/nfc/record_tag_scan_service'
+import { verifyTag } from '#services/nfc/verify_tag_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TagScanController {
-  async show({ request, response }: HttpContext) {
-    const query = request.qs()
-    const required = ['picc_data', 'enc', 'cmac'] as const
+  async store({ request, response, auth }: HttpContext) {
+    const payload = await request.validateUsing(tagScanValidator)
 
-    for (const field of required) {
-      if (typeof query[field] !== 'string' || query[field].trim().length === 0) {
-        return response.badRequest({ error: `Missing required parameter: ${field}` })
-      }
+    const upstream = await verifyTag({
+      piccData: payload.picc_data,
+      enc: payload.enc,
+      cmac: payload.cmac,
+    })
+
+    if (!upstream.tag) {
+      return response.badRequest({ error: 'Unable to verify the NFC tag.' })
     }
 
-    const upstream = await new VerifyTagService({
-      piccData: query.picc_data,
-      enc: query.enc,
-      cmac: query.cmac,
-    }).call()
+    try {
+      const scan = await recordTagScan({
+        userId: auth.getUserOrFail().id,
+        tagIdentifier: upstream.tag.identifier,
+        readCounter: upstream.tag.readCounter,
+      })
 
-    response.status(upstream.status)
-    response.type('text/plain')
-    return response.send(upstream.body)
+      return response.created(scan)
+    } catch (error) {
+      if (error instanceof TagScanError) {
+        return response.status(error.status).send({ error: error.message })
+      }
+
+      throw error
+    }
   }
 }
