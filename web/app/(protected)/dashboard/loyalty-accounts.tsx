@@ -107,7 +107,6 @@ function CompanyCard({ company }: { company: CompanyEntry }) {
         <div className='flex items-baseline justify-between gap-4'>
           <p className='text-[13px] font-semibold text-[#202a25]'>Your progress</p>
           <p className='text-[13px] font-semibold text-[#536059]'>
-            
             {collectedStamps} / {totalStamps}
           </p>
         </div>
