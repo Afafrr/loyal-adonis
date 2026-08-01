@@ -17,13 +17,13 @@ const sessionConfig = defineConfig({
    * When set to true, the session id cookie will be deleted
    * once the user closes the browser.
    */
-  clearWithBrowser: true,
+  clearWithBrowser: false,
 
   /**
    * Define how long to keep the session data alive without
    * any activity.
    */
-  age: '2h',
+  age: '15d',
 
   /**
    * Configuration for session cookie and the
