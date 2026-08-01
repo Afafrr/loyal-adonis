@@ -6,7 +6,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
   const collectedStamps = Math.min(account.program.stampCount, totalStamps);
 
   return (
-    <div className='mt-5 rounded-[18px] border border-line-subtle bg-panel p-6 shadow-[0_14px_36px_rgba(32,42,37,0.035)] sm:p-7'>
+    <article className='rounded-[18px] border border-line-subtle bg-panel p-6 shadow-[0_14px_36px_rgba(32,42,37,0.035)] sm:p-7'>
       <p className='text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground-label'>Loyalty program</p>
       <h2 className='mt-2 text-xl font-semibold tracking-[-0.04em]'>{account.company.name}</h2>
       <p className='mt-1 text-[13px] font-medium text-foreground-tertiary'>{account.program.name}</p>
@@ -28,6 +28,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
           ))}
         </ul>
       </div>
-    </div>
+
+    </article>
   );
 }
