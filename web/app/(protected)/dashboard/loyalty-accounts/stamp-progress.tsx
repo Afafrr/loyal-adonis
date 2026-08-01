@@ -7,8 +7,8 @@ export function StampProgress({ collectedStamps, totalStamps }: StampProgressPro
   return (
     <div className='mt-6'>
       <div className='flex items-baseline justify-between gap-4'>
-        <p className='text-[13px] font-semibold text-[#202a25]'>Your progress</p>
-        <p className='text-[13px] font-semibold text-[#536059]'>
+        <p className='text-[13px] font-semibold text-foreground'>Your progress</p>
+        <p className='text-[13px] font-semibold text-foreground-secondary'>
           {collectedStamps} / {totalStamps}
         </p>
       </div>
@@ -20,14 +20,14 @@ export function StampProgress({ collectedStamps, totalStamps }: StampProgressPro
             <span
               aria-hidden='true'
               className={`size-4 rounded-full border-2 ${
-                collected ? 'border-[#1f2924] bg-[#1f2924]' : 'border-[#c8d0cb] bg-white'
+                collected ? 'border-stamp-filled bg-stamp-filled' : 'border-stamp-empty bg-panel'
               }`}
               key={index}
             />
           );
         })}
       </div>
-      <p className='mt-3 text-[13px] leading-5 text-[#657069]'>
+      <p className='mt-3 text-[13px] leading-5 text-foreground-tertiary'>
         Collect stamps across any participating venue.
       </p>
     </div>

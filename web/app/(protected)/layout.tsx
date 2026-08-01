@@ -23,7 +23,7 @@ async function getCurrentUser(): Promise<CurrentUser> {
 function Brand() {
   return (
     <div className='flex items-center gap-2.5 text-[15px] font-semibold tracking-[-0.03em]'>
-      <span className='grid size-7 place-items-center rounded-[8px_8px_8px_2px] bg-[#1f2924] text-[12px] font-bold text-white'>
+      <span className='grid size-7 place-items-center rounded-[8px_8px_8px_2px] bg-brand text-[12px] font-bold text-white'>
         L
       </span>
       <span>loyal nest</span>
@@ -35,11 +35,11 @@ export default async function ProtectedLayout({ children }: Readonly<{ children:
   const user = await getCurrentUser();
 
   return (
-    <main className='min-h-screen bg-[#f7f8f6] text-[#202a25]'>
+    <main className='min-h-screen bg-canvas text-foreground'>
       <nav className='mx-auto flex max-w-4xl items-center justify-between px-6 py-7'>
         <Brand />
         <div className='flex items-center gap-4'>
-          <p className='hidden text-[12px] text-[#7a837e] sm:block'>{user.email}</p>
+          <p className='hidden text-[12px] text-foreground-muted sm:block'>{user.email}</p>
           <SignOutButton />
         </div>
       </nav>

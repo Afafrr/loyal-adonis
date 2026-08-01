@@ -30,10 +30,10 @@ export function SignOutButton() {
 
   return (
     <div className='text-right'>
-      <button className='rounded-[10px] border border-[#d7ddd9] bg-white px-4 py-2.5 text-[11px] font-semibold text-[#4f5e56] transition hover:border-[#aeb9b2] disabled:cursor-wait disabled:opacity-60' onClick={signOut} disabled={signingOut}>
+      <button className='rounded-[10px] border border-line bg-panel px-4 py-2.5 text-[11px] font-semibold text-foreground-secondary transition hover:border-line-hover disabled:cursor-wait disabled:opacity-60' onClick={signOut} disabled={signingOut}>
         {signingOut ? 'Signing out...' : 'Sign out'}
       </button>
-      {error && <p className='mt-2 text-[11px] text-[#9a6259]' role='alert'>{error}</p>}
+      {error && <p className='mt-2 text-[11px] text-danger' role='alert'>{error}</p>}
     </div>
   );
 }

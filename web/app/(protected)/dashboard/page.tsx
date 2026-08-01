@@ -22,7 +22,7 @@ export default async function DashboardPage() {
 
   return (
     <section className='mx-auto max-w-3xl px-6 pb-16 pt-24'>
-      <p className='mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#87918b]'>Your workspace</p>
+      <p className='mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground-label'>Your workspace</p>
       <h1 className='text-4xl font-semibold leading-none tracking-[-0.06em] sm:text-5xl'>Welcome.</h1>
       <LoyaltyAccounts loyaltyAccounts={loyaltyAccounts} />
     </section>
