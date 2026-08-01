@@ -57,6 +57,7 @@ test.group('Loyalty accounts', () => {
             name: 'Coffee stamps',
             rewardTitle: 'Free coffee',
             stampsRequired: 10,
+            stampCount: 2,
           },
           company: { id: Number(company.id), name: 'Coffee Co.' },
           locations: [

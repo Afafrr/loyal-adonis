@@ -9,6 +9,7 @@ export interface LoyaltyAccount {
     name: string;
     rewardTitle: string;
     stampsRequired: number;
+    stampCount: number;
   };
   company: {
     id: number;
@@ -88,23 +89,51 @@ function groupAccountsByCompany(loyaltyAccounts: LoyaltyAccount[]): CompanyEntry
 
 function CompanyCard({ company }: { company: CompanyEntry }) {
   const { account } = company;
+  const totalStamps = Math.max(account.program.stampsRequired, 1);
+  const collectedStamps = Math.min(account.program.stampCount, totalStamps);
 
   return (
-    <div className='mt-5 rounded-[18px] border border-[#e1e5e2] bg-white p-7 shadow-[0_18px_50px_rgba(32,42,37,0.04)] sm:p-9'>
+    <div className='mt-5 rounded-[18px] border border-[#e1e5e2] bg-white p-6 shadow-[0_14px_36px_rgba(32,42,37,0.035)] sm:p-7'>
       <p className='text-[10px] font-semibold uppercase tracking-[0.2em] text-[#87918b]'>Loyalty program</p>
-      <h2 className='mt-3 text-2xl font-semibold tracking-[-0.04em]'>{company.companyName}</h2>
-      <p className='mt-2 text-[13px] text-[#7a837e]'>{account.program.name}</p>
+      <h2 className='mt-2 text-xl font-semibold tracking-[-0.04em]'>{company.companyName}</h2>
+      <p className='mt-1 text-[13px] font-medium text-[#657069]'>{account.program.name}</p>
 
-      <div className='mt-8 border-t border-[#edf0ee] pt-6'>
-        <p className='text-[13px] font-semibold'>Reward: {account.program.rewardTitle}</p>
-        <p className='mt-1 text-[13px] leading-6 text-[#7a837e]'>
-          Earn {account.program.stampsRequired} stamps across any participating venue.
+      <div className='mt-6 rounded-xl bg-[#f4f6f4] px-4 py-3.5'>
+        <p className='text-[10px] font-semibold uppercase tracking-[0.16em] text-[#68736c]'>Reward</p>
+        <p className='mt-1 text-[15px] font-semibold tracking-[-0.02em] text-[#202a25]'>{account.program.rewardTitle}</p>
+      </div>
+
+      <div className='mt-6'>
+        <div className='flex items-baseline justify-between gap-4'>
+          <p className='text-[13px] font-semibold text-[#202a25]'>Your progress</p>
+          <p className='text-[13px] font-semibold text-[#536059]'>
+            
+            {collectedStamps} / {totalStamps}
+          </p>
+        </div>
+        <div aria-label={`${collectedStamps} of ${totalStamps} stamps collected`} className='mt-3 flex flex-wrap gap-2'>
+          {Array.from({ length: totalStamps }, (_, index) => {
+            const collected = index < collectedStamps;
+
+            return (
+              <span
+                aria-hidden='true'
+                className={`size-4 rounded-full border-2 ${
+                  collected ? 'border-[#1f2924] bg-[#1f2924]' : 'border-[#c8d0cb] bg-white'
+                }`}
+                key={index}
+              />
+            );
+          })}
+        </div>
+        <p className='mt-3 text-[13px] leading-5 text-[#657069]'>
+          Collect stamps across any participating venue.
         </p>
       </div>
 
-      <div className='mt-8 border-t border-[#edf0ee] pt-6'>
+      <div className='mt-6 border-t border-[#edf0ee] pt-5'>
         <p className='text-[10px] font-semibold uppercase tracking-[0.2em] text-[#87918b]'>Visited venues</p>
-        <ul className='mt-3 flex flex-wrap gap-2'>
+        <ul className='mt-2.5 flex flex-wrap gap-2'>
           {account.locations.map((location) => (
             <li className='rounded-full bg-[#f2f4f2] px-3 py-1.5 text-[13px] text-[#536059]' key={location.id}>
               {location.name}

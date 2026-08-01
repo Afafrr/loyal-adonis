@@ -40,6 +40,7 @@ export default class LoyaltyAccountsController {
             name: loyaltyProgram.name,
             rewardTitle: loyaltyProgram.rewardTitle,
             stampsRequired: loyaltyProgram.stampsRequired,
+            stampCount: loyaltyAccount.stamps.length,
           },
           company: {
             id: Number(company.id),
