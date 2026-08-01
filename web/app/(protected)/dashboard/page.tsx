@@ -1,6 +1,7 @@
 import { headers } from 'next/headers';
 import { serverRoutes } from '../../routes';
-import { LoyaltyAccounts, type LoyaltyAccount } from './loyalty-accounts';
+import { LoyaltyAccounts } from './loyalty-accounts';
+import type { LoyaltyAccount } from './loyalty-accounts/types';
 
 async function getLoyaltyAccounts(cookie: string | null): Promise<LoyaltyAccount[]> {
   if (!cookie) return [];
