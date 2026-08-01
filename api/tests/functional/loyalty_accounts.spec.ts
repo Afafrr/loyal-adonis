@@ -9,9 +9,18 @@ import { sessionCookie, signIn } from '#tests/helpers/http'
 import { test } from '@japa/runner'
 
 test.group('Loyalty accounts', () => {
-  test('lists only the signed-in user accounts with their programme and visited locations', async ({ client, assert }) => {
-    const user = await User.create({ email: 'member@example.com', encryptedPassword: 'password123' })
-    const otherUser = await User.create({ email: 'other@example.com', encryptedPassword: 'password123' })
+  test('lists only the signed-in user accounts with their programme and visited locations', async ({
+    client,
+    assert,
+  }) => {
+    const user = await User.create({
+      email: 'member@example.com',
+      encryptedPassword: 'password123',
+    })
+    const otherUser = await User.create({
+      email: 'other@example.com',
+      encryptedPassword: 'password123',
+    })
     const company = await Company.create({ name: 'Coffee Co.' })
     const loyaltyProgram = await LoyaltyProgram.create({
       companyId: company.id,
@@ -39,8 +48,21 @@ test.group('Loyalty accounts', () => {
       loyaltyProgramId: loyaltyProgram.id,
     })
     await LoyaltyAccount.create({ userId: otherUser.id, loyaltyProgramId: loyaltyProgram.id })
-    await Stamp.create({ loyaltyAccountId: loyaltyAccount.id, nfcTagId: firstTag.id, nfcCounter: 1 })
-    await Stamp.create({ loyaltyAccountId: loyaltyAccount.id, nfcTagId: secondTag.id, nfcCounter: 1 })
+    await Stamp.create({
+      loyaltyAccountId: loyaltyAccount.id,
+      nfcTagId: firstTag.id,
+      nfcCounter: 1,
+    })
+    await Stamp.create({
+      loyaltyAccountId: loyaltyAccount.id,
+      nfcTagId: secondTag.id,
+      nfcCounter: 1,
+    })
+    await Stamp.create({
+      loyaltyAccountId: loyaltyAccount.id,
+      nfcTagId: secondTag.id,
+      nfcCounter: 2,
+    })
 
     const login = await signIn(client, user.email, 'password123')
     const response = await client
@@ -57,23 +79,20 @@ test.group('Loyalty accounts', () => {
             name: 'Coffee stamps',
             rewardTitle: 'Free coffee',
             stampsRequired: 10,
-            stampCount: 2,
+            stampCount: 3,
           },
           company: { id: Number(company.id), name: 'Coffee Co.' },
           locations: [
-            { id: Number(firstVenue.id), name: 'Main Street' },
-            { id: Number(secondVenue.id), name: 'Riverside' },
+            { id: Number(secondVenue.id), name: 'Riverside', stampCount: 2 },
+            { id: Number(firstVenue.id), name: 'Main Street', stampCount: 1 },
           ],
         },
       ],
     })
 
     const body = response.body() as {
-      loyaltyAccounts: Array<{ locations: Array<{ firstScannedAt: string }> }>
+      loyaltyAccounts: Array<{ locations: Array<{ firstScannedAt: string; stampCount: number }> }>
     }
-    assert.isBelow(
-      Date.parse(body.loyaltyAccounts[0].locations[0].firstScannedAt),
-      Date.parse(body.loyaltyAccounts[0].locations[1].firstScannedAt)
-    )
+    assert.equal(body.loyaltyAccounts[0].locations[0].stampCount, 2)
   })
 })
