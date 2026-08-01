@@ -6,6 +6,7 @@ function apiRoutesFor(origin: string) {
   return {
     health: `${origin}/up`,
     me: `${apiBaseUrl}/me`,
+    loyaltyAccounts: `${apiBaseUrl}/me/loyalty_accounts`,
     register: `${apiBaseUrl}/users`,
     signIn: `${apiBaseUrl}/users/sign_in`,
     signOut: `${apiBaseUrl}/users/sign_out`,
