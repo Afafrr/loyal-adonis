@@ -67,13 +67,11 @@ services:
     build:
       context: ./web
       dockerfile: Dockerfile.dev
-    command: npm run dev -- --hostname 0.0.0.0 --webpack
+    command: npm run dev
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_API_ORIGIN: http://localhost:3333
       API_ORIGIN: http://backend:3333
-      WATCHPACK_POLLING: 'true'
-      CHOKIDAR_USEPOLLING: 'true'
     ports:
       - '3000:3000'
     volumes:
