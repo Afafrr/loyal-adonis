@@ -16,6 +16,7 @@
     "start": "node bin/server.js",
     "build": "node ace build",
     "dev": "node ace serve --hmr",
+    "seed": "node ace db:seed",
     "test": "node --import=@poppinss/ts-exec bin/test.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
