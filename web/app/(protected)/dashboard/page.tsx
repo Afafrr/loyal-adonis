@@ -21,9 +21,8 @@ export default async function DashboardPage() {
   const loyaltyAccounts = await getLoyaltyAccounts(cookie);
 
   return (
-    <section className='mx-auto max-w-3xl px-6 pb-16 pt-24'>
-      <p className='mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground-label'>Your workspace</p>
-      <h1 className='text-4xl font-semibold leading-none tracking-[-0.06em] sm:text-5xl'>Welcome.</h1>
+    <section className='mx-auto max-w-2xl px-4 pb-10 pt-4 min-[380px]:px-5 sm:px-12 sm:pb-16 sm:pt-6'>
+      <h1 className='text-4xl font-semibold leading-none tracking-[-0.06em] sm:text-5xl'>One place for loyalty.</h1>
       <LoyaltyAccounts loyaltyAccounts={loyaltyAccounts} />
     </section>
   );

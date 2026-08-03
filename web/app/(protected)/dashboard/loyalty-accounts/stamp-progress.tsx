@@ -1,14 +1,15 @@
 interface StampProgressProps {
   collectedStamps: number;
+  filledStampClass: string;
   totalStamps: number;
 }
 
-export function StampProgress({ collectedStamps, totalStamps }: StampProgressProps) {
+export function StampProgress({ collectedStamps, filledStampClass, totalStamps }: StampProgressProps) {
   return (
     <div className='mt-6'>
       <div className='flex items-baseline justify-between gap-4'>
-        <p className='text-[13px] font-semibold text-foreground'>Your progress</p>
-        <p className='text-[13px] font-semibold text-foreground-secondary'>
+        <p className='text-[13px] font-semibold text-foreground sm:text-sm'>Your progress</p>
+        <p className='text-[13px] font-semibold text-foreground-secondary sm:text-sm'>
           {collectedStamps} / {totalStamps}
         </p>
       </div>
@@ -19,15 +20,15 @@ export function StampProgress({ collectedStamps, totalStamps }: StampProgressPro
           return (
             <span
               aria-hidden='true'
-              className={`size-4 rounded-full border-2 ${
-                collected ? 'border-stamp-filled bg-stamp-filled' : 'border-stamp-empty bg-panel'
+              className={`size-6 rounded-full ${
+                collected ? filledStampClass : 'border-2 border-stamp-empty bg-panel'
               }`}
               key={index}
             />
           );
         })}
       </div>
-      <p className='mt-3 text-[13px] leading-5 text-foreground-tertiary'>
+      <p className='mt-3 text-[11px] leading-5 text-foreground-tertiary sm:text-xs'>
         Collect stamps across any participating venue.
       </p>
     </div>

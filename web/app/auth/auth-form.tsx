@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { brandOutfit } from '../brand-fonts';
 import { routes } from '../routes';
 import { submitCredentials, type AuthMode } from './auth-api';
 import { useAuthRedirect } from './use-auth-redirect';
 
 function Brand() {
   return (
-    <div className='flex items-center gap-2.5 text-[15px] font-semibold tracking-[-0.03em]'>
+    <div className={`${brandOutfit.className} flex items-center gap-2.5 text-[15px] font-semibold tracking-[-0.03em] sm:text-base`}>
       <span className='grid size-7 place-items-center rounded-[8px_8px_8px_2px] bg-brand text-[12px] font-bold text-white'>
         L
       </span>
@@ -50,17 +51,17 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
   }
 
   const inputClass =
-    'h-11 w-full rounded-[10px] border border-line bg-panel px-3.5 text-[13px] outline-none transition placeholder:text-placeholder focus:border-focus focus:ring-4 focus:ring-focus/10 disabled:opacity-60';
+    'h-11 w-full rounded-[10px] border border-line bg-panel px-3.5 text-[13px] outline-none transition placeholder:text-placeholder focus:border-focus focus:ring-4 focus:ring-focus/10 disabled:opacity-60 sm:text-sm';
 
   return (
-    <main className='flex min-h-dvh items-center justify-center bg-canvas px-5 py-10 text-foreground'>
-      <section className='w-full max-w-103 rounded-[18px] border border-line-subtle bg-panel px-7 py-7 shadow-[0_18px_50px_rgba(32,42,37,0.06)] sm:px-10 sm:py-8'>
+    <main className='flex min-h-dvh items-center justify-center bg-canvas px-3 py-4 text-foreground sm:px-5 sm:py-10'>
+      <section className='w-full max-w-103 rounded-[16px] border border-line-subtle bg-panel px-5 py-6 shadow-[0_18px_50px_rgba(32,42,37,0.06)] min-[380px]:px-7 sm:rounded-[18px] sm:px-10 sm:py-8'>
         <Brand />
-        <h1 className='mt-9 text-[27px] font-semibold leading-[1.05] tracking-[-0.055em]'>
+        <h1 className='mt-7 text-[25px] font-semibold leading-[1.1] tracking-[-0.055em] sm:mt-9 sm:text-[27px]'>
           {isSignUp ? 'Create your account' : 'Sign in'}
         </h1>
         <form onSubmit={handleSubmit} noValidate className='mt-6 grid gap-2'>
-          <label className='mt-1 text-[11px] font-semibold text-foreground-secondary' htmlFor='email'>
+          <label className='mt-1 text-[11px] font-semibold text-foreground-secondary sm:text-xs' htmlFor='email'>
             Email address
           </label>
           <input
@@ -73,7 +74,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             onChange={(event) => setEmail(event.target.value)}
             disabled={disabled}
           />
-          <label className='mt-2 text-[11px] font-semibold text-foreground-secondary' htmlFor='password'>
+          <label className='mt-2 text-[11px] font-semibold text-foreground-secondary sm:text-xs' htmlFor='password'>
             Password
           </label>
           <div className='relative'>
@@ -88,7 +89,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
               disabled={disabled}
             />
             <button
-              className='absolute right-3 top-1/2 -translate-y-1/2 px-1 text-[10px] font-semibold text-foreground-interactive-muted'
+              className='absolute right-3 top-1/2 -translate-y-1/2 px-1 text-[10px] font-semibold text-foreground-interactive-muted sm:text-[11px]'
               type='button'
               onClick={() => setShowPassword(!showPassword)}
               disabled={disabled}
@@ -98,7 +99,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
           </div>
           {isSignUp && (
             <>
-              <label className='mt-2 text-[11px] font-semibold text-foreground-secondary' htmlFor='confirmation'>
+              <label className='mt-2 text-[11px] font-semibold text-foreground-secondary sm:text-xs' htmlFor='confirmation'>
                 Confirm password
               </label>
               <input
@@ -114,18 +115,18 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
             </>
           )}
           {error && (
-            <p className='mt-1 text-[11px] text-danger' role='alert'>
+            <p className='mt-1 text-[11px] text-danger sm:text-xs' role='alert'>
               {error}
             </p>
           )}
           <button
-            className='mt-3 h-11 rounded-[10px] bg-brand text-[13px] font-semibold text-white transition hover:bg-brand-hover disabled:cursor-wait disabled:opacity-60'
+            className='mt-3 h-11 rounded-[10px] bg-brand text-[13px] font-semibold text-white transition hover:bg-brand-hover disabled:cursor-wait disabled:opacity-60 sm:text-sm'
             disabled={disabled}
           >
             {loading || checkingSession ? 'Please wait…' : isSignUp ? 'Create account' : 'Sign in'}
           </button>
         </form>
-        <div className='mt-5 flex items-center justify-center gap-1 text-[13px] text-foreground-label md:text-[11px] '>
+        <div className='mt-5 flex flex-wrap items-center justify-center gap-x-1 gap-y-2 text-center text-[12px] text-foreground-label sm:text-sm'>
           <span>{isSignUp ? 'Already have an account?' : 'New to Loyal Nest?'}</span>
           <Link
             className='font-semibold text-foreground-secondary underline decoration-stamp-empty underline-offset-4 '

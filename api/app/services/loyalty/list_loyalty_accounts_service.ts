@@ -4,6 +4,7 @@ type LocationSummary = {
   id: number
   name: string
   firstScannedAt: string
+  lastVisitedAt: string
   stampCount: number
 }
 
@@ -54,23 +55,27 @@ function summarizeLocations(loyaltyAccount: LoyaltyAccount): LocationSummary[] {
 
     if (location) {
       location.stampCount += 1
+      location.lastVisitedAt = stamp.createdAt.toISO()!
     } else {
+      const scannedAt = stamp.createdAt.toISO()!
+
       locations.set(venueId, {
         id: venueId,
         name: venue.name,
-        firstScannedAt: stamp.createdAt.toISO()!,
+        firstScannedAt: scannedAt,
+        lastVisitedAt: scannedAt,
         stampCount: 1,
       })
     }
   }
 
-  return [...locations.values()].sort(byStampCount)
+  return [...locations.values()].sort(byLastVisit)
 }
 
-function byStampCount(firstLocation: LocationSummary, secondLocation: LocationSummary) {
+function byLastVisit(firstLocation: LocationSummary, secondLocation: LocationSummary) {
   return (
-    secondLocation.stampCount - firstLocation.stampCount ||
-    firstLocation.firstScannedAt.localeCompare(secondLocation.firstScannedAt)
+    secondLocation.lastVisitedAt.localeCompare(firstLocation.lastVisitedAt) ||
+    secondLocation.stampCount - firstLocation.stampCount
   )
 }
 
@@ -78,7 +83,15 @@ function byFirstVisit(
   firstAccount: ReturnType<typeof toAccountSummary>,
   secondAccount: ReturnType<typeof toAccountSummary>
 ) {
-  const firstVisit = firstAccount.locations[0]?.firstScannedAt ?? ''
-  const secondVisit = secondAccount.locations[0]?.firstScannedAt ?? ''
+  const firstVisit = earliestVisit(firstAccount.locations)
+  const secondVisit = earliestVisit(secondAccount.locations)
   return firstVisit.localeCompare(secondVisit)
+}
+
+function earliestVisit(locations: LocationSummary[]) {
+  return locations.reduce(
+    (earliest, location) =>
+      earliest === '' || location.firstScannedAt < earliest ? location.firstScannedAt : earliest,
+    ''
+  )
 }

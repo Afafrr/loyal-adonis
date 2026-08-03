@@ -1,5 +1,6 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { brandOutfit } from '../brand-fonts';
 import { routes, serverRoutes } from '../routes';
 import { SignOutButton } from './sign-out-button';
 
@@ -22,7 +23,9 @@ async function getCurrentUser(): Promise<CurrentUser> {
 
 function Brand() {
   return (
-    <div className='flex items-center gap-2.5 text-[15px] font-semibold tracking-[-0.03em]'>
+    <div
+      className={`${brandOutfit.className} flex items-center gap-2.5 text-[15px] font-bold tracking-[-0.03em] text-red-700 sm:text-base`}
+    >
       <span className='grid size-7 place-items-center rounded-[8px_8px_8px_2px] bg-brand text-[12px] font-bold text-white'>
         L
       </span>
@@ -36,10 +39,12 @@ export default async function ProtectedLayout({ children }: Readonly<{ children:
 
   return (
     <main className='min-h-screen bg-canvas text-foreground'>
-      <nav className='mx-auto flex max-w-4xl items-center justify-between px-6 py-7'>
-        <Brand />
-        <div className='flex items-center gap-4'>
-          <p className='hidden text-[12px] text-foreground-muted sm:block'>{user.email}</p>
+      <nav className='mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3 min-[380px]:px-5 sm:px-8 sm:py-5'>
+        <div className='shrink-0'>
+          <Brand />
+        </div>
+        <div className='flex min-w-0 items-center gap-4'>
+          <p className='hidden min-w-0 truncate text-[12px] text-foreground-muted sm:block'>{user.email}</p>
           <SignOutButton />
         </div>
       </nav>

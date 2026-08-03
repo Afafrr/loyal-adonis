@@ -7,6 +7,7 @@ import User from '#models/user'
 import Venue from '#models/venue'
 import { sessionCookie, signIn } from '#tests/helpers/http'
 import { test } from '@japa/runner'
+import { DateTime } from 'luxon'
 
 test.group('Loyalty accounts', () => {
   test('lists only the signed-in user accounts with their programme and visited locations', async ({
@@ -52,16 +53,19 @@ test.group('Loyalty accounts', () => {
       loyaltyAccountId: loyaltyAccount.id,
       nfcTagId: firstTag.id,
       nfcCounter: 1,
+      createdAt: DateTime.fromISO('2026-08-03T10:00:00Z'),
     })
     await Stamp.create({
       loyaltyAccountId: loyaltyAccount.id,
       nfcTagId: secondTag.id,
       nfcCounter: 1,
+      createdAt: DateTime.fromISO('2026-08-01T10:00:00Z'),
     })
     await Stamp.create({
       loyaltyAccountId: loyaltyAccount.id,
       nfcTagId: secondTag.id,
       nfcCounter: 2,
+      createdAt: DateTime.fromISO('2026-08-02T10:00:00Z'),
     })
 
     const login = await signIn(client, user.email, 'password123')
@@ -83,16 +87,27 @@ test.group('Loyalty accounts', () => {
           },
           company: { id: Number(company.id), name: 'Coffee Co.' },
           locations: [
-            { id: Number(secondVenue.id), name: 'Riverside', stampCount: 2 },
-            { id: Number(firstVenue.id), name: 'Main Street', stampCount: 1 },
+            {
+              id: Number(firstVenue.id),
+              name: 'Main Street',
+              lastVisitedAt: '2026-08-03T10:00:00.000Z',
+              stampCount: 1,
+            },
+            {
+              id: Number(secondVenue.id),
+              name: 'Riverside',
+              lastVisitedAt: '2026-08-02T10:00:00.000Z',
+              stampCount: 2,
+            },
           ],
         },
       ],
     })
 
     const body = response.body() as {
-      loyaltyAccounts: Array<{ locations: Array<{ firstScannedAt: string; stampCount: number }> }>
+      loyaltyAccounts: Array<{ locations: Array<{ lastVisitedAt: string; stampCount: number }> }>
     }
-    assert.equal(body.loyaltyAccounts[0].locations[0].stampCount, 2)
+    assert.equal(body.loyaltyAccounts[0].locations[0].stampCount, 1)
+    assert.equal(body.loyaltyAccounts[0].locations[0].lastVisitedAt, '2026-08-03T10:00:00.000Z')
   })
 })

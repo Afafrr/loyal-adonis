@@ -15,6 +15,7 @@ export interface LoyaltyAccount {
     id: number;
     name: string;
     firstScannedAt: string;
+    lastVisitedAt: string;
     stampCount: number;
   }>;
 }
