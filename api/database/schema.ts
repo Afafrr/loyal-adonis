@@ -93,7 +93,7 @@ export class StampSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'encryptedPassword', 'id', 'rememberCreatedAt', 'resetPasswordSentAt', 'resetPasswordToken', 'updatedAt'] as const
+  static $columns = ['createdAt', 'email', 'encryptedPassword', 'firstName', 'id', 'phoneE164', 'phoneVerifiedAt', 'rememberCreatedAt', 'resetPasswordSentAt', 'resetPasswordToken', 'updatedAt'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -101,8 +101,14 @@ export class UserSchema extends BaseModel {
   declare email: string
   @column({ serializeAs: null })
   declare encryptedPassword: string
+  @column()
+  declare firstName: string | null
   @column({ isPrimary: true })
   declare id: bigint | number
+  @column()
+  declare phoneE164: string | null
+  @column.dateTime()
+  declare phoneVerifiedAt: DateTime | null
   @column.dateTime()
   declare rememberCreatedAt: DateTime | null
   @column.dateTime()

@@ -6,6 +6,7 @@ import Stamp from '#models/stamp'
 import User from '#models/user'
 import Venue from '#models/venue'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
+import { DateTime } from 'luxon'
 
 export default class LoyaltyDemoSeeder extends BaseSeeder {
   async run() {
@@ -13,7 +14,12 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
 
     const user = await User.updateOrCreate(
       { email: 'member@example.com' },
-      { encryptedPassword: 'password123' },
+      {
+        encryptedPassword: 'password123',
+        firstName: 'Marta',
+        phoneE164: '+48501123456',
+        phoneVerifiedAt: DateTime.fromISO('2026-08-04T12:00:00Z'),
+      },
       client
     )
 
