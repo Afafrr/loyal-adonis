@@ -14,7 +14,6 @@ export interface LoyaltyAccount {
   locations: Array<{
     id: number;
     name: string;
-    firstScannedAt: string;
     lastVisitedAt: string;
     stampCount: number;
   }>;

@@ -6,7 +6,6 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
   const totalStamps = Math.max(account.program.stampsRequired, 1);
   const collectedStamps = Math.min(account.program.stampCount, totalStamps);
   const loyaltyColor = getLoyaltyColor(account.company.id);
-  const topLocations = account.locations.slice(0, 2);
 
   return (
     <article className='min-w-0 rounded-2xl border border-line-subtle bg-panel p-4 shadow-[0_14px_36px_rgba(32,42,37,0.035)] sm:rounded-[18px] sm:px-10 sm:py-8'>
@@ -26,27 +25,29 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
         totalStamps={totalStamps}
       />
 
-      <div className='mt-3 border-t border-line-faint pt-4'>
-        <p className='mb-2 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground-label sm:text-xs'>
-          Recently visited
-        </p>
-        <ul className='mt-1'>
-          {topLocations.map((location) => (
-            <li
-              className='flex items-baseline justify-between gap-4 text-sm font-bold'
-              key={location.id}
-            >
-              <span className='min-w-0 truncate text-foreground'>
-                {location.name} ·{' '}
-                <span suppressHydrationWarning>{formatLastVisit(location.lastVisitedAt)}</span>
-              </span>
-              <span className={`shrink-0 ${loyaltyColor.locationTextClass}`}>
-                {location.stampCount} {location.stampCount === 1 ? 'stamp' : 'stamps'}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {account.locations.length > 0 && (
+        <div className='mt-3 border-t border-line-faint pt-4'>
+          <p className='mb-2 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground-label sm:text-xs'>
+            Recently visited
+          </p>
+          <ul className='mt-1'>
+            {account.locations.map((location) => (
+              <li
+                className='flex items-baseline justify-between gap-4 text-sm font-bold'
+                key={location.id}
+              >
+                <span className='min-w-0 truncate text-foreground'>
+                  {location.name} ·{' '}
+                  <span suppressHydrationWarning>{formatLastVisit(location.lastVisitedAt)}</span>
+                </span>
+                <span className={`shrink-0 ${loyaltyColor.locationTextClass}`}>
+                  {location.stampCount} {location.stampCount === 1 ? 'stamp' : 'stamps'}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </article>
   );
 }
