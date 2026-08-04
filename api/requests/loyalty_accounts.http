@@ -1,0 +1,17 @@
+###
+# Loyalty accounts dashboard API — VS Code REST Client
+#
+# Start the API and sign in through auth.http first. REST Client retains the
+# authenticated session cookie for localhost and sends it with this request.
+#
+# The endpoint returns every company joined by the user. Only the first three
+# accounts contain up to two most recently visited locations; later accounts
+# return an empty locations array. program.stampCount still includes stamps
+# collected across every location for every account.
+
+@baseUrl = http://localhost:3333/api/v1
+
+### Get loyalty accounts for the dashboard (expected: 200)
+# @name loyaltyAccounts
+GET {{baseUrl}}/me/loyalty_accounts
+Accept: application/json

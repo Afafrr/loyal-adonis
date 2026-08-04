@@ -10,7 +10,7 @@
 # and after sign-out because these operations may reset the session.
 
 @baseUrl = http://localhost:3333/api/v1
-@email = client2@example.com
+@email = member@example.com
 @password = password123
 
 # @name csrf
