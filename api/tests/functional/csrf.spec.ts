@@ -10,12 +10,12 @@ test.group('CSRF', () => {
     response.assertHeader('X-CSRF-Token')
   })
 
-  test('rejects a state-changing request without a token', async ({ client }) => {
+  test('rejects a state-changing request without a token', async ({ client, assert }) => {
     const response = await client.post('/api/v1/users/sign_in').json({
       user: { email: 'user@example.com', password: 'password123' },
     })
 
     response.assertStatus(403)
-    response.assertBody({ error: 'Invalid CSRF token' })
+    assert.deepEqual(response.body(), { error: 'Invalid CSRF token' })
   })
 })

@@ -105,7 +105,7 @@ test.group('Tag scans', () => {
 
       const repeatResponse = await authenticatedPost(client, user)
       repeatResponse.assertStatus(409)
-      repeatResponse.assertBody({ error: 'This NFC scan has already been accepted.' })
+      assert.deepEqual(repeatResponse.body(), { error: 'This NFC scan has already been accepted.' })
 
       const stampCount = await Stamp.query().where('nfc_tag_id', Number(tag.id)).count('* as total')
       assert.equal(Number(stampCount[0].$extras.total), 1)

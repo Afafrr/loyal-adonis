@@ -9,11 +9,11 @@ test.group('System endpoints', () => {
     assert.isTrue(Number.isFinite(Date.parse(response.body().timestamp)))
   })
 
-  test('returns the Rails-compatible unauthorized response', async ({ client }) => {
+  test('returns the Rails-compatible unauthorized response', async ({ client, assert }) => {
     const response = await client.get('/api/v1/me')
 
     response.assertStatus(401)
-    response.assertBody({
+    assert.deepEqual(response.body(), {
       error: 'You need to sign in or sign up before continuing.',
     })
   })
