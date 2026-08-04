@@ -53,17 +53,44 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
 
     const firstCompanyFirstVenue = await Venue.updateOrCreate(
       { companyId: firstCompany.id, name: 'Śródmieście' },
-      { companyId: firstCompany.id, name: 'Śródmieście' },
+      {
+        companyId: firstCompany.id,
+        name: 'Śródmieście',
+        addressLine1: 'ul. Marszałkowska 10',
+        postalCode: '00-590',
+        city: 'Warszawa',
+        countryCode: 'PL',
+        latitude: '52.221617',
+        longitude: '21.014272',
+      },
       client
     )
     const firstCompanySecondVenue = await Venue.updateOrCreate(
       { companyId: firstCompany.id, name: 'Stare Miasto' },
-      { companyId: firstCompany.id, name: 'Stare Miasto' },
+      {
+        companyId: firstCompany.id,
+        name: 'Stare Miasto',
+        addressLine1: 'ul. Freta 10',
+        postalCode: '00-227',
+        city: 'Warszawa',
+        countryCode: 'PL',
+        latitude: '52.251623',
+        longitude: '21.010097',
+      },
       client
     )
     const secondCompanyVenue = await Venue.updateOrCreate(
       { companyId: secondCompany.id, name: 'Mokotów' },
-      { companyId: secondCompany.id, name: 'Mokotów' },
+      {
+        companyId: secondCompany.id,
+        name: 'Mokotów',
+        addressLine1: 'ul. Puławska 2',
+        postalCode: '02-566',
+        city: 'Warszawa',
+        countryCode: 'PL',
+        latitude: '52.209124',
+        longitude: '21.019510',
+      },
       client
     )
 

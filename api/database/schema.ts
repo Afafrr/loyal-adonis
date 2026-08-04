@@ -114,16 +114,30 @@ export class UserSchema extends BaseModel {
 }
 
 export class VenueSchema extends BaseModel {
-  static $columns = ['companyId', 'createdAt', 'id', 'name', 'updatedAt'] as const
+  static $columns = ['addressLine1', 'addressLine2', 'city', 'companyId', 'countryCode', 'createdAt', 'id', 'latitude', 'longitude', 'name', 'postalCode', 'updatedAt'] as const
   $columns = VenueSchema.$columns
   @column()
+  declare addressLine1: string | null
+  @column()
+  declare addressLine2: string | null
+  @column()
+  declare city: string | null
+  @column()
   declare companyId: bigint | number
+  @column()
+  declare countryCode: string | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column({ isPrimary: true })
   declare id: bigint | number
   @column()
+  declare latitude: string | null
+  @column()
+  declare longitude: string | null
+  @column()
   declare name: string
+  @column()
+  declare postalCode: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
