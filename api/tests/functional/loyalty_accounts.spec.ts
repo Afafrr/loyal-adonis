@@ -129,6 +129,45 @@ test.group('Loyalty accounts', () => {
     assert.equal(body.loyaltyAccounts[0].locations[0].lastVisitedAt, '2026-08-04T10:00:00.000Z')
   })
 
+  test('does not return another user loyalty account', async ({ client, assert }) => {
+    const user = await User.create({
+      email: 'owner@example.com',
+      encryptedPassword: 'password123',
+    })
+    const otherUser = await User.create({
+      email: 'stranger@example.com',
+      encryptedPassword: 'password123',
+    })
+    const company = await Company.create({ name: 'Coffee Co.' })
+    const loyaltyProgram = await LoyaltyProgram.create({
+      companyId: company.id,
+      name: 'Coffee stamps',
+      rewardTitle: 'Free coffee',
+      stampsRequired: 10,
+      active: true,
+    })
+
+    const ownAccount = await LoyaltyAccount.create({
+      userId: user.id,
+      loyaltyProgramId: loyaltyProgram.id,
+    })
+    await LoyaltyAccount.create({
+      userId: otherUser.id,
+      loyaltyProgramId: loyaltyProgram.id,
+    })
+
+    const login = await signIn(client, user.email, 'password123')
+    const response = await client
+      .get('/api/v1/me/loyalty_accounts')
+      .header('Cookie', sessionCookie(login))
+
+    response.assertStatus(200)
+
+    const body = response.body() as { loyaltyAccounts: Array<{ id: number }> }
+    assert.lengthOf(body.loyaltyAccounts, 1)
+    assert.equal(body.loyaltyAccounts[0].id, Number(ownAccount.id))
+  })
+
   test('returns recent locations only for the first three companies', async ({
     client,
     assert,
