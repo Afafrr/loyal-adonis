@@ -29,16 +29,19 @@ export function SignOutButton() {
   }
 
   return (
-    <div className='shrink-0 text-right'>
+    <div>
       <button
-        className='min-h-10 whitespace-nowrap rounded-[10px] border border-line bg-panel px-3 text-[11px] font-semibold text-foreground-secondary transition hover:border-line-hover disabled:cursor-wait disabled:opacity-60 sm:px-4 sm:text-xs'
+        className='flex min-h-14 w-full items-center justify-between gap-4 px-5 text-left text-sm font-bold text-danger transition hover:bg-panel-subtle disabled:cursor-wait disabled:opacity-60 sm:px-6 sm:text-[15px]'
         onClick={signOut}
         disabled={signingOut}
       >
-        {signingOut ? 'Signing out...' : 'Sign out'}
+        <span>{signingOut ? 'Signing out…' : 'Sign out'}</span>
+        <svg className='size-5' viewBox='0 0 24 24' fill='none' aria-hidden='true'>
+          <path d='M14 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-3M10 12h11m0 0-3-3m3 3-3 3' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' />
+        </svg>
       </button>
       {error && (
-        <p className='mt-2 max-w-48 text-[11px] text-danger' role='alert'>
+        <p className='px-5 pb-4 text-[11px] text-danger sm:px-6' role='alert'>
           {error}
         </p>
       )}

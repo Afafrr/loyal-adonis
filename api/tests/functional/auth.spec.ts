@@ -45,6 +45,7 @@ test.group('Authentication', () => {
     const user = await User.create({
       email: 'user@example.com',
       encryptedPassword: 'password123',
+      firstName: 'Marta',
     })
 
     const login = await signIn(client, user.email, 'password123')
@@ -54,7 +55,7 @@ test.group('Authentication', () => {
 
     const me = await client.get('/api/v1/me').header('Cookie', sessionCookie(login))
     me.assertStatus(200)
-    me.assertBody({ id: Number(user.id), email: user.email })
+    me.assertBody({ id: Number(user.id), email: user.email, firstName: 'Marta' })
   })
 
   test('rejects invalid credentials', async ({ client }) => {

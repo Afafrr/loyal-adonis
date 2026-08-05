@@ -6,6 +6,7 @@ function apiRoutesFor(origin: string) {
   return {
     health: `${origin}/up`,
     me: `${apiBaseUrl}/me`,
+    profile: `${apiBaseUrl}/me/profile`,
     loyaltyAccounts: `${apiBaseUrl}/me/loyalty_accounts`,
     register: `${apiBaseUrl}/users`,
     signIn: `${apiBaseUrl}/users/sign_in`,
@@ -18,6 +19,7 @@ export const routes = {
   signIn: '/sign-in',
   signUp: '/sign-up',
   dashboard: '/dashboard',
+  profile: '/profile',
   api: apiRoutesFor(browserApiOrigin),
 } as const;
 

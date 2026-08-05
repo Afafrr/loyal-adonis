@@ -1,24 +1,8 @@
-import { headers } from 'next/headers';
-import { serverRoutes } from '../../routes';
+import { getLoyaltyAccounts } from '../_lib/loyalty-accounts';
 import { LoyaltyAccounts } from './loyalty-accounts';
-import type { LoyaltyAccount } from './loyalty-accounts/types';
-
-async function getLoyaltyAccounts(cookie: string | null): Promise<LoyaltyAccount[]> {
-  if (!cookie) return [];
-
-  const response = await fetch(serverRoutes.api.loyaltyAccounts, {
-    headers: { Cookie: cookie },
-    cache: 'no-store',
-  });
-
-  if (!response.ok) return [];
-  const data = (await response.json()) as { loyaltyAccounts: LoyaltyAccount[] };
-  return data.loyaltyAccounts;
-}
 
 export default async function DashboardPage() {
-  const cookie = (await headers()).get('cookie');
-  const loyaltyAccounts = await getLoyaltyAccounts(cookie);
+  const loyaltyAccounts = await getLoyaltyAccounts();
 
   return (
     <section className='mx-auto max-w-2xl px-4 pb-10 pt-4 min-[380px]:px-5 sm:px-12 sm:pb-16 sm:pt-6'>
