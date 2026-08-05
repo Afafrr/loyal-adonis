@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ChevronRightIcon } from '../../_components/icons';
 import { userDisplayName, userInitial } from '../_lib/current-user';
 import { getCurrentProfile } from '../_lib/user-profile';
 import { SignOutButton } from '../sign-out-button';
@@ -8,14 +9,6 @@ export const metadata: Metadata = {
   description: 'Your Loyal Nest profile and account summary',
 };
 
-function Chevron() {
-  return (
-    <svg className='size-5 shrink-0 text-foreground-label' viewBox='0 0 20 20' fill='none' aria-hidden='true'>
-      <path d='m7.5 4.5 5 5.5-5 5.5' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' />
-    </svg>
-  );
-}
-
 export default async function ProfilePage() {
   const profile = await getCurrentProfile();
   const displayName = userDisplayName(profile);
@@ -24,7 +17,9 @@ export default async function ProfilePage() {
   return (
     <section className='mx-auto max-w-2xl px-4 pb-12 pt-4 min-[380px]:px-5 sm:px-12 sm:pb-16 sm:pt-6'>
       <div className='flex items-center justify-between gap-4'>
-        <h1 className='text-4xl font-extrabold leading-none tracking-[-0.055em] sm:text-5xl'>Profile</h1>
+        <h1 className='text-4xl font-bold leading-none tracking-[-0.055em] sm:text-5xl'>
+          Profile
+        </h1>
         <span className='rounded-full border border-line-subtle bg-panel px-4 py-2 text-xs font-bold text-foreground-secondary shadow-[0_4px_12px_rgba(32,42,37,0.025)] sm:text-sm'>
           Edit
         </span>
@@ -38,7 +33,7 @@ export default async function ProfilePage() {
         <p className='mt-1 text-sm font-semibold text-foreground-muted sm:text-base'>Loyal Nest member since {memberSince}</p>
       </div>
 
-      <div className='mt-6 flex items-end justify-between rounded-[26px] bg-brand px-6 py-5 text-white shadow-[0_16px_36px_rgba(32,42,37,0.1)] sm:mt-8 sm:px-8 sm:py-6'>
+      <div className='mt-6 flex items-end justify-between rounded-[26px] bg-brand px-8 py-5 text-white shadow-[0_16px_36px_rgba(32,42,37,0.1)] sm:mt-8 sm:px-12 sm:py-6'>
         <div>
           <p className='text-3xl font-black leading-none sm:text-4xl'>{profile.visitCount}</p>
           <p className='mt-1 text-[10px] font-extrabold uppercase tracking-[0.09em] text-white/65 sm:text-xs'>Visits</p>
@@ -53,11 +48,11 @@ export default async function ProfilePage() {
       <div className='overflow-hidden rounded-[24px] border border-line-subtle bg-panel shadow-[0_14px_36px_rgba(32,42,37,0.035)]'>
         <div className='flex min-h-14 items-center justify-between gap-4 border-b border-line-faint px-5 sm:px-6'>
           <span className='text-sm font-bold sm:text-[15px]'>Reward preferences</span>
-          <Chevron />
+          <ChevronRightIcon className='size-5 shrink-0 text-foreground-label' />
         </div>
         <div className='flex min-h-14 items-center justify-between gap-4 border-b border-line-faint px-5 sm:px-6'>
           <span className='text-sm font-bold sm:text-[15px]'>Help &amp; support</span>
-          <Chevron />
+          <ChevronRightIcon className='size-5 shrink-0 text-foreground-label' />
         </div>
         <SignOutButton />
       </div>

@@ -1,6 +1,11 @@
-import { Nunito, Space_Grotesk } from 'next/font/google';
+import { Nunito, Space_Grotesk, Inter } from 'next/font/google';
 
 export const nunito = Nunito({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+});
+
+export const inter = Inter({
   subsets: ['latin', 'latin-ext'],
   weight: ['400', '500', '600', '700', '800', '900'],
 });

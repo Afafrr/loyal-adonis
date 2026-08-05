@@ -44,6 +44,12 @@
   --foreground: var(--color-foreground);
 }
 
+@media (min-width: 40rem) {
+  :root {
+    font-size: 80%;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -62,4 +68,8 @@ input {
 }
 a {
   color: inherit;
+}
+a,
+button:not(:disabled) {
+  cursor: pointer;
 }
