@@ -11,6 +11,7 @@ export interface CurrentProfile {
   createdAt: string;
   visitCount: number;
   activeProgramCount: number;
+  availableRewardCount: number;
 }
 
 export const getCurrentProfile = cache(async (): Promise<CurrentProfile> => {

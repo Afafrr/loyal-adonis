@@ -39,7 +39,7 @@ export default async function ProfilePage() {
           <p className='mt-1 text-[10px] font-extrabold uppercase tracking-[0.09em] text-white/65 sm:text-xs'>Visits</p>
         </div>
         <div className='text-right'>
-          <p className='text-3xl font-black leading-none sm:text-4xl'>{profile.activeProgramCount}</p>
+          <p className='text-3xl font-black leading-none sm:text-4xl'>{profile.availableRewardCount}</p>
           <p className='mt-1 text-[10px] font-extrabold uppercase tracking-[0.09em] text-white/65 sm:text-xs'>Rewards</p>
         </div>
       </div>
