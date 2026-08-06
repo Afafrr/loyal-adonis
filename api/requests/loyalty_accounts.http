@@ -6,8 +6,8 @@
 #
 # The endpoint returns every company joined by the user. Only the first three
 # accounts contain up to two most recently visited locations; later accounts
-# return an empty locations array. program.stampCount still includes stamps
-# collected across every location for every account.
+# return an empty locations array. program.stampCount is the progress on the
+# current stamp card.
 
 @baseUrl = http://localhost:3333/api/v1
 

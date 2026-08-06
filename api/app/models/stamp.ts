@@ -1,4 +1,5 @@
 import { StampSchema } from '#database/schema'
+import EarnedReward from '#models/earned_reward'
 import LoyaltyAccount from '#models/loyalty_account'
 import NfcTag from '#models/nfc_tag'
 import { belongsTo } from '@adonisjs/lucid/orm'
@@ -10,4 +11,7 @@ export default class Stamp extends StampSchema {
 
   @belongsTo(() => NfcTag)
   declare nfcTag: BelongsTo<typeof NfcTag>
+
+  @belongsTo(() => EarnedReward)
+  declare earnedReward: BelongsTo<typeof EarnedReward>
 }

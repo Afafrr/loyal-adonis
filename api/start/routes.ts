@@ -12,6 +12,7 @@ import { middleware } from '#start/kernel'
 
 const HealthController = () => import('#controllers/health_controller')
 const LoyaltyAccountsController = () => import('#controllers/loyalty_accounts_controller')
+const LoyaltyRewardsController = () => import('#controllers/loyalty_rewards_controller')
 const DevelopmentNfcTagsController = () => import('#controllers/development_nfc_tags_controller')
 const RegistrationsController = () => import('#controllers/registrations_controller')
 const ProfileController = () => import('#controllers/profile_controller')
@@ -35,6 +36,9 @@ router
         router
           .get('me/loyalty_accounts', [LoyaltyAccountsController, 'index'])
           .as('loyaltyAccounts.index')
+        router
+          .get('me/loyalty_rewards', [LoyaltyRewardsController, 'index'])
+          .as('loyaltyRewards.index')
         router
           .post('dev/nfc_tags/inspect', [DevelopmentNfcTagsController, 'inspect'])
           .as('developmentNfcTags.inspect')

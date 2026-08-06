@@ -1,0 +1,15 @@
+###
+# Available loyalty rewards API — VS Code REST Client
+#
+# Start the API and sign in through auth.http first. REST Client retains the
+# authenticated session cookie for localhost and sends it with this request.
+#
+# The endpoint returns only unredeemed rewards, newest first. The first item
+# is therefore the latest reward available to show on the dashboard.
+
+@baseUrl = http://localhost:3333/api/v1
+
+### Get available rewards (expected: 200)
+# @name loyaltyRewards
+GET {{baseUrl}}/me/loyalty_rewards
+Accept: application/json

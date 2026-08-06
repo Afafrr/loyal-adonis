@@ -20,6 +20,31 @@ export class CompanySchema extends BaseModel {
   declare updatedAt: DateTime
 }
 
+export class EarnedRewardSchema extends BaseModel {
+  static $columns = ['createdAt', 'earnedAt', 'id', 'loyaltyAccountId', 'redeemedAt', 'redeemedAtVenueId', 'redeemedByUserId', 'rewardTitleSnapshot', 'stampsRequiredSnapshot', 'updatedAt'] as const
+  $columns = EarnedRewardSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare earnedAt: DateTime
+  @column({ isPrimary: true })
+  declare id: bigint | number
+  @column()
+  declare loyaltyAccountId: bigint | number
+  @column.dateTime()
+  declare redeemedAt: DateTime | null
+  @column()
+  declare redeemedAtVenueId: bigint | number | null
+  @column()
+  declare redeemedByUserId: bigint | number | null
+  @column()
+  declare rewardTitleSnapshot: string
+  @column()
+  declare stampsRequiredSnapshot: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
+
 export class LoyaltyAccountSchema extends BaseModel {
   static $columns = ['createdAt', 'id', 'loyaltyProgramId', 'updatedAt', 'userId'] as const
   $columns = LoyaltyAccountSchema.$columns
@@ -76,10 +101,12 @@ export class NfcTagSchema extends BaseModel {
 }
 
 export class StampSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'loyaltyAccountId', 'nfcCounter', 'nfcTagId', 'updatedAt'] as const
+  static $columns = ['createdAt', 'earnedRewardId', 'id', 'loyaltyAccountId', 'nfcCounter', 'nfcTagId', 'updatedAt'] as const
   $columns = StampSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+  @column()
+  declare earnedRewardId: bigint | number | null
   @column({ isPrimary: true })
   declare id: bigint | number
   @column()

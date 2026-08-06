@@ -25,11 +25,15 @@ export async function listLoyaltyAccounts(userId: number) {
     .orderBy('created_at', 'asc')
     .withCount('stamps')
     .preload('loyaltyProgram', (loyaltyProgramQuery) => loyaltyProgramQuery.preload('company'))
+    .preload('earnedRewards', (earnedRewardQuery) =>
+      earnedRewardQuery.select('id', 'loyalty_account_id', 'stamps_required_snapshot')
+    )
 
   const locationsByAccount = await loadLocationSummaries(
-    loyaltyAccounts.slice(0, recentLocationAccountLimit).map((loyaltyAccount) => Number(loyaltyAccount.id))
+    loyaltyAccounts
+      .slice(0, recentLocationAccountLimit)
+      .map((loyaltyAccount) => Number(loyaltyAccount.id))
   )
-
   return {
     loyaltyAccounts: loyaltyAccounts.map((loyaltyAccount) =>
       toAccountSummary(loyaltyAccount, locationsByAccount.get(Number(loyaltyAccount.id)) ?? [])
@@ -98,7 +102,11 @@ async function loadLocationSummaries(accountIds: number[]) {
 function toAccountSummary(loyaltyAccount: LoyaltyAccount, locations: LocationSummary[]) {
   const { loyaltyProgram } = loyaltyAccount
   const { company } = loyaltyProgram
-
+  const stampCount = Number(loyaltyAccount.$extras.stamps_count)
+  const allocatedStampCount = loyaltyAccount.earnedRewards.reduce(
+    (total, reward) => total + reward.stampsRequiredSnapshot,
+    0
+  )
   return {
     id: Number(loyaltyAccount.id),
     program: {
@@ -106,7 +114,7 @@ function toAccountSummary(loyaltyAccount: LoyaltyAccount, locations: LocationSum
       name: loyaltyProgram.name,
       rewardTitle: loyaltyProgram.rewardTitle,
       stampsRequired: loyaltyProgram.stampsRequired,
-      stampCount: Number(loyaltyAccount.$extras.stamps_count),
+      stampCount: Math.max(stampCount - allocatedStampCount, 0),
     },
     company: {
       id: Number(company.id),

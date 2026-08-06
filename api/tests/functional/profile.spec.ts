@@ -1,4 +1,5 @@
 import Company from '#models/company'
+import EarnedReward from '#models/earned_reward'
 import LoyaltyAccount from '#models/loyalty_account'
 import LoyaltyProgram from '#models/loyalty_program'
 import NfcTag from '#models/nfc_tag'
@@ -33,16 +34,26 @@ test.group('Profile', () => {
       userId: user.id,
       loyaltyProgramId: activeProgram.id,
     })
-    await Stamp.create({
+    const firstActiveStamp = await Stamp.create({
       loyaltyAccountId: activeAccount.id,
       nfcTagId: activeTag.id,
       nfcCounter: 1,
     })
-    await Stamp.create({
+    const secondActiveStamp = await Stamp.create({
       loyaltyAccountId: activeAccount.id,
       nfcTagId: activeTag.id,
       nfcCounter: 2,
     })
+    const earnedReward = await EarnedReward.create({
+      loyaltyAccountId: activeAccount.id,
+      rewardTitleSnapshot: 'Free coffee',
+      stampsRequiredSnapshot: 2,
+      earnedAt: secondActiveStamp.createdAt,
+    })
+    firstActiveStamp.earnedRewardId = earnedReward.id
+    secondActiveStamp.earnedRewardId = earnedReward.id
+    await firstActiveStamp.save()
+    await secondActiveStamp.save()
 
     const inactiveCompany = await Company.create({ name: 'Inactive Bakery' })
     const inactiveProgram = await LoyaltyProgram.create({
@@ -80,6 +91,7 @@ test.group('Profile', () => {
       createdAt: '2026-08-01T08:00:00.000Z',
       visitCount: 3,
       activeProgramCount: 1,
+      availableRewardCount: 1,
     })
   })
 

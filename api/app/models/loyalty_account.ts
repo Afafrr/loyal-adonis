@@ -1,4 +1,5 @@
 import { LoyaltyAccountSchema } from '#database/schema'
+import EarnedReward from '#models/earned_reward'
 import LoyaltyProgram from '#models/loyalty_program'
 import Stamp from '#models/stamp'
 import User from '#models/user'
@@ -14,4 +15,7 @@ export default class LoyaltyAccount extends LoyaltyAccountSchema {
 
   @hasMany(() => Stamp)
   declare stamps: HasMany<typeof Stamp>
+
+  @hasMany(() => EarnedReward)
+  declare earnedRewards: HasMany<typeof EarnedReward>
 }
