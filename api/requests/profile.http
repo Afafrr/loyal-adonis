@@ -1,0 +1,12 @@
+###
+# Profile API — VS Code REST Client
+#
+# Start the API and sign in through auth.http first. REST Client retains the
+# authenticated session cookie for localhost and sends it with this request.
+
+@baseUrl = http://localhost:3333/api/v1
+
+### Get the signed-in user profile (expected: 200)
+# @name profile
+GET {{baseUrl}}/me/profile
+Accept: application/json
