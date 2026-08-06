@@ -1,5 +1,5 @@
 import { tagScanValidator } from '#validators/tag_scan'
-import { recordTagScan, TagScanError } from '#services/nfc/record_tag_scan_service'
+import { recordTagScan } from '#services/nfc/record_tag_scan_service'
 import { verifyTag } from '#services/nfc/verify_tag_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -17,20 +17,12 @@ export default class TagScanController {
       return response.badRequest({ error: 'Unable to verify the NFC tag.' })
     }
 
-    try {
-      const scan = await recordTagScan({
-        userId: auth.getUserOrFail().id,
-        tagIdentifier: upstream.tag.identifier,
-        readCounter: upstream.tag.readCounter,
-      })
+    const scan = await recordTagScan({
+      userId: auth.getUserOrFail().id,
+      tagIdentifier: upstream.tag.identifier,
+      readCounter: upstream.tag.readCounter,
+    })
 
-      return response.created(scan)
-    } catch (error) {
-      if (error instanceof TagScanError) {
-        return response.status(error.status).send({ error: error.message })
-      }
-
-      throw error
-    }
+    return response.created(scan)
   }
 }

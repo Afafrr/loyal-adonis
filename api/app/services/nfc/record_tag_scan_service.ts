@@ -1,4 +1,6 @@
 import EarnedReward from '#models/earned_reward'
+import { isPostgresUniqueConstraintViolation } from '#exceptions/database_error'
+import TagScanError from '#exceptions/tag_scan_error'
 import LoyaltyAccount from '#models/loyalty_account'
 import LoyaltyProgram from '#models/loyalty_program'
 import NfcTag from '#models/nfc_tag'
@@ -10,15 +12,6 @@ export interface RecordTagScanParams {
   userId: number | bigint
   tagIdentifier: string
   readCounter: number
-}
-
-export class TagScanError extends Error {
-  constructor(
-    message: string,
-    readonly status: 404 | 409
-  ) {
-    super(message)
-  }
 }
 
 export interface RecordedTagScan {
@@ -115,16 +108,7 @@ export async function recordTagScan(params: RecordTagScanParams): Promise<Record
       }
     })
   } catch (error) {
-    if (error instanceof TagScanError) throw error
-
-    if (
-      typeof error === 'object' &&
-      error !== null &&
-      'code' in error &&
-      error.code === '23505' &&
-      'constraint' in error &&
-      error.constraint === 'stamps_nfc_tag_id_nfc_counter_unique'
-    ) {
+    if (isPostgresUniqueConstraintViolation(error, 'stamps_nfc_tag_id_nfc_counter_unique')) {
       throw new TagScanError('This NFC scan has already been accepted.', 409)
     }
 

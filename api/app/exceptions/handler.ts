@@ -1,4 +1,5 @@
 import app from '@adonisjs/core/services/app'
+import TagScanError from '#exceptions/tag_scan_error'
 import { type HttpContext, ExceptionHandler } from '@adonisjs/core/http'
 import { errors as authErrors } from '@adonisjs/auth'
 import { errors as shieldErrors } from '@adonisjs/shield'
@@ -27,6 +28,10 @@ export default class HttpExceptionHandler extends ExceptionHandler {
 
     if (error instanceof authErrors.E_INVALID_CREDENTIALS) {
       return ctx.response.status(401).send({ error: 'Invalid email or password.' })
+    }
+
+    if (error instanceof TagScanError) {
+      return ctx.response.status(error.status).send({ error: error.message })
     }
 
     return super.handle(error, ctx)
