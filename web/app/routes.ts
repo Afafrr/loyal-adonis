@@ -8,6 +8,7 @@ function apiRoutesFor(origin: string) {
     me: `${apiBaseUrl}/me`,
     profile: `${apiBaseUrl}/me/profile`,
     loyaltyAccounts: `${apiBaseUrl}/me/loyalty_accounts`,
+    loyaltyRewards: `${apiBaseUrl}/me/loyalty_rewards`,
     register: `${apiBaseUrl}/users`,
     signIn: `${apiBaseUrl}/users/sign_in`,
     signOut: `${apiBaseUrl}/users/sign_out`,

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { ChevronRightIcon } from '../../_components/icons';
+import { PageTitle } from '../../_components/page-title';
 import { userDisplayName, userInitial } from '../_lib/current-user';
 import { getCurrentProfile } from '../_lib/user-profile';
 import { SignOutButton } from '../sign-out-button';
@@ -17,9 +18,7 @@ export default async function ProfilePage() {
   return (
     <section className='mx-auto max-w-2xl px-4 pb-12 pt-4 min-[380px]:px-5 sm:px-12 sm:pb-16 sm:pt-6'>
       <div className='flex items-center justify-between gap-4'>
-        <h1 className='text-4xl font-bold leading-none tracking-[-0.055em] sm:text-5xl'>
-          Profile
-        </h1>
+        <PageTitle>Profile</PageTitle>
         <span className='rounded-full border border-line-subtle bg-panel px-4 py-2 text-xs font-bold text-foreground-secondary shadow-[0_4px_12px_rgba(32,42,37,0.025)] sm:text-sm'>
           Edit
         </span>
