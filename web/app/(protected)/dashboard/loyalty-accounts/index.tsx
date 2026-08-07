@@ -1,20 +1,10 @@
-'use client';
-
 import { CompanyCard } from './company-card';
 import type { LoyaltyAccount } from './types';
 
 export type { LoyaltyAccount } from './types';
 
-interface CompanyEntry {
-  companyId: number;
-  companyName: string;
-  accounts: LoyaltyAccount[];
-}
-
 export function LoyaltyAccounts({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyAccount[] }) {
-  const companies = groupAccountsByCompany(loyaltyAccounts);
-
-  if (companies.length === 0) {
+  if (loyaltyAccounts.length === 0) {
     return (
       <div className='mt-8 rounded-2xl border border-line-subtle bg-panel p-5 shadow-[0_18px_50px_rgba(32,42,37,0.04)] sm:mt-10 sm:rounded-[18px] sm:p-9 lg:mt-12 lg:p-10'>
         <h2 className='text-[16px] font-semibold sm:text-lg lg:text-[18px]'>No loyalty programs yet.</h2>
@@ -25,37 +15,32 @@ export function LoyaltyAccounts({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyA
     );
   }
 
+  const sortedAccounts = [...loyaltyAccounts].sort(compareProgressDescending);
+
   return (
     <section className='mt-2 sm:mt-4'>
       <div className='space-y-5'>
-        {companies.map((company) => (
-          <div className='space-y-5' key={company.companyId}>
-            {company.accounts.map((account) => (
-              <CompanyCard account={account} key={account.id} />
-            ))}
-          </div>
+        {sortedAccounts.map((account) => (
+          <CompanyCard account={account} key={account.id} />
         ))}
       </div>
     </section>
   );
 }
 
-function groupAccountsByCompany(loyaltyAccounts: LoyaltyAccount[]): CompanyEntry[] {
-  const companies = new Map<number, CompanyEntry>();
+function compareProgressDescending(first: LoyaltyAccount, second: LoyaltyAccount) {
+  const firstProgress = first.program.stampCount / Math.max(first.program.stampsRequired, 1);
+  const secondProgress = second.program.stampCount / Math.max(second.program.stampsRequired, 1);
+  const progressDifference = secondProgress - firstProgress;
 
-  for (const account of loyaltyAccounts) {
-    const company = companies.get(account.company.id);
-
-    if (company) {
-      company.accounts.push(account);
-    } else {
-      companies.set(account.company.id, {
-        companyId: account.company.id,
-        companyName: account.company.name,
-        accounts: [account],
-      });
-    }
+  if (progressDifference !== 0) {
+    return progressDifference;
   }
 
-  return [...companies.values()];
+  const companyDifference = first.company.name.localeCompare(second.company.name);
+  if (companyDifference !== 0) {
+    return companyDifference;
+  }
+
+  return first.id - second.id;
 }

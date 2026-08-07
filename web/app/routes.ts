@@ -7,6 +7,7 @@ function apiRoutesFor(origin: string) {
     health: `${origin}/up`,
     me: `${apiBaseUrl}/me`,
     profile: `${apiBaseUrl}/me/profile`,
+    latestActivity: `${apiBaseUrl}/me/latest_activity`,
     loyaltyAccounts: `${apiBaseUrl}/me/loyalty_accounts`,
     loyaltyRewards: `${apiBaseUrl}/me/loyalty_rewards`,
     register: `${apiBaseUrl}/users`,

@@ -11,10 +11,4 @@ export interface LoyaltyAccount {
     id: number;
     name: string;
   };
-  locations: Array<{
-    id: number;
-    name: string;
-    lastVisitedAt: string;
-    stampCount: number;
-  }>;
 }

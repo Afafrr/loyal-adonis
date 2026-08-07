@@ -17,14 +17,14 @@ export function RewardBalance({
   }
 
   return (
-    <section className='mt-6 rounded-[26px] bg-[linear-gradient(120deg,#1f2824_0%,#32443D_90%)] px-6 py-5 text-white shadow-[0_16px_36px_rgba(32,42,37,0.1)] sm:mt-8 sm:px-8 sm:py-6'>
+    <section className='mt-6 rounded-[26px] bg-[linear-gradient(120deg,#1f2824_0%,#32443D_90%)] px-5 py-6 text-white shadow-[0_16px_36px_rgba(32,42,37,0.1)] sm:mt-8 sm:px-12 sm:py-10'>
       <p className='text-[10px] font-extrabold uppercase tracking-[0.14em] text-white/65 sm:text-xs'>
         Your loyalty balance
       </p>
       <p className='mt-2 text-3xl font-black leading-none tracking-[-0.02em] sm:text-4xl'>
         {rewardCount > 0 ? `${rewardCount} ${rewardCount === 1 ? 'reward' : 'rewards'}` : 'Your next reward'}
       </p>
-      <p className='mt-5 flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-sm font-bold text-white/85 sm:text-[15px]'>
+      <p className='mt-5 flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-sm font-bold text-white/85 sm:text-[15px] sm:px-4 sm:py-3 sm:rounded-2xl'>
         <GiftIcon className='size-4 shrink-0' />
         <span>
           {nextReward.remainingStamps === 1
@@ -36,10 +36,7 @@ export function RewardBalance({
   );
 }
 
-export function shouldShowRewardBalance(
-  loyaltyAccounts: LoyaltyAccount[],
-  rewards: AvailableReward[]
-) {
+export function shouldShowRewardBalance(loyaltyAccounts: LoyaltyAccount[], rewards: AvailableReward[]) {
   return rewards.length > 0 || findNextReward(loyaltyAccounts, true) !== undefined;
 }
 

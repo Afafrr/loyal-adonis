@@ -73,3 +73,27 @@ a,
 button:not(:disabled) {
   cursor: pointer;
 }
+
+.loyalty-card {
+  outline: 1px solid transparent;
+}
+
+.loyalty-card:target {
+  animation: loyalty-card-highlight 1s ease-out;
+}
+
+@keyframes loyalty-card-highlight {
+  0%,
+  85% {
+    outline-color: color-mix(in oklab, var(--color-reward-olive) 60%, transparent);
+  }
+  100% {
+    outline-color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loyalty-card:target {
+    animation: none;
+  }
+}
