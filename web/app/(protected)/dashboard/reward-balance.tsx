@@ -1,3 +1,4 @@
+import { GiftIcon } from '../../_components/icons';
 import type { AvailableReward } from '../_lib/loyalty-rewards';
 import type { LoyaltyAccount } from './loyalty-accounts/types';
 
@@ -20,13 +21,16 @@ export function RewardBalance({
       <p className='text-[10px] font-extrabold uppercase tracking-[0.14em] text-white/65 sm:text-xs'>
         Your loyalty balance
       </p>
-      <p className='mt-2 text-3xl font-black leading-none tracking-[-0.04em] sm:text-4xl'>
+      <p className='mt-2 text-3xl font-black leading-none tracking-[-0.02em] sm:text-4xl'>
         {rewardCount > 0 ? `${rewardCount} ${rewardCount === 1 ? 'reward' : 'rewards'}` : 'Your next reward'}
       </p>
-      <p className='mt-5 rounded-xl bg-white/10 px-4 py-2 text-sm font-bold text-white/85 sm:text-[15px]'>
-        {nextReward.remainingStamps === 1
-          ? `One stamp to ${nextReward.title}`
-          : `${nextReward.remainingStamps} stamps to ${nextReward.title}`}
+      <p className='mt-5 flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-sm font-bold text-white/85 sm:text-[15px]'>
+        <GiftIcon className='size-4 shrink-0' />
+        <span>
+          {nextReward.remainingStamps === 1
+            ? `One stamp to ${nextReward.title}`
+            : `${nextReward.remainingStamps} stamps to ${nextReward.title}`}
+        </span>
       </p>
     </section>
   );

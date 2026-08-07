@@ -26,7 +26,7 @@ export function LoyaltyAccounts({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyA
   }
 
   return (
-    <section className='mt-4 sm:mt-10 lg:mt-8'>
+    <section className='mt-2 sm:mt-4'>
       <div className='space-y-5'>
         {companies.map((company) => (
           <div className='space-y-5' key={company.companyId}>

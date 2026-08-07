@@ -13,7 +13,7 @@ export default async function DashboardPage() {
       <PageTitle>Your rewards</PageTitle>
       {showRewardBalance && <RewardBalance loyaltyAccounts={loyaltyAccounts} rewards={rewards} />}
       {showRewardBalance && (
-        <p className='mb-2 mt-5 text-[10px] font-bold uppercase tracking-[0.14em] text-foreground-label sm:mt-6 sm:text-xs'>
+        <p className='mt-6 text-[10px] font-bold uppercase tracking-[0.14em] text-foreground-label sm:mt-7 sm:text-xs'>
           Active programs
         </p>
       )}
