@@ -28,9 +28,6 @@ export function StampProgress({ collectedStamps, filledStampClass, totalStamps }
           );
         })}
       </div>
-      <p className='mt-3 text-[11px] leading-5 text-foreground-tertiary sm:text-xs lg:text-[12px]'>
-        Collect stamps across any participating venue.
-      </p>
     </div>
   );
 }

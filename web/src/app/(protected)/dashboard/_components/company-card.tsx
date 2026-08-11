@@ -8,6 +8,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
   const collectedStamps = Math.min(account.program.stampCount, totalStamps);
   const loyaltyColor = getLoyaltyColor(account.company.id);
   const locationLabel = account.lastVisitedVenue ? formatLocation(account.lastVisitedVenue) : null;
+  const venueCategory = account.lastVisitedVenue?.category;
 
   return (
     <article
@@ -24,7 +25,11 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
         </span>
         <div className='min-w-0'>
           <h2 className='truncate text-xl font-black'>{account.company.name}</h2>
-          <p className='mt-0.5 truncate text-sm text-foreground-secondary'>{account.program.name}</p>
+          {venueCategory && (
+            <p className='mt-0.5 truncate text-sm text-foreground-secondary'>
+              {formatVenueCategory(venueCategory)}
+            </p>
+          )}
         </div>
       </div>
 
@@ -86,6 +91,11 @@ function getLoyaltyColor(companyId: number): LoyaltyPaletteColor {
 type Location = NonNullable<LoyaltyAccount['lastVisitedVenue']>;
 
 function formatLocation(location: Location) {
-
   return [location.addressLine1, location.addressLine2, location.city || null].filter(Boolean).join(', ') || location.name;
+}
+
+function formatVenueCategory(category: string) {
+  return category
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, (letter) => letter.toLocaleUpperCase());
 }
