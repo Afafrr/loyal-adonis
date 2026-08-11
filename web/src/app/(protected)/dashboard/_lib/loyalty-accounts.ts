@@ -15,6 +15,15 @@ export interface LoyaltyAccount {
     id: number;
     name: string;
   };
+  lastVisitedVenue: {
+    id: number;
+    name: string;
+    addressLine1: string | null;
+    addressLine2: string | null;
+    postalCode: string | null;
+    city: string | null;
+    countryCode: string | null;
+  } | null;
 }
 
 export const getLoyaltyAccounts = cache(async (): Promise<LoyaltyAccount[]> => {

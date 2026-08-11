@@ -1,3 +1,4 @@
+import { MapPinIcon } from '@/components/ui/icons';
 import { StampProgress } from './stamp-progress';
 import { companyInitials } from '../_lib/company-initials';
 import type { LoyaltyAccount } from '../_lib/loyalty-accounts';
@@ -6,6 +7,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
   const totalStamps = Math.max(account.program.stampsRequired, 1);
   const collectedStamps = Math.min(account.program.stampCount, totalStamps);
   const loyaltyColor = getLoyaltyColor(account.company.id);
+  const locationLabel = account.lastVisitedVenue ? formatLocation(account.lastVisitedVenue) : null;
 
   return (
     <article
@@ -38,6 +40,13 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
         filledStampClass={loyaltyColor.filledStampClass}
         totalStamps={totalStamps}
       />
+
+      {locationLabel && (
+        <p className='mt-5 flex items-start gap-2 text-sm text-foreground-secondary'>
+          <MapPinIcon className='mt-0.5 size-4 shrink-0 text-foreground-tertiary' />
+          <span>{locationLabel}</span>
+        </p>
+      )}
     </article>
   );
 }
@@ -72,4 +81,11 @@ const loyaltyPalette: LoyaltyPaletteColor[] = [
  */
 function getLoyaltyColor(companyId: number): LoyaltyPaletteColor {
   return loyaltyPalette[Math.max(companyId - 1, 0) % loyaltyPalette.length];
+}
+
+type Location = NonNullable<LoyaltyAccount['lastVisitedVenue']>;
+
+function formatLocation(location: Location) {
+
+  return [location.addressLine1, location.addressLine2, location.city || null].filter(Boolean).join(', ') || location.name;
 }

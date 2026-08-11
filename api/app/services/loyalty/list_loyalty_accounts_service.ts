@@ -9,6 +9,13 @@ export async function listLoyaltyAccounts(userId: number) {
     .preload('earnedRewards', (earnedRewardQuery) =>
       earnedRewardQuery.select('id', 'loyalty_account_id', 'stamps_required_snapshot')
     )
+    .preload('stamps', (stampQuery) =>
+      stampQuery
+        .orderBy('created_at', 'desc')
+        .orderBy('id', 'desc')
+        .groupLimit(1)
+        .preload('nfcTag', (nfcTagQuery) => nfcTagQuery.preload('venue'))
+    )
 
   return {
     loyaltyAccounts: loyaltyAccounts.map(toAccountSummary),
@@ -23,6 +30,8 @@ function toAccountSummary(loyaltyAccount: LoyaltyAccount) {
     (total, reward) => total + reward.stampsRequiredSnapshot,
     0
   )
+  const latestStamp = loyaltyAccount.stamps[0]
+  const lastVisitedVenue = latestStamp?.nfcTag.venue
   return {
     id: Number(loyaltyAccount.id),
     program: {
@@ -36,5 +45,16 @@ function toAccountSummary(loyaltyAccount: LoyaltyAccount) {
       id: Number(company.id),
       name: company.name,
     },
+    lastVisitedVenue: lastVisitedVenue
+      ? {
+          id: Number(lastVisitedVenue.id),
+          name: lastVisitedVenue.name,
+          addressLine1: lastVisitedVenue.addressLine1,
+          addressLine2: lastVisitedVenue.addressLine2,
+          postalCode: lastVisitedVenue.postalCode,
+          city: lastVisitedVenue.city,
+          countryCode: lastVisitedVenue.countryCode,
+        }
+      : null,
   }
 }

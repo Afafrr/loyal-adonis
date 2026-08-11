@@ -10,7 +10,7 @@ import { test } from '@japa/runner'
 import { DateTime } from 'luxon'
 
 test.group('Loyalty accounts', () => {
-  test('lists signed-in user accounts with their programme progress', async ({
+  test('lists signed-in user accounts with their programme progress and last visited venue', async ({
     client,
     assert,
   }) => {
@@ -30,9 +30,31 @@ test.group('Loyalty accounts', () => {
       stampsRequired: 10,
       active: true,
     })
-    const firstVenue = await Venue.create({ companyId: company.id, name: 'Main Street' })
-    const secondVenue = await Venue.create({ companyId: company.id, name: 'Riverside' })
-    const thirdVenue = await Venue.create({ companyId: company.id, name: 'Old Town' })
+    const firstVenue = await Venue.create({
+      companyId: company.id,
+      name: 'Main Street',
+      addressLine1: '12 Main Street',
+      postalCode: '00-001',
+      city: 'Warsaw',
+      countryCode: 'PL',
+    })
+    const secondVenue = await Venue.create({
+      companyId: company.id,
+      name: 'Riverside',
+      addressLine1: '8 River Road',
+      addressLine2: 'Unit 2',
+      postalCode: '00-002',
+      city: 'Warsaw',
+      countryCode: 'PL',
+    })
+    const thirdVenue = await Venue.create({
+      companyId: company.id,
+      name: 'Old Town',
+      addressLine1: '4 Old Town Square',
+      postalCode: '00-003',
+      city: 'Warsaw',
+      countryCode: 'PL',
+    })
     const firstTag = await NfcTag.create({
       venueId: firstVenue.id,
       identifier: '041C6432A91190',
@@ -106,10 +128,27 @@ test.group('Loyalty accounts', () => {
     const body = response.body() as {
       loyaltyAccounts: Array<{
         program: { stampCount: number }
+        lastVisitedVenue: {
+          id: number
+          name: string
+          addressLine1: string | null
+          addressLine2: string | null
+          postalCode: string | null
+          city: string | null
+          countryCode: string | null
+        } | null
       }>
     }
     assert.equal(body.loyaltyAccounts[0].program.stampCount, 4)
-    assert.notProperty(body.loyaltyAccounts[0], 'locations')
+    assert.deepEqual(body.loyaltyAccounts[0].lastVisitedVenue, {
+      id: Number(thirdVenue.id),
+      name: 'Old Town',
+      addressLine1: '4 Old Town Square',
+      addressLine2: null,
+      postalCode: '00-003',
+      city: 'Warsaw',
+      countryCode: 'PL',
+    })
   })
 
   test('does not return another user loyalty account', async ({ client, assert }) => {
