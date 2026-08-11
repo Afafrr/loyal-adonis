@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { ClockIcon, StampIcon, TrophyIcon } from '@/components/ui/icons';
 import { routes } from '@/lib/api/routes';
+import { companyInitials } from '../_lib/company-initials';
 import type { LatestActivity } from '../_lib/latest-activity';
 
 const desktopMediaQuery = '(min-width: 48rem)';
@@ -101,16 +102,6 @@ function StatCard({ icon, label, value }: { icon: ReactNode; label: string; valu
       <p className='mt-2 text-sm text-foreground-secondary'>{label}</p>
     </section>
   );
-}
-
-function companyInitials(companyName: string) {
-  return companyName
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join('')
-    .toLocaleUpperCase();
 }
 
 function formatActivityDate(visitedAt: string) {
