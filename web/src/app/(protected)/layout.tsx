@@ -21,7 +21,7 @@ export default async function ProtectedLayout({ children }: Readonly<{ children:
 
   return (
     <main className='min-h-screen bg-canvas text-foreground'>
-      <nav className='mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-2 min-[380px]:px-5 sm:px-8 sm:py-5 lg:max-w-5xl lg:px-10 lg:py-6'>
+      <nav className='mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-2 min-[380px]:px-5 sm:px-8 sm:py-5 md:max-w-355 md:px-10 lg:py-6'>
         <div className='shrink-0'>
           <Brand />
         </div>

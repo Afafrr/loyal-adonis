@@ -16,8 +16,8 @@ export function LoyaltyAccounts({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyA
   const sortedAccounts = [...loyaltyAccounts].sort(compareProgressDescending);
 
   return (
-    <section className='mt-2 sm:mt-4'>
-      <div className='space-y-5'>
+    <section className='mt-3 sm:mt-4 md:mt-6'>
+      <div className='grid gap-3 lg:gap-5 md:grid-cols-2'>
         {sortedAccounts.map((account) => (
           <CompanyCard account={account} key={account.id} />
         ))}

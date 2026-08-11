@@ -37,6 +37,9 @@
   /* Loyalty stamps */
   --color-stamp-filled: #1f2924;
   --color-stamp-empty: #c8d0cb;
+
+  /* Dashboard */
+  --radius-dashboard-card: 1.875rem;
 }
 
 :root {

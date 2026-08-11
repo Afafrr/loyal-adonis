@@ -43,3 +43,40 @@ export function GiftIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function ClockIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox='0 0 24 24' fill='none' aria-hidden='true'>
+      <circle cx='12' cy='12' r='8.5' stroke='currentColor' strokeWidth='1.8' />
+      <path d='M12 7.5V12l3 2' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' />
+    </svg>
+  );
+}
+
+export function StampIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox='0 0 24 24' fill='none' aria-hidden='true'>
+      <path
+        d='M8 17h8M6 21h12M9 13h6l1.5-2.5A3.5 3.5 0 0 0 13.5 5h-3a3.5 3.5 0 0 0-3 5.5L9 13Z'
+        stroke='currentColor'
+        strokeWidth='1.8'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+    </svg>
+  );
+}
+
+export function TrophyIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox='0 0 24 24' fill='none' aria-hidden='true'>
+      <path
+        d='M8 5h8v3.5a4 4 0 0 1-8 0V5ZM8 7H5v1a4 4 0 0 0 4 4M16 7h3v1a4 4 0 0 1-4 4M12 13v4m-3 2h6'
+        stroke='currentColor'
+        strokeWidth='1.8'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+    </svg>
+  );
+}
