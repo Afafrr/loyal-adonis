@@ -1,27 +1,70 @@
-# Loyal Nest — AdonisJS API
+# Loyalty Nest
 
-Backend przepisany z Rails 8.1 na AdonisJS 7. Zachowuje PostgreSQL, sesyjne logowanie,
-CSRF, kontrakt endpointów oraz układ usług Docker Compose (`backend`, `db`, `nfc`).
+Loyalty Nest is a loyalty application for venues. Its backend was migrated from
+Rails 8.1 to AdonisJS 7 while preserving PostgreSQL, session authentication, CSRF
+protection, API contracts, and the Docker Compose service layout (`backend`, `db`,
+and `nfc`).
 
-## Uruchomienie w Dockerze
+## Project structure
 
-1. Skopiuj `.env.example` do `.env` i ustaw bezpieczne `APP_KEY` oraz `NFC_MASTER_KEY`.
-2. Uruchom `docker compose up --build`.
+```text
+loyal-adonis/
+├── api/                     # AdonisJS API and business logic
+│   ├── app/
+│   │   ├── controllers/    # HTTP request handlers
+│   │   ├── models/         # Lucid ORM models
+│   │   ├── services/       # Domain logic, including loyalty and NFC
+│   │   └── validators/     # Request validation
+│   ├── database/
+│   │   ├── migrations/     # PostgreSQL migrations
+│   │   └── seeders/        # Seed and demo data
+│   ├── start/                   # Routes and startup configuration
+│   └── tests/                   # Japa tests
+├── web/                     # Next.js application
+│   └── src/
+│       ├── app/                 # App Router pages and layouts
+│       │   ├── (public)/        # Pages available without authentication
+│       │   └── (protected)/     # Authenticated pages
+│       │       ├── dashboard/
+│       │       │   ├── _components/ # Dashboard-only UI
+│       │       │   └── _lib/        # Dashboard-only data access and types
+│       │       └── profile/
+│       │           └── _lib/        # Profile-only data access and types
+│       ├── components/ui/       # Shared UI components
+│       ├── features/            # Application feature modules
+│       │   └── auth/            # Authentication shared by multiple routes
+│       └── lib/                 # Shared infrastructure and utilities
+├── docker/                  # Containerized service configuration
+└── compose.yaml            # Local Docker Compose environment
+```
 
-Usługi:
+The frontend uses a hybrid structure. `app/` owns routing and page composition, and
+code used by only one route is colocated with that route in private `_components/`
+and `_lib/` directories. Reusable business capabilities live in `features/`.
+Domain-independent elements belong in `components/ui/`, while shared infrastructure,
+such as API request and route handling, belongs in `lib/`.
+
+## Running with Docker
+
+1. Copy `.env.example` to `.env` and set secure `APP_KEY` and `NFC_MASTER_KEY`
+   values.
+2. Run `docker compose up --build`.
+
+Services:
 
 - API: `http://localhost:3000`
 - PostgreSQL: `localhost:5433`
-- serwis NFC: `http://localhost:5000`
+- NFC service: `http://localhost:5000`
 
-Kontener backendu uruchamia migracje przed serwerem. Kod `api/` jest podmontowany,
-a zależności są przechowywane w osobnym wolumenie `backend_node_modules`.
-Przy pierwszym utworzeniu wolumenu PostgreSQL skrypt inicjalizacyjny tworzy też
-oddzielną bazę `loyal_test` używaną wyłącznie przez testy.
+The backend container runs migrations before starting the server. The `api/` source
+directory is mounted into the container, while dependencies are stored in a separate
+`backend_node_modules` volume. When the PostgreSQL volume is created for the first
+time, the initialization script also creates a separate `loyal_test` database used
+exclusively by tests.
 
-## Lokalnie
+## Running locally
 
-Wymagane są Node.js 24+ i npm 11+.
+Node.js 24+ and npm 11+ are required.
 
 ```bash
 cd api
@@ -31,12 +74,13 @@ node ace generate:key
 npm run dev
 ```
 
-Przy lokalnym PostgreSQL z Compose `DATABASE_URL` wskazuje port `5433`.
+When using the PostgreSQL service from Docker Compose, set the local `DATABASE_URL`
+to use port `5433`.
 
-Gotowe requesty dla rozszerzenia VS Code REST Client znajdują się w
-`api/requests/auth.http` i `api/requests/tag_scan.http`.
+Ready-to-use requests for the VS Code REST Client extension are available in
+`api/requests/auth.http` and `api/requests/tag_scan.http`.
 
-## Kontrakt API
+## API contract
 
 - `GET /up`
 - `POST /api/v1/users`
@@ -45,12 +89,11 @@ Gotowe requesty dla rozszerzenia VS Code REST Client znajdują się w
 - `GET /api/v1/me`
 - `POST /api/v1/tag_scans`
 
-Żądania zmieniające stan wymagają cookie `_loyal_session` oraz tokena CSRF.
-AdonisJS udostępnia token w cookie `XSRF-TOKEN`, a klient przeglądarkowy powinien
-wysłać jego wartość w nagłówku `X-XSRF-TOKEN`. Żądania muszą używać
-`credentials: 'include'`.
+State-changing requests require the `_loyal_session` cookie and a CSRF token.
+AdonisJS exposes the token in the `XSRF-TOKEN` cookie, and browser clients must send
+its value in the `X-XSRF-TOKEN` header. Requests must use `credentials: 'include'`.
 
-## Weryfikacja
+## Verification
 
 ```bash
 cd api
@@ -60,25 +103,25 @@ npm run build
 npm test
 ```
 
-Testy funkcjonalne używają `loyal_test` z `api/.env.test`. Runner ma dodatkową
-blokadę bezpieczeństwa i odmówi migracji/resetu bazy, której nazwa nie kończy się
-na `_test`. Jeśli wolumen PostgreSQL powstał przed dodaniem bazy testowej, utwórz
-ją jednorazowo:
+Functional tests use the `loyal_test` database configured in `api/.env.test`. The
+test runner includes an additional safety check and refuses to migrate or reset a
+database whose name does not end with `_test`. If the PostgreSQL volume predates the
+test database setup, create the database once with:
 
 ```bash
 docker compose exec db createdb -U loyal loyal_test
 ```
 
-Przy niestandardowych danych PostgreSQL zaktualizuj także URL w `api/.env.test`.
+When using custom PostgreSQL credentials, update the URL in `api/.env.test` as well.
 
-## Migracja istniejących danych
+## Migrating existing data
 
-Schema zachowuje nazwy tabel i kolumn z Rails, w tym `users.encrypted_password`.
-Bcrypt kosztu 12 pozwala weryfikować istniejące hasła Devise. Ciasteczka sesji
-Rails i AdonisJS nie są kryptograficznie zgodne, więc po przełączeniu użytkownicy
-będą musieli zalogować się ponownie.
+The schema preserves the Rails table and column names, including
+`users.encrypted_password`. Bcrypt cost 12 allows existing Devise passwords to be
+verified. Rails and AdonisJS session cookies are not cryptographically compatible,
+so users must sign in again after the migration.
 
-Migracja tworzy czysty schemat docelowy. Jeśli ma zostać użyta istniejąca baza
-Rails z danymi, najpierw należy oznaczyć migrację bazową jako wykonaną albo
-wykonać kontrolowany import do nowej bazy; nie uruchamiaj jej bezpośrednio na
-bazie, która ma już te tabele.
+The migration creates a clean target schema. Before using an existing Rails database
+that already contains data, either mark the baseline migration as completed or run a
+controlled import into a new database. Do not run the baseline migration directly
+against a database that already contains these tables.
