@@ -58,6 +58,7 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
       {
         companyId: company.id,
         name: 'Śródmieście',
+        category: 'cafe',
         addressLine1: 'ul. Marszałkowska 10',
         postalCode: '00-590',
         city: 'Warszawa',
@@ -72,6 +73,7 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
       {
         companyId: company.id,
         name: 'Stare Miasto',
+        category: 'cafe',
         addressLine1: 'ul. Freta 10',
         postalCode: '00-227',
         city: 'Warszawa',
@@ -128,6 +130,7 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
       {
         companyId: company.id,
         name: 'Mokotów',
+        category: 'bakery',
         addressLine1: 'ul. Puławska 2',
         postalCode: '02-566',
         city: 'Warszawa',

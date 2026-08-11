@@ -18,6 +18,7 @@ export interface LoyaltyAccount {
   lastVisitedVenue: {
     id: number;
     name: string;
+    category: string | null;
     addressLine1: string | null;
     addressLine2: string | null;
     postalCode: string | null;

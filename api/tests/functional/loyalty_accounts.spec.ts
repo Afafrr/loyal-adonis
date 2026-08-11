@@ -50,6 +50,7 @@ test.group('Loyalty accounts', () => {
     const thirdVenue = await Venue.create({
       companyId: company.id,
       name: 'Old Town',
+      category: 'cafe',
       addressLine1: '4 Old Town Square',
       postalCode: '00-003',
       city: 'Warsaw',
@@ -131,6 +132,7 @@ test.group('Loyalty accounts', () => {
         lastVisitedVenue: {
           id: number
           name: string
+          category: string | null
           addressLine1: string | null
           addressLine2: string | null
           postalCode: string | null
@@ -143,6 +145,7 @@ test.group('Loyalty accounts', () => {
     assert.deepEqual(body.loyaltyAccounts[0].lastVisitedVenue, {
       id: Number(thirdVenue.id),
       name: 'Old Town',
+      category: 'cafe',
       addressLine1: '4 Old Town Square',
       addressLine2: null,
       postalCode: '00-003',

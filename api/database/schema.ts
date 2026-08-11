@@ -147,12 +147,14 @@ export class UserSchema extends BaseModel {
 }
 
 export class VenueSchema extends BaseModel {
-  static $columns = ['addressLine1', 'addressLine2', 'city', 'companyId', 'countryCode', 'createdAt', 'id', 'latitude', 'longitude', 'name', 'postalCode', 'updatedAt'] as const
+  static $columns = ['addressLine1', 'addressLine2', 'category', 'city', 'companyId', 'countryCode', 'createdAt', 'id', 'latitude', 'longitude', 'name', 'postalCode', 'updatedAt'] as const
   $columns = VenueSchema.$columns
   @column()
   declare addressLine1: string | null
   @column()
   declare addressLine2: string | null
+  @column()
+  declare category: string | null
   @column()
   declare city: string | null
   @column()

@@ -49,6 +49,7 @@ function toAccountSummary(loyaltyAccount: LoyaltyAccount) {
       ? {
           id: Number(lastVisitedVenue.id),
           name: lastVisitedVenue.name,
+          category: lastVisitedVenue.category,
           addressLine1: lastVisitedVenue.addressLine1,
           addressLine2: lastVisitedVenue.addressLine2,
           postalCode: lastVisitedVenue.postalCode,
