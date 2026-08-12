@@ -1,6 +1,7 @@
 import { MapPinIcon } from '@/components/ui/icons';
 import { StampProgress } from './stamp-progress';
 import { companyInitials } from '../_lib/company-initials';
+import { getLoyaltyColor } from '../_lib/loyalty-color';
 import type { LoyaltyAccount } from '../_lib/loyalty-accounts';
 
 export function CompanyCard({ account }: { account: LoyaltyAccount }) {
@@ -20,7 +21,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
         <div className='flex min-w-0 items-center gap-4'>
           <span
             aria-hidden='true'
-            className={`grid size-14 shrink-0 place-items-center rounded-full text-lg font-black text-white ${loyaltyColor.filledStampClass}`}
+            className={`grid size-14 shrink-0 place-items-center rounded-full text-lg font-black text-white ${loyaltyColor.fillClass}`}
           >
             {companyInitials(account.company.name)}
           </span>
@@ -47,7 +48,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
 
       <StampProgress
         collectedStamps={collectedStamps}
-        filledStampClass={loyaltyColor.filledStampClass}
+        filledStampClass={loyaltyColor.fillClass}
         totalStamps={totalStamps}
       />
 
@@ -59,38 +60,6 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
       )}
     </article>
   );
-}
-
-interface LoyaltyPaletteColor {
-  rewardPanelClass: string;
-  filledStampClass: string;
-}
-
-const loyaltyPalette: LoyaltyPaletteColor[] = [
-  {
-    rewardPanelClass: 'bg-reward-coffee',
-    filledStampClass: 'bg-reward-coffee',
-  },
-  {
-    rewardPanelClass: 'bg-reward-burgundy',
-    filledStampClass: 'bg-reward-burgundy',
-  },
-  {
-    rewardPanelClass: 'bg-reward-olive',
-    filledStampClass: 'bg-reward-olive',
-  },
-  {
-    rewardPanelClass: 'bg-reward-navy',
-    filledStampClass: 'bg-reward-navy',
-  },
-];
-
-/**
- * Temporary presentation mapping until a visual color is stored on the loyalty program.
- * A company receives the same color on every render without changing API data.
- */
-function getLoyaltyColor(companyId: number): LoyaltyPaletteColor {
-  return loyaltyPalette[Math.max(companyId - 1, 0) % loyaltyPalette.length];
 }
 
 type Location = NonNullable<LoyaltyAccount['lastVisitedVenue']>;
