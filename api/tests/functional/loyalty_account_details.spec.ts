@@ -1,12 +1,10 @@
-import Company from '#models/company'
 import EarnedReward from '#models/earned_reward'
 import LoyaltyAccount from '#models/loyalty_account'
-import LoyaltyProgram from '#models/loyalty_program'
 import NfcTag from '#models/nfc_tag'
 import Stamp from '#models/stamp'
 import User from '#models/user'
-import Venue from '#models/venue'
 import { sessionCookie, signIn } from '#tests/helpers/http'
+import { createCompanyWithProgram, createVenues } from '#tests/helpers/loyalty'
 import { test } from '@japa/runner'
 import { DateTime } from 'luxon'
 
@@ -22,39 +20,31 @@ test.group('Loyalty account details', () => {
       email: 'member-detail@example.com',
       encryptedPassword: 'password123',
     })
-    const company = await Company.create({ name: 'Coffee Co.' })
-    const loyaltyProgram = await LoyaltyProgram.create({
-      companyId: company.id,
-      name: 'Coffee stamps',
-      rewardTitle: 'Free coffee',
-      stampsRequired: 5,
-      active: true,
-    })
-    const mainVenue = await Venue.create({
-      companyId: company.id,
-      name: 'Main Street',
-      category: 'cafe',
-      addressLine1: '12 Main Street',
-      postalCode: '00-001',
-      city: 'Warsaw',
-      countryCode: 'PL',
-    })
-    await Venue.create({
-      companyId: company.id,
-      name: 'Riverside',
-      addressLine1: '8 River Road',
-      postalCode: '00-002',
-      city: 'Warsaw',
-      countryCode: 'PL',
-    })
-    const krakowVenue = await Venue.create({
-      companyId: company.id,
-      name: 'Old Town',
-      addressLine1: '4 Market Square',
-      postalCode: '30-001',
-      city: 'Krakow',
-      countryCode: 'PL',
-    })
+    const { company, loyaltyProgram } = await createCompanyWithProgram({ stampsRequired: 5 })
+    const [mainVenue, , krakowVenue] = await createVenues(company.id, [
+      {
+        name: 'Main Street',
+        category: 'cafe',
+        addressLine1: '12 Main Street',
+        postalCode: '00-001',
+        city: 'Warsaw',
+        countryCode: 'PL',
+      },
+      {
+        name: 'Riverside',
+        addressLine1: '8 River Road',
+        postalCode: '00-002',
+        city: 'Warsaw',
+        countryCode: 'PL',
+      },
+      {
+        name: 'Old Town',
+        addressLine1: '4 Market Square',
+        postalCode: '30-001',
+        city: 'Krakow',
+        countryCode: 'PL',
+      },
+    ])
     const tag = await NfcTag.create({
       venueId: mainVenue.id,
       identifier: '041C6432A91234',
@@ -153,24 +143,14 @@ test.group('Loyalty account details', () => {
       email: 'city-tiebreaker@example.com',
       encryptedPassword: 'password123',
     })
-    const firstCompany = await Company.create({ name: 'First Coffee Co.' })
-    const firstProgram = await LoyaltyProgram.create({
-      companyId: firstCompany.id,
-      name: 'First coffee stamps',
-      rewardTitle: 'Free coffee',
-      stampsRequired: 10,
-      active: true,
+    const { company: firstCompany, loyaltyProgram: firstProgram } = await createCompanyWithProgram({
+      companyName: 'First Coffee Co.',
+      programName: 'First coffee stamps',
     })
-    const warsawVenue = await Venue.create({
-      companyId: firstCompany.id,
-      name: 'Warsaw',
-      city: 'Warsaw',
-    })
-    const krakowVenue = await Venue.create({
-      companyId: firstCompany.id,
-      name: 'Krakow',
-      city: 'Krakow',
-    })
+    const [warsawVenue, krakowVenue] = await createVenues(firstCompany.id, [
+      { name: 'Warsaw', city: 'Warsaw' },
+      { name: 'Krakow', city: 'Krakow' },
+    ])
     const warsawTag = await NfcTag.create({
       venueId: warsawVenue.id,
       identifier: '041C6432A90001',
@@ -212,24 +192,16 @@ test.group('Loyalty account details', () => {
       createdAt: DateTime.fromISO('2026-08-04T12:00:00Z'),
     })
 
-    const secondCompany = await Company.create({ name: 'Second Coffee Co.' })
-    const secondProgram = await LoyaltyProgram.create({
-      companyId: secondCompany.id,
-      name: 'Second coffee stamps',
-      rewardTitle: 'Free tea',
-      stampsRequired: 10,
-      active: true,
-    })
-    const gdanskVenue = await Venue.create({
-      companyId: secondCompany.id,
-      name: 'Gdansk',
-      city: 'Gdansk',
-    })
-    const secondWarsawVenue = await Venue.create({
-      companyId: secondCompany.id,
-      name: 'Warsaw Central',
-      city: 'Warsaw',
-    })
+    const { company: secondCompany, loyaltyProgram: secondProgram } =
+      await createCompanyWithProgram({
+        companyName: 'Second Coffee Co.',
+        programName: 'Second coffee stamps',
+        rewardTitle: 'Free tea',
+      })
+    const [gdanskVenue, secondWarsawVenue] = await createVenues(secondCompany.id, [
+      { name: 'Gdansk', city: 'Gdansk' },
+      { name: 'Warsaw Central', city: 'Warsaw' },
+    ])
     const gdanskTag = await NfcTag.create({
       venueId: gdanskVenue.id,
       identifier: '041C6432A90003',
@@ -284,15 +256,8 @@ test.group('Loyalty account details', () => {
       email: 'member-without-stamps@example.com',
       encryptedPassword: 'password123',
     })
-    const company = await Company.create({ name: 'Coffee Co.' })
-    const loyaltyProgram = await LoyaltyProgram.create({
-      companyId: company.id,
-      name: 'Coffee stamps',
-      rewardTitle: 'Free coffee',
-      stampsRequired: 10,
-      active: true,
-    })
-    await Venue.create({ companyId: company.id, name: 'Main Street', city: 'Warsaw' })
+    const { company, loyaltyProgram } = await createCompanyWithProgram()
+    await createVenues(company.id, [{ name: 'Main Street', city: 'Warsaw' }])
     const loyaltyAccount = await LoyaltyAccount.create({
       userId: user.id,
       loyaltyProgramId: loyaltyProgram.id,
@@ -321,14 +286,7 @@ test.group('Loyalty account details', () => {
       email: 'member-stranger@example.com',
       encryptedPassword: 'password123',
     })
-    const company = await Company.create({ name: 'Coffee Co.' })
-    const loyaltyProgram = await LoyaltyProgram.create({
-      companyId: company.id,
-      name: 'Coffee stamps',
-      rewardTitle: 'Free coffee',
-      stampsRequired: 5,
-      active: true,
-    })
+    const { loyaltyProgram } = await createCompanyWithProgram({ stampsRequired: 5 })
     const otherAccount = await LoyaltyAccount.create({
       userId: otherUser.id,
       loyaltyProgramId: loyaltyProgram.id,
