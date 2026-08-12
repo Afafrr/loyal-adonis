@@ -10,8 +10,15 @@
 # current stamp card.
 
 @baseUrl = http://localhost:3333/api/v1
+@loyaltyAccountId = 1
 
 ### Get loyalty accounts for the dashboard (expected: 200)
 # @name loyaltyAccounts
 GET {{baseUrl}}/me/loyalty_accounts
+Accept: application/json
+
+### Get loyalty account details (expected: 200)
+# Update @loyaltyAccountId with an id returned by the dashboard request.
+# @name loyaltyAccountDetails
+GET {{baseUrl}}/me/loyalty_accounts/{{loyaltyAccountId}}
 Accept: application/json

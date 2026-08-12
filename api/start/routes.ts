@@ -13,6 +13,8 @@ import { middleware } from '#start/kernel'
 const HealthController = () => import('#controllers/health_controller')
 const LatestActivityController = () => import('#controllers/latest_activity_controller')
 const LoyaltyAccountsController = () => import('#controllers/loyalty_accounts_controller')
+const LoyaltyAccountDetailsController = () =>
+  import('#controllers/loyalty_account_details_controller')
 const LoyaltyRewardsController = () => import('#controllers/loyalty_rewards_controller')
 const DevelopmentNfcTagsController = () => import('#controllers/development_nfc_tags_controller')
 const RegistrationsController = () => import('#controllers/registrations_controller')
@@ -40,6 +42,9 @@ router
         router
           .get('me/loyalty_accounts', [LoyaltyAccountsController, 'index'])
           .as('loyaltyAccounts.index')
+        router
+          .get('me/loyalty_accounts/:loyaltyAccountId', [LoyaltyAccountDetailsController, 'show'])
+          .as('loyaltyAccounts.show')
         router
           .get('me/loyalty_rewards', [LoyaltyRewardsController, 'index'])
           .as('loyaltyRewards.index')
