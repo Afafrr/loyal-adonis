@@ -14,11 +14,12 @@ export function RewardBalance({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyAcc
   const venueName = nextReward.venueName ?? nextReward.companyName;
 
   return (
-    <section
-      aria-label={`Closest reward at ${venueName}`}
-      className={`relative min-h-48 overflow-hidden rounded-[26px] border border-line shadow-brand ${
+    <a
+      aria-label={`Closest reward at ${venueName}: ${nextReward.title}. Go to loyalty card.`}
+      className={`relative block min-h-48 overflow-hidden rounded-[26px] border border-line shadow-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus ${
         showsProgress ? loyaltyColor.backgroundClass : loyaltyColor.fillClass
       }`}
+      href={`#loyalty-account-${nextReward.accountId}`}
     >
       <div
         aria-hidden='true'
@@ -37,7 +38,7 @@ export function RewardBalance({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyAcc
           <RewardContent inverted nextReward={nextReward} />
         </div>
       )}
-    </section>
+    </a>
   );
 }
 
@@ -85,6 +86,7 @@ function formatRewardProgress(nextReward: NextReward) {
 function findNextReward(loyaltyAccounts: LoyaltyAccount[]) {
   return loyaltyAccounts.reduce<
     | {
+        accountId: number;
         collectedStamps: number;
         companyId: number;
         companyName: string;
@@ -102,6 +104,7 @@ function findNextReward(loyaltyAccounts: LoyaltyAccount[]) {
 
     if (!closestReward || remainingStamps < closestReward.remainingStamps) {
       return {
+        accountId: account.id,
         collectedStamps,
         companyId: account.company.id,
         companyName: account.company.name,

@@ -89,7 +89,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
               disabled={disabled}
             />
             <button
-              className='absolute right-3 top-1/2 -translate-y-1/2 px-1 text-[10px] font-semibold text-foreground-interactive-muted sm:text-[11px]'
+              className='absolute right-3 top-1/2 -translate-y-1/2 px-2 text-[10px] font-semibold text-foreground-interactive-muted sm:text-[11px]'
               type='button'
               onClick={() => setShowPassword(!showPassword)}
               disabled={disabled}

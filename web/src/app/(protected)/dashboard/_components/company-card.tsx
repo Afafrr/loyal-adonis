@@ -13,7 +13,8 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
 
   return (
     <article
-      className='loyalty-card min-w-0 scroll-mt-6 rounded-dashboard-card border border-line-subtle bg-panel px-4 py-4 shadow-card sm:px-7'
+      aria-labelledby={`loyalty-account-${account.id}-title`}
+      className='loyalty-card min-w-0 scroll-mt-6 rounded-dashboard-card border border-line-subtle bg-panel px-4 py-4 shadow-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus sm:px-8 sm:py-8'
       id={`loyalty-account-${account.id}`}
       tabIndex={-1}
     >
@@ -26,7 +27,9 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
             {companyInitials(account.company.name)}
           </span>
           <div className='min-w-0'>
-            <h2 className='truncate text-base md:text-xl font-black'>{account.company.name}</h2>
+            <h2 className='truncate text-base font-black md:text-xl' id={`loyalty-account-${account.id}-title`}>
+              {account.company.name}
+            </h2>
             {venueCategory && (
               <p className='mt-0.5 truncate text-xs md:text-base text-foreground-secondary uppercase'>
                 {formatVenueCategory(venueCategory)}
