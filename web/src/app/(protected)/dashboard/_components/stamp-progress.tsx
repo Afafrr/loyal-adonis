@@ -6,6 +6,7 @@ type StampProgressProps = {
 
 export function StampProgress({ collectedStamps, filledStampClass, totalStamps }: StampProgressProps) {
   const progressPercentage = Math.min(Math.max((collectedStamps / totalStamps) * 100, 0), 100);
+  const remainingStamps = totalStamps - collectedStamps;
 
   return (
     <div className='mt-6'>
@@ -41,6 +42,11 @@ export function StampProgress({ collectedStamps, filledStampClass, totalStamps }
           style={{ width: `${progressPercentage}%` }}
         />
       </div>
+      <p className='mt-2 text-xs font-semibold text-foreground-secondary sm:hidden'>
+        {remainingStamps === 0
+          ? 'Reward ready'
+          : `${remainingStamps} ${remainingStamps === 1 ? 'stamp' : 'stamps'} to go`}
+      </p>
     </div>
   );
 }

@@ -1,8 +1,8 @@
 const loyaltyColors = [
-  { backgroundClass: 'bg-reward-coffee/20', fillClass: 'bg-reward-coffee' },
-  { backgroundClass: 'bg-reward-burgundy/20', fillClass: 'bg-reward-burgundy' },
-  { backgroundClass: 'bg-reward-olive/20', fillClass: 'bg-reward-olive' },
-  { backgroundClass: 'bg-reward-navy/20', fillClass: 'bg-reward-navy' },
+  { backgroundClass: 'bg-reward-coffee/20', fillClass: 'bg-reward-coffee', textClass: 'text-reward-coffee' },
+  { backgroundClass: 'bg-reward-burgundy/20', fillClass: 'bg-reward-burgundy', textClass: 'text-reward-burgundy' },
+  { backgroundClass: 'bg-reward-olive/20', fillClass: 'bg-reward-olive', textClass: 'text-reward-olive' },
+  { backgroundClass: 'bg-reward-navy/20', fillClass: 'bg-reward-navy', textClass: 'text-reward-navy' },
 ] as const;
 
 /**

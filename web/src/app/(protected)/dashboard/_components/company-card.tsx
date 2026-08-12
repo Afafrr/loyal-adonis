@@ -1,4 +1,4 @@
-import { MapPinIcon } from '@/components/ui/icons';
+import { GiftIcon, MapPinIcon } from '@/components/ui/icons';
 import { StampProgress } from './stamp-progress';
 import { companyInitials } from '../_lib/company-initials';
 import { getLoyaltyColor } from '../_lib/loyalty-color';
@@ -26,24 +26,26 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
             {companyInitials(account.company.name)}
           </span>
           <div className='min-w-0'>
-            <h2 className='truncate text-xl font-black'>{account.company.name}</h2>
+            <h2 className='truncate text-base md:text-xl font-black'>{account.company.name}</h2>
             {venueCategory && (
-              <p className='mt-0.5 truncate text-sm text-foreground-secondary'>
+              <p className='mt-0.5 truncate text-xs md:text-base text-foreground-secondary uppercase'>
                 {formatVenueCategory(venueCategory)}
               </p>
             )}
           </div>
         </div>
-        <p className='shrink-0 rounded-full bg-panel-muted px-5 py-2 text-sm font-semibold text-foreground'>
+        <p className='hidden shrink-0 rounded-full bg-panel-muted px-5 py-2 text-sm font-semibold text-foreground sm:block'>
           {collectedStamps}/{totalStamps}
         </p>
       </div>
 
-      <div className={`mt-5 rounded-3xl px-6 py-2 bg-panel-muted`}>
-        <p className='text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground-tertiary sm:text-xs lg:text-[11px]'>Reward</p>
-        <p className='text-[15px] font-semibold tracking-[-0.02em] text-foreground sm:text-base lg:text-[14px]'>
-          {account.program.rewardTitle}
-        </p>
+      <div className='mt-5 flex items-center gap-4 rounded-3xl bg-panel-muted px-6 py-3'>
+        <GiftIcon className={`size-5 shrink-0`} />
+        <div className='min-w-0'>
+          <p className='truncate text-[15px] font-semibold tracking-[-0.02em] text-foreground sm:text-base lg:text-[14px]'>
+            {account.program.rewardTitle}
+          </p>
+        </div>
       </div>
 
       <StampProgress
@@ -53,7 +55,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
       />
 
       {locationLabel && (
-        <p className='mt-5 flex items-start gap-2 text-sm text-foreground-secondary'>
+        <p className='mt-3 flex items-start gap-2 text-sm text-foreground-secondary'>
           <MapPinIcon className='mt-0.5 size-4 shrink-0 text-foreground-tertiary' />
           <span>{locationLabel}</span>
         </p>

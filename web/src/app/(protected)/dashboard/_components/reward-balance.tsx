@@ -16,7 +16,7 @@ export function RewardBalance({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyAcc
   return (
     <section
       aria-label={`Closest reward at ${venueName}`}
-      className={`relative min-h-52 overflow-hidden rounded-[26px] border border-line shadow-brand ${
+      className={`relative min-h-48 overflow-hidden rounded-[26px] border border-line shadow-brand ${
         showsProgress ? loyaltyColor.backgroundClass : loyaltyColor.fillClass
       }`}
     >
@@ -26,7 +26,7 @@ export function RewardBalance({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyAcc
         style={{ width: `${progressFill}%` }}
       />
 
-      <RewardContent inverted={!showsProgress} nextReward={nextReward} venueName={venueName} />
+      <RewardContent inverted={!showsProgress} nextReward={nextReward} />
 
       {progressFill > 0 && (
         <div
@@ -34,7 +34,7 @@ export function RewardBalance({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyAcc
           className='pointer-events-none absolute inset-0 overflow-hidden'
           style={{ clipPath: `inset(0 ${100 - progressFill}% 0 0)` }}
         >
-          <RewardContent inverted nextReward={nextReward} venueName={venueName} />
+          <RewardContent inverted nextReward={nextReward} />
         </div>
       )}
     </section>
@@ -46,20 +46,18 @@ type NextReward = NonNullable<ReturnType<typeof findNextReward>>;
 function RewardContent({
   inverted = false,
   nextReward,
-  venueName,
 }: {
   inverted?: boolean;
   nextReward: NextReward;
-  venueName: string;
 }) {
   return (
-    <div className='relative flex min-h-52 h-full flex-col justify-center px-5 py-6 sm:px-12 sm:py-8'>
+    <div className='relative flex h-full min-h-48 flex-col justify-center px-5 py-5 sm:px-12 sm:py-7 '>
       <p
         className={`text-[10px] font-extrabold uppercase tracking-[0.14em] sm:text-xs ${
           inverted ? 'text-white/65' : 'text-foreground-label'
         }`}
       >
-        Closest reward · {venueName}
+        Closest reward · {nextReward.companyName}
       </p>
       <h2
         className={`mt-2 text-3xl font-black leading-tight tracking-[-0.035em] sm:text-4xl ${
