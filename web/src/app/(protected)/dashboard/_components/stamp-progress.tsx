@@ -20,11 +20,15 @@ export function StampProgress({ collectedStamps, filledStampClass, totalStamps }
           return (
             <span
               aria-hidden='true'
-              className={`size-6 rounded-full lg:size-7 ${
-                collected ? filledStampClass : 'border-2 border-stamp-empty bg-panel'
+              className={`grid size-6 place-items-center rounded-full lg:size-7 ${
+                collected
+                  ? filledStampClass
+                  : 'border-[1.5px] border-dashed border-stamp-empty bg-panel text-[10px] font-medium leading-none text-foreground-label lg:text-[11px]'
               }`}
               key={index}
-            />
+            >
+              {collected ? null : totalStamps - index}
+            </span>
           );
         })}
       </div>
