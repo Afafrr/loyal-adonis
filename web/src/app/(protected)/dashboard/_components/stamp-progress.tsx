@@ -5,14 +5,10 @@ type StampProgressProps = {
 };
 
 export function StampProgress({ collectedStamps, filledStampClass, totalStamps }: StampProgressProps) {
+  const progressPercentage = Math.min(Math.max((collectedStamps / totalStamps) * 100, 0), 100);
+
   return (
     <div className='mt-6'>
-      <div className='flex items-baseline justify-between gap-4'>
-        <p className='text-[13px] font-semibold text-foreground sm:text-sm lg:text-[13px]'>Your progress</p>
-        <p className='text-[13px] font-semibold text-foreground-secondary sm:text-sm lg:text-[13px]'>
-          {collectedStamps} / {totalStamps}
-        </p>
-      </div>
       <div aria-label={`${collectedStamps} of ${totalStamps} stamps collected`} className='mt-3 flex flex-wrap gap-2'>
         {Array.from({ length: totalStamps }, (_, index) => {
           const collected = index < collectedStamps;
@@ -31,6 +27,19 @@ export function StampProgress({ collectedStamps, filledStampClass, totalStamps }
             </span>
           );
         })}
+      </div>
+      <div
+        aria-label={`${collectedStamps} of ${totalStamps} stamps collected`}
+        aria-valuemax={totalStamps}
+        aria-valuemin={0}
+        aria-valuenow={collectedStamps}
+        className='mt-4 h-2 overflow-hidden rounded-full bg-panel-muted'
+        role='progressbar'
+      >
+        <div
+          className={`h-full rounded-full transition-[width] duration-300 ${filledStampClass}`}
+          style={{ width: `${progressPercentage}%` }}
+        />
       </div>
     </div>
   );

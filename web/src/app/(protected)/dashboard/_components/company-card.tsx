@@ -16,26 +16,31 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
       id={`loyalty-account-${account.id}`}
       tabIndex={-1}
     >
-      <div className='flex items-center gap-4'>
-        <span
-          aria-hidden='true'
-          className={`grid size-14 shrink-0 place-items-center rounded-full text-lg font-black text-white ${loyaltyColor.filledStampClass}`}
-        >
-          {companyInitials(account.company.name)}
-        </span>
-        <div className='min-w-0'>
-          <h2 className='truncate text-xl font-black'>{account.company.name}</h2>
-          {venueCategory && (
-            <p className='mt-0.5 truncate text-sm text-foreground-secondary'>
-              {formatVenueCategory(venueCategory)}
-            </p>
-          )}
+      <div className='flex items-start justify-between gap-4'>
+        <div className='flex min-w-0 items-center gap-4'>
+          <span
+            aria-hidden='true'
+            className={`grid size-14 shrink-0 place-items-center rounded-full text-lg font-black text-white ${loyaltyColor.filledStampClass}`}
+          >
+            {companyInitials(account.company.name)}
+          </span>
+          <div className='min-w-0'>
+            <h2 className='truncate text-xl font-black'>{account.company.name}</h2>
+            {venueCategory && (
+              <p className='mt-0.5 truncate text-sm text-foreground-secondary'>
+                {formatVenueCategory(venueCategory)}
+              </p>
+            )}
+          </div>
         </div>
+        <p className='shrink-0 rounded-full bg-panel-muted px-5 py-2 text-sm font-semibold text-foreground'>
+          {collectedStamps}/{totalStamps}
+        </p>
       </div>
 
-      <div className={`mt-5 rounded-xl px-4 py-2 ${loyaltyColor.rewardPanelClass}`}>
-        <p className='text-[10px] font-semibold uppercase tracking-[0.16em] text-white/70 sm:text-xs lg:text-[11px]'>Reward</p>
-        <p className='text-[15px] font-semibold tracking-[-0.02em] text-white sm:text-base lg:text-[14px]'>
+      <div className={`mt-5 rounded-3xl px-6 py-2 bg-panel-muted`}>
+        <p className='text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground-tertiary sm:text-xs lg:text-[11px]'>Reward</p>
+        <p className='text-[15px] font-semibold tracking-[-0.02em] text-foreground sm:text-base lg:text-[14px]'>
           {account.program.rewardTitle}
         </p>
       </div>
