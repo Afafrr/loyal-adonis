@@ -53,14 +53,14 @@ function RewardContent({
   return (
     <div className='relative flex h-full min-h-48 flex-col justify-center px-5 py-5 sm:px-12 sm:py-7 '>
       <p
-        className={`text-[10px] font-extrabold uppercase tracking-[0.14em] sm:text-xs ${
+        className={`text-[10px] font-bold uppercase tracking-[0.14em] sm:text-xs ${
           inverted ? 'text-white/65' : 'text-foreground-label'
         }`}
       >
         Closest reward · {nextReward.companyName}
       </p>
       <h2
-        className={`mt-2 text-3xl font-black leading-tight tracking-[-0.035em] sm:text-4xl ${
+        className={`mt-2 text-3xl font-bold tracking-[-0.035em] sm:text-4xl ${
           inverted ? 'text-white' : 'text-foreground'
         }`}
       >

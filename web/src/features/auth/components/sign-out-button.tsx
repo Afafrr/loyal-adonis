@@ -32,7 +32,7 @@ export function SignOutButton() {
   return (
     <div>
       <button
-        className='flex min-h-14 w-full items-center justify-between gap-4 px-5 text-left text-sm font-bold text-danger transition hover:bg-panel-subtle disabled:cursor-wait disabled:opacity-60 sm:px-6 sm:text-[15px]'
+        className='flex min-h-14 w-full items-center justify-between gap-4 px-5 text-left text-sm font-bold text-danger transition hover:bg-panel-subtle disabled:cursor-wait disabled:opacity-60 sm:px-6 sm:text-xs'
         onClick={signOut}
         disabled={signingOut}
       >

@@ -10,7 +10,7 @@ export default async function DashboardPage() {
   const [loyaltyAccounts, latestActivity] = await Promise.all([getLoyaltyAccounts(), getLatestActivity()]);
 
   return (
-    <section className='mx-auto max-w-2xl px-2 pb-10 pt-4 min-[380px]:px-5 sm:px-12 sm:pb-16 sm:pt-6 md:max-w-355 md:px-10 md:pt-8'>
+    <section className='mx-auto max-w-2xl px-1 pb-10 pt-2 min-[380px]:px-3 sm:px-12 sm:pb-16 sm:pt-6 md:max-w-355 md:px-10 md:pt-8'>
       <PageTitle>Your rewards</PageTitle>
 
       {loyaltyAccounts.length > 0 && (
