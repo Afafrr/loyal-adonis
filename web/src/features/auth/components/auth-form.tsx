@@ -55,7 +55,7 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
 
   return (
     <main className='flex min-h-dvh items-center justify-center bg-canvas px-3 py-4 text-foreground sm:px-5 sm:py-10'>
-      <section className='w-full max-w-103 rounded-[16px] border border-line-subtle bg-panel px-5 py-6 shadow-[0_18px_50px_rgba(32,42,37,0.06)] min-[380px]:px-7 sm:rounded-[18px] sm:px-10 sm:py-8'>
+      <section className='w-full max-w-103 rounded-[16px] border border-line-subtle bg-panel px-5 py-6 shadow-form min-[380px]:px-7 sm:rounded-[18px] sm:px-10 sm:py-8'>
         <Brand />
         <h1 className='mt-7 text-[25px] font-semibold leading-[1.1] tracking-[-0.055em] sm:mt-9 sm:text-[27px]'>
           {isSignUp ? 'Create your account' : 'Sign in'}

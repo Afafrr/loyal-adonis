@@ -7,7 +7,7 @@ function Brand() {
   return (
     <Link
       href={routes.dashboard}
-      className={`${brandOutfit.className} flex items-center gap-2.5 text-[14px] font-bold tracking-[-0.03em] text-red-700 lg:gap-3 lg:text-[16px]`}
+      className={`${brandOutfit.className} flex items-center gap-2.5 text-[14px] font-bold tracking-[-0.03em] text-brand lg:gap-3 lg:text-[16px]`}
       aria-label='Loyal Nest dashboard'
     >
       <span>loyal nest</span>
@@ -26,11 +26,11 @@ export default async function ProtectedLayout({ children }: Readonly<{ children:
           <Brand />
         </div>
         <Link
-          className='flex min-w-0 items-center gap-2 rounded-full border border-line-subtle bg-panel py-1.5 pl-1.5 pr-1.5 shadow-[0_6px_18px_rgba(32,42,37,0.04)] transition hover:border-line-hover hover:bg-panel-subtle sm:gap-2.5 sm:pr-3.5 lg:gap-3 lg:py-2 lg:pl-2 lg:pr-4'
+          className='flex min-w-0 items-center gap-2 rounded-full border border-line-subtle bg-panel py-1.5 pl-1.5 pr-1.5 shadow-navigation transition hover:border-line-hover hover:bg-panel-subtle sm:gap-2.5 sm:pr-3.5 lg:gap-3 lg:py-2 lg:pl-2 lg:pr-4'
           href={routes.profile}
           aria-label={`Open profile for ${displayName}`}
         >
-          <span className='grid size-8 shrink-0 place-items-center rounded-full bg-[#ffc9aa] text-xs font-extrabold text-[#633a2a] sm:size-8 sm:text-sm lg:size-9 lg:text-[15px]'>
+          <span className='grid size-8 shrink-0 place-items-center rounded-full bg-avatar text-xs font-extrabold text-avatar-foreground sm:size-8 sm:text-sm lg:size-9 lg:text-[15px]'>
             {userInitial(user)}
           </span>
           <span className='hidden min-w-0 sm:block'>

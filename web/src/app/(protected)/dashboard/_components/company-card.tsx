@@ -12,7 +12,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
 
   return (
     <article
-      className='loyalty-card min-w-0 scroll-mt-6 rounded-dashboard-card border border-line-subtle bg-panel px-6 py-6 shadow-[0_14px_36px_rgba(32,42,37,0.035)] sm:px-7'
+      className='loyalty-card min-w-0 scroll-mt-6 rounded-dashboard-card border border-line-subtle bg-panel px-6 py-6 shadow-card sm:px-7'
       id={`loyalty-account-${account.id}`}
       tabIndex={-1}
     >

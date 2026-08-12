@@ -9,7 +9,7 @@ export function RewardBalance({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyAcc
   }
 
   return (
-    <section className='flex flex-col justify-center rounded-[26px] bg-[linear-gradient(120deg,#1f2824_0%,#32443D_90%)] px-5 py-6 text-white shadow-[0_16px_36px_rgba(32,42,37,0.1)] sm:px-12 sm:py-8'>
+    <section className='flex flex-col justify-center rounded-[26px] bg-[linear-gradient(120deg,var(--color-brand-gradient-start)_0%,var(--color-brand-gradient-end)_90%)] px-5 py-6 text-white shadow-brand sm:px-12 sm:py-8'>
       <p className='text-[10px] font-extrabold uppercase tracking-[0.14em] text-white/65 sm:text-xs'>
         Your loyalty balance
       </p>

@@ -11,7 +11,7 @@ export function LatestActivity({ activity }: { activity: LatestActivityData | nu
         Latest activity
       </p>
       <a
-        className='mt-2 flex items-center justify-between gap-4 rounded-2xl border border-line-subtle bg-panel px-4 py-4 shadow-[0_14px_36px_rgba(32,42,37,0.035)] transition-colors hover:bg-panel-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-reward-olive sm:px-6'
+        className='mt-2 flex items-center justify-between gap-4 rounded-2xl border border-line-subtle bg-panel px-4 py-4 shadow-card transition-colors hover:bg-panel-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-reward-olive sm:px-6'
         href={`#loyalty-account-${activity.loyaltyAccountId}`}
       >
         <span className='min-w-0'>

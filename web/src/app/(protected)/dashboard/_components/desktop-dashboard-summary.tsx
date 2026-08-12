@@ -57,7 +57,7 @@ export function DesktopDashboardSummary({ latestActivity }: { latestActivity: La
 
   return (
     <aside className='hidden min-h-full grid-rows-[1fr_auto] md:gap-3 lg:gap-5 md:grid' aria-label='Loyalty summary'>
-      <section className='rounded-dashboard-card border border-line-subtle bg-panel px-7 py-6 shadow-[0_14px_36px_rgba(32,42,37,0.035)]'>
+      <section className='rounded-dashboard-card border border-line-subtle bg-panel px-7 py-6 shadow-card'>
         <p className='flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-foreground-tertiary'>
           <ClockIcon className='size-5' />
           Last visited
@@ -96,7 +96,7 @@ export function DesktopDashboardSummary({ latestActivity }: { latestActivity: La
 
 function StatCard({ icon, label, value }: { icon: ReactNode; label: string; value: number | undefined }) {
   return (
-    <section className='relative rounded-dashboard-card border border-line-subtle bg-panel px-8 py-4 shadow-[0_14px_36px_rgba(32,42,37,0.035)]'>
+    <section className='relative rounded-dashboard-card border border-line-subtle bg-panel px-8 py-4 shadow-card'>
       <span className='absolute right-6 top-5 text-foreground-tertiary'>{icon}</span>
       <p className='mt-1 text-4xl font-black leading-none'>{value ?? '—'}</p>
       <p className='mt-2 text-sm text-foreground-secondary'>{label}</p>
