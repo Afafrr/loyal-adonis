@@ -4,10 +4,7 @@ const uniqueConstraintName = 'earned_rewards_loyalty_account_id_cycle_number_uni
 
 export default class extends BaseSchema {
   async up() {
-    this.schema.alterTable('earned_rewards', (table) => {
-      table.dropUnique(['loyalty_account_id', 'cycle_number'], uniqueConstraintName)
-      table.dropColumn('cycle_number')
-    })
+    await this.db.rawQuery('ALTER TABLE earned_rewards DROP COLUMN IF EXISTS cycle_number')
   }
 
   async down() {
