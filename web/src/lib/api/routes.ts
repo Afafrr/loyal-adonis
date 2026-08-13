@@ -9,6 +9,7 @@ function apiRoutesFor(origin: string) {
     profile: `${apiBaseUrl}/me/profile`,
     latestActivity: `${apiBaseUrl}/me/latest_activity`,
     loyaltyAccounts: `${apiBaseUrl}/me/loyalty_accounts`,
+    loyaltyAccount: (loyaltyAccountId: number) => `${apiBaseUrl}/me/loyalty_accounts/${loyaltyAccountId}`,
     loyaltyRewards: `${apiBaseUrl}/me/loyalty_rewards`,
     register: `${apiBaseUrl}/users`,
     signIn: `${apiBaseUrl}/users/sign_in`,
@@ -21,6 +22,7 @@ export const routes = {
   signIn: '/sign-in',
   signUp: '/sign-up',
   dashboard: '/dashboard',
+  loyaltyAccount: (loyaltyAccountId: number) => `/loyalty-accounts/${loyaltyAccountId}`,
   profile: '/profile',
   api: apiRoutesFor(browserApiOrigin),
 } as const;

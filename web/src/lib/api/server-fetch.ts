@@ -6,6 +6,13 @@ import { routes } from '@/lib/api/routes';
 
 const sessionCookieName = '_loyal_session';
 
+export class AuthenticatedApiError extends Error {
+  constructor(public readonly status: number) {
+    super(`Authenticated API request failed with status ${status}.`);
+    this.name = 'AuthenticatedApiError';
+  }
+}
+
 export async function authenticatedFetch(url: string, init: RequestInit = {}) {
   const cookieStore = await cookies();
 
@@ -28,7 +35,7 @@ export async function authenticatedFetch(url: string, init: RequestInit = {}) {
   }
 
   if (!response.ok) {
-    throw new Error(`Authenticated API request failed with status ${response.status}.`);
+    throw new AuthenticatedApiError(response.status);
   }
 
   return response;

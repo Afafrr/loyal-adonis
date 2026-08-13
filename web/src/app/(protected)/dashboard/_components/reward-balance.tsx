@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { routes } from '@/lib/api/routes';
 import { getLoyaltyColor } from '../_lib/loyalty-color';
 import type { LoyaltyAccount } from '../_lib/loyalty-accounts';
 
@@ -14,12 +16,12 @@ export function RewardBalance({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyAcc
   const venueName = nextReward.venueName ?? nextReward.companyName;
 
   return (
-    <a
+    <Link
       aria-label={`Closest reward at ${venueName}: ${nextReward.title}. Go to loyalty card.`}
       className={`relative block min-h-48 overflow-hidden rounded-[26px] border border-line shadow-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus ${
         showsProgress ? loyaltyColor.backgroundClass : loyaltyColor.fillClass
       }`}
-      href={`#loyalty-account-${nextReward.accountId}`}
+      href={routes.loyaltyAccount(nextReward.accountId)}
     >
       <div
         aria-hidden='true'
@@ -38,19 +40,13 @@ export function RewardBalance({ loyaltyAccounts }: { loyaltyAccounts: LoyaltyAcc
           <RewardContent inverted nextReward={nextReward} />
         </div>
       )}
-    </a>
+    </Link>
   );
 }
 
 type NextReward = NonNullable<ReturnType<typeof findNextReward>>;
 
-function RewardContent({
-  inverted = false,
-  nextReward,
-}: {
-  inverted?: boolean;
-  nextReward: NextReward;
-}) {
+function RewardContent({ inverted = false, nextReward }: { inverted?: boolean; nextReward: NextReward }) {
   return (
     <div className='relative flex h-full min-h-48 flex-col justify-center px-5 py-5 sm:px-12 sm:py-7 '>
       <p
@@ -67,7 +63,9 @@ function RewardContent({
       >
         {nextReward.title}
       </h2>
-      <p className={`mt-5 text-sm font-bold sm:text-[15px] ${inverted ? 'text-white/80' : 'text-foreground-secondary'}`}>
+      <p
+        className={`mt-5 text-sm font-bold sm:text-[15px] ${inverted ? 'text-white/80' : 'text-foreground-secondary'}`}
+      >
         {formatRewardProgress(nextReward)}
       </p>
     </div>
@@ -79,7 +77,8 @@ function formatRewardProgress(nextReward: NextReward) {
     return `Reward ready · ${nextReward.collectedStamps}/${nextReward.totalStamps} stamps`;
   }
 
-  const remainingLabel = nextReward.remainingStamps === 1 ? '1 stamp left' : `${nextReward.remainingStamps} stamps left`;
+  const remainingLabel =
+    nextReward.remainingStamps === 1 ? '1 stamp left' : `${nextReward.remainingStamps} stamps left`;
   return `${remainingLabel} · ${nextReward.collectedStamps}/${nextReward.totalStamps} stamps`;
 }
 

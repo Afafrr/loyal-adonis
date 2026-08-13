@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { routes } from '@/lib/api/routes';
 import type { LatestActivity as LatestActivityData } from '../_lib/latest-activity';
 
 export function LatestActivity({ activity }: { activity: LatestActivityData | null }) {
@@ -10,9 +12,9 @@ export function LatestActivity({ activity }: { activity: LatestActivityData | nu
       <p className='text-[10px] font-bold uppercase tracking-[0.14em] text-foreground-label sm:text-xs'>
         Latest activity
       </p>
-      <a
+      <Link
         className='mt-2 flex items-center justify-between gap-4 rounded-2xl border border-line-subtle bg-panel px-4 py-4 shadow-card transition-colors hover:bg-panel-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-reward-olive sm:px-6'
-        href={`#loyalty-account-${activity.loyaltyAccountId}`}
+        href={routes.loyaltyAccount(activity.loyaltyAccountId)}
       >
         <span className='min-w-0'>
           <span className='block truncate text-sm font-black text-foreground sm:text-base'>{activity.venue.name}</span>
@@ -23,7 +25,7 @@ export function LatestActivity({ activity }: { activity: LatestActivityData | nu
         <span className='shrink-0 rounded-full bg-reward-olive/10 px-3 py-1 text-xs font-extrabold text-reward-olive'>
           +1 stamp
         </span>
-      </a>
+      </Link>
     </section>
   );
 }

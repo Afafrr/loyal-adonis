@@ -1,4 +1,6 @@
+import Link from 'next/link';
 import { GiftIcon, MapPinIcon } from '@/components/ui/icons';
+import { routes } from '@/lib/api/routes';
 import { StampProgress } from './stamp-progress';
 import { companyInitials } from '../_lib/company-initials';
 import { getLoyaltyColor } from '../_lib/loyalty-color';
@@ -12,11 +14,11 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
   const venueCategory = account.lastVisitedVenue?.category;
 
   return (
-    <article
+    <Link
       aria-labelledby={`loyalty-account-${account.id}-title`}
-      className='loyalty-card min-w-0 scroll-mt-6 rounded-dashboard-card border border-line-subtle bg-panel px-4 py-4 shadow-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus sm:px-8 sm:py-8'
+      className='loyalty-card min-w-0 scroll-mt-6 rounded-dashboard-card border border-line-subtle bg-panel px-4 py-4 shadow-card transition hover:-translate-y-0.5 hover:border-line-hover hover:shadow-card-wide focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus sm:px-8 sm:py-8'
+      href={routes.loyaltyAccount(account.id)}
       id={`loyalty-account-${account.id}`}
-      tabIndex={-1}
     >
       <div className='flex items-start justify-between gap-4'>
         <div className='flex min-w-0 items-center gap-4'>
@@ -63,7 +65,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
           <span>{locationLabel}</span>
         </p>
       )}
-    </article>
+    </Link>
   );
 }
 
