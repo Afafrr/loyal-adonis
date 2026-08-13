@@ -1,4 +1,11 @@
 import env from '#start/env'
+import NfcVerificationError from '#exceptions/nfc_verification_error'
+
+const verifierTimeoutMs = 7_000
+const temporarilyUnavailableMessage =
+  'NFC verification service is temporarily unavailable. Please try again.'
+const invalidResponseMessage =
+  'NFC verification service returned an invalid response. Please try again.'
 
 export interface VerifiedNfcTag {
   identifier: string
@@ -17,25 +24,80 @@ export interface VerifyTagParams {
 }
 
 export async function verifyTag(params: VerifyTagParams): Promise<NfcVerificationResponse> {
+  const verifierResponse = await requestVerifier(buildVerifierUrl(params))
+
+  if (!verifierResponse.accepted) {
+    return { status: verifierResponse.status, tag: null }
+  }
+
+  const tag = parseVerifiedTag(verifierResponse.body)
+
+  if (!tag) {
+    throw invalidVerifierResponse()
+  }
+
+  return {
+    status: verifierResponse.status,
+    tag,
+  }
+}
+
+function buildVerifierUrl(params: VerifyTagParams) {
   const baseUrl = env.get('NFC_SERVICE_URL') ?? 'http://127.0.0.1:5000'
   const url = new URL('/api/tag', baseUrl)
   url.searchParams.set('picc_data', params.piccData)
   url.searchParams.set('enc', params.enc)
   url.searchParams.set('cmac', params.cmac)
 
-  const upstream = await fetch(url, {
-    signal: AbortSignal.timeout(7_000),
-  })
+  return url
+}
 
-  const body: unknown = await upstream.json().catch(() => null)
+type VerifierResponse =
+  { accepted: false; status: number } | { accepted: true; status: number; body: unknown }
 
-  return {
-    status: upstream.status,
-    tag: upstream.ok ? verifiedTag(body) : null,
+async function requestVerifier(url: URL): Promise<VerifierResponse> {
+  let upstream: Response
+
+  try {
+    upstream = await fetch(url, {
+      signal: AbortSignal.timeout(verifierTimeoutMs),
+    })
+  } catch {
+    throw verifierUnavailable()
+  }
+
+  if ([408, 429, 503, 504].includes(upstream.status)) {
+    throw verifierUnavailable()
+  }
+
+  if (upstream.status >= 500) {
+    throw invalidVerifierResponse()
+  }
+
+  if (!upstream.ok) {
+    return { accepted: false, status: upstream.status }
+  }
+
+  try {
+    return {
+      accepted: true,
+      status: upstream.status,
+      body: await upstream.json(),
+    }
+  } catch {
+    throw invalidVerifierResponse()
   }
 }
 
-function verifiedTag(body: unknown): VerifiedNfcTag | null {
+function verifierUnavailable() {
+  return new NfcVerificationError(temporarilyUnavailableMessage, 503)
+}
+
+function invalidVerifierResponse() {
+  return new NfcVerificationError(invalidResponseMessage, 502)
+}
+
+function parseVerifiedTag(body: unknown): VerifiedNfcTag | null {
   if (!body || typeof body !== 'object') return null
 
   const result = body as Record<string, unknown>

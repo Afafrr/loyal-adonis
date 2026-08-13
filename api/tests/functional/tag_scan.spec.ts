@@ -72,6 +72,140 @@ test.group('Tag scans', () => {
     response.assertStatus(422)
   })
 
+  test('returns a rejected scan when the verifier rejects the NFC payload', async ({
+    client,
+    assert,
+  }) => {
+    const user = await User.create({
+      email: 'rejected@example.com',
+      encryptedPassword: 'password123',
+    })
+    const originalFetch = globalThis.fetch
+    globalThis.fetch = async () => new Response(null, { status: 422 })
+
+    try {
+      const response = await authenticatedPost(client, user)
+
+      response.assertStatus(400)
+      assert.deepEqual(response.body(), { error: 'Unable to verify the NFC tag.' })
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+
+  test('returns bad gateway when the verifier fails', async ({ client, assert }) => {
+    const user = await User.create({
+      email: 'upstream-error@example.com',
+      encryptedPassword: 'password123',
+    })
+    const originalFetch = globalThis.fetch
+    globalThis.fetch = async () => new Response(null, { status: 500 })
+
+    try {
+      const response = await authenticatedPost(client, user)
+
+      response.assertStatus(502)
+      assert.deepEqual(response.body(), {
+        error: 'NFC verification service returned an invalid response. Please try again.',
+      })
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+
+  test('returns bad gateway when the verifier returns malformed success data', async ({
+    client,
+    assert,
+  }) => {
+    const user = await User.create({
+      email: 'malformed@example.com',
+      encryptedPassword: 'password123',
+    })
+    const originalFetch = globalThis.fetch
+    globalThis.fetch = async () => new Response(JSON.stringify({ valid: true }), { status: 200 })
+
+    try {
+      const response = await authenticatedPost(client, user)
+
+      response.assertStatus(502)
+      assert.deepEqual(response.body(), {
+        error: 'NFC verification service returned an invalid response. Please try again.',
+      })
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+
+  test('returns service unavailable when the verifier cannot be reached', async ({
+    client,
+    assert,
+  }) => {
+    const user = await User.create({
+      email: 'unavailable@example.com',
+      encryptedPassword: 'password123',
+    })
+    const originalFetch = globalThis.fetch
+    globalThis.fetch = async () => {
+      throw new TypeError('fetch failed')
+    }
+
+    try {
+      const response = await authenticatedPost(client, user)
+
+      response.assertStatus(503)
+      assert.deepEqual(response.body(), {
+        error: 'NFC verification service is temporarily unavailable. Please try again.',
+      })
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+
+  test('returns service unavailable when the verifier times out', async ({ client, assert }) => {
+    const user = await User.create({
+      email: 'timeout@example.com',
+      encryptedPassword: 'password123',
+    })
+    const originalFetch = globalThis.fetch
+    globalThis.fetch = async () => {
+      throw new DOMException('The operation timed out', 'TimeoutError')
+    }
+
+    try {
+      const response = await authenticatedPost(client, user)
+
+      response.assertStatus(503)
+      assert.deepEqual(response.body(), {
+        error: 'NFC verification service is temporarily unavailable. Please try again.',
+      })
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+
+  test('returns service unavailable when the verifier reports an upstream timeout', async ({
+    client,
+    assert,
+  }) => {
+    const user = await User.create({
+      email: 'upstream-timeout@example.com',
+      encryptedPassword: 'password123',
+    })
+    const originalFetch = globalThis.fetch
+    globalThis.fetch = async () => new Response(null, { status: 504 })
+
+    try {
+      const response = await authenticatedPost(client, user)
+
+      response.assertStatus(503)
+      assert.deepEqual(response.body(), {
+        error: 'NFC verification service is temporarily unavailable. Please try again.',
+      })
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+
   test('creates a loyalty account on the first valid scan and records a stamp', async ({
     client,
     assert,

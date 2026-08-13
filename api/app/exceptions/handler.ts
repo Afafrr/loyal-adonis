@@ -1,4 +1,5 @@
 import app from '@adonisjs/core/services/app'
+import NfcVerificationError from '#exceptions/nfc_verification_error'
 import TagScanError from '#exceptions/tag_scan_error'
 import { type HttpContext, ExceptionHandler } from '@adonisjs/core/http'
 import { errors as authErrors } from '@adonisjs/auth'
@@ -31,6 +32,10 @@ export default class HttpExceptionHandler extends ExceptionHandler {
     }
 
     if (error instanceof TagScanError) {
+      return ctx.response.status(error.status).send({ error: error.message })
+    }
+
+    if (error instanceof NfcVerificationError) {
       return ctx.response.status(error.status).send({ error: error.message })
     }
 
