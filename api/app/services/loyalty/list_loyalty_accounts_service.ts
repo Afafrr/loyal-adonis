@@ -5,10 +5,10 @@ export async function listLoyaltyAccounts(userId: number) {
     .where('user_id', userId)
     .orderBy('created_at', 'asc')
     .withCount('stamps')
-    .preload('loyaltyProgram', (loyaltyProgramQuery) => loyaltyProgramQuery.preload('company'))
-    .preload('earnedRewards', (earnedRewardQuery) =>
-      earnedRewardQuery.select('id', 'loyalty_account_id', 'stamps_required_snapshot')
+    .withAggregate('earnedRewards', (earnedRewardQuery) =>
+      earnedRewardQuery.sum('stamps_required_snapshot').as('allocated_stamps_count')
     )
+    .preload('loyaltyProgram', (loyaltyProgramQuery) => loyaltyProgramQuery.preload('company'))
     .preload('stamps', (stampQuery) =>
       stampQuery
         .orderBy('created_at', 'desc')
@@ -26,10 +26,7 @@ function toAccountSummary(loyaltyAccount: LoyaltyAccount) {
   const { loyaltyProgram } = loyaltyAccount
   const { company } = loyaltyProgram
   const stampCount = Number(loyaltyAccount.$extras.stamps_count)
-  const allocatedStampCount = loyaltyAccount.earnedRewards.reduce(
-    (total, reward) => total + reward.stampsRequiredSnapshot,
-    0
-  )
+  const allocatedStampCount = Number(loyaltyAccount.$extras.allocated_stamps_count ?? 0)
   const latestStamp = loyaltyAccount.stamps[0]
   const lastVisitedVenue = latestStamp?.nfcTag.venue
   return {

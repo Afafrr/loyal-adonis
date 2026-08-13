@@ -7,9 +7,12 @@ export async function getLoyaltyAccountDetail(userId: number, loyaltyAccountId: 
     .where('id', loyaltyAccountId)
     .where('user_id', userId)
     .withCount('stamps')
+    .withAggregate('earnedRewards', (earnedRewardQuery) =>
+      earnedRewardQuery.sum('stamps_required_snapshot').as('allocated_stamps_count')
+    )
     .preload('loyaltyProgram', (loyaltyProgramQuery) => loyaltyProgramQuery.preload('company'))
     .preload('earnedRewards', (earnedRewardQuery) =>
-      earnedRewardQuery.orderBy('earned_at', 'desc').orderBy('id', 'desc')
+      earnedRewardQuery.whereNull('redeemed_at').orderBy('earned_at', 'desc').orderBy('id', 'desc')
     )
     .preload('stamps', (stampQuery) =>
       stampQuery
@@ -28,10 +31,7 @@ export async function getLoyaltyAccountDetail(userId: number, loyaltyAccountId: 
   const { company } = loyaltyProgram
   const companyId = Number(company.id)
   const totalStampCount = Number(loyaltyAccount.$extras.stamps_count)
-  const allocatedStampCount = loyaltyAccount.earnedRewards.reduce(
-    (total, reward) => total + reward.stampsRequiredSnapshot,
-    0
-  )
+  const allocatedStampCount = Number(loyaltyAccount.$extras.allocated_stamps_count ?? 0)
   const primaryCity = await findPrimaryCity(Number(loyaltyAccount.id))
   const [venues, venueCount] = await Promise.all([
     primaryCity
@@ -69,13 +69,11 @@ export async function getLoyaltyAccountDetail(userId: number, loyaltyAccountId: 
         city: venue.city,
         countryCode: venue.countryCode,
       })),
-      availableRewards: loyaltyAccount.earnedRewards
-        .filter((reward) => reward.redeemedAt === null)
-        .map((reward) => ({
-          id: Number(reward.id),
-          title: reward.rewardTitleSnapshot,
-          earnedAt: reward.earnedAt.toUTC().toISO()!,
-        })),
+      availableRewards: loyaltyAccount.earnedRewards.map((reward) => ({
+        id: Number(reward.id),
+        title: reward.rewardTitleSnapshot,
+        earnedAt: reward.earnedAt.toUTC().toISO()!,
+      })),
       recentStamps: loyaltyAccount.stamps.map((stamp) => ({
         id: Number(stamp.id),
         createdAt: stamp.createdAt.toUTC().toISO()!,
