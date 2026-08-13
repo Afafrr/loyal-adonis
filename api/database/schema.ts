@@ -81,6 +81,25 @@ export class LoyaltyProgramSchema extends BaseModel {
   declare updatedAt: DateTime
 }
 
+export class MembershipSchema extends BaseModel {
+  static $columns = ['companyId', 'createdAt', 'id', 'role', 'updatedAt', 'userId', 'venueId'] as const
+  $columns = MembershipSchema.$columns
+  @column()
+  declare companyId: bigint | number | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: bigint | number
+  @column()
+  declare role: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+  @column()
+  declare userId: bigint | number
+  @column()
+  declare venueId: bigint | number | null
+}
+
 export class NfcTagSchema extends BaseModel {
   static $columns = ['active', 'createdAt', 'id', 'identifier', 'lastAcceptedCounter', 'updatedAt', 'venueId'] as const
   $columns = NfcTagSchema.$columns
