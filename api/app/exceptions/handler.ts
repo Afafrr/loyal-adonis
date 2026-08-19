@@ -3,6 +3,7 @@ import NfcVerificationError from '#exceptions/nfc_verification_error'
 import TagScanError from '#exceptions/tag_scan_error'
 import { type HttpContext, ExceptionHandler } from '@adonisjs/core/http'
 import { errors as authErrors } from '@adonisjs/auth'
+import { errors as bouncerErrors } from '@adonisjs/bouncer'
 import { errors as shieldErrors } from '@adonisjs/shield'
 
 export default class HttpExceptionHandler extends ExceptionHandler {
@@ -29,6 +30,10 @@ export default class HttpExceptionHandler extends ExceptionHandler {
 
     if (error instanceof authErrors.E_INVALID_CREDENTIALS) {
       return ctx.response.status(401).send({ error: 'Invalid email or password.' })
+    }
+
+    if (error instanceof bouncerErrors.E_AUTHORIZATION_FAILURE) {
+      return ctx.response.status(error.status).send({ error: error.message })
     }
 
     if (error instanceof TagScanError) {
