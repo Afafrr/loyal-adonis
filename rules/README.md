@@ -4,6 +4,7 @@ This directory records implemented business flows and the invariants they rely o
 
 ## Backend
 
+- [Authorization: roles, permissions, and scope](./backend/authorization-roles.md)
 - [Tag scan](./backend/tag-scan-flow.md)
 - [Loyalty accounts](./backend/loyalty-accounts-flow.md)
 - [Loyalty rewards](./backend/loyalty-rewards-flow.md)
