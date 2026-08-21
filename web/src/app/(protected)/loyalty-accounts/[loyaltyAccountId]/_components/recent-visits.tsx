@@ -7,7 +7,7 @@ export function RecentVisits({ stamps }: { stamps: LoyaltyAccountDetail['recentS
       <p className='text-[10px] font-extrabold uppercase tracking-[0.14em] text-foreground-label sm:text-xs'>Activity</p>
       <h2 className='mt-1 text-xl font-black tracking-[-0.035em] sm:text-2xl'>Recent visits</h2>
 
-      <div className='mt-4 overflow-hidden rounded-[24px] border border-line-subtle bg-panel shadow-card'>
+      <div className='mt-4 overflow-hidden rounded-2xl bg-panel-muted sm:rounded-[24px] sm:border sm:border-line-subtle sm:bg-panel sm:shadow-card'>
         {stamps.length > 0 ? (
           stamps.map((stamp, index) => (
             <div

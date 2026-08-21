@@ -19,7 +19,7 @@ export function Venues({ account }: { account: LoyaltyAccountDetail }) {
       {account.venues.length > 0 ? (
         <div className={`mt-4 grid gap-3 ${account.venues.length > 1 ? 'sm:grid-cols-2' : ''}`}>
           {account.venues.map((venue) => (
-            <article className='rounded-[24px] border border-line-subtle bg-panel p-5 shadow-card' key={venue.id}>
+            <article className='rounded-2xl bg-panel-muted p-4 sm:rounded-[24px] sm:border sm:border-line-subtle sm:bg-panel sm:p-5 sm:shadow-card' key={venue.id}>
               <div className='flex items-start gap-3'>
                 <span className='grid size-10 shrink-0 place-items-center rounded-full bg-panel-muted text-foreground-secondary'>
                   <MapPinIcon className='size-5' />
@@ -38,7 +38,7 @@ export function Venues({ account }: { account: LoyaltyAccountDetail }) {
           ))}
         </div>
       ) : (
-        <div className='mt-4 rounded-[24px] border border-line-subtle bg-panel p-5 text-sm leading-6 text-foreground-muted shadow-card'>
+        <div className='mt-4 rounded-2xl bg-panel-muted p-5 text-sm leading-6 text-foreground-muted sm:rounded-[24px] sm:border sm:border-line-subtle sm:bg-panel sm:shadow-card'>
           Visit any participating venue and scan its loyalty tag. Venues near your most visited city will appear here.
         </div>
       )}

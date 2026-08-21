@@ -1,6 +1,8 @@
-import Link from 'next/link';
+import { ViewTransition } from 'react';
 import { GiftIcon, MapPinIcon } from '@/components/ui/icons';
 import { routes } from '@/lib/api/routes';
+import { getLoyaltyCardTransitionNames } from '@/lib/loyalty-card-transition';
+import { LoyaltyCardLink } from './loyalty-card-link';
 import { StampProgress } from './stamp-progress';
 import { companyInitials } from '../_lib/company-initials';
 import { getLoyaltyColor } from '../_lib/loyalty-color';
@@ -12,24 +14,34 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
   const loyaltyColor = getLoyaltyColor(account.company.id);
   const locationLabel = account.lastVisitedVenue ? formatLocation(account.lastVisitedVenue) : null;
   const venueCategory = account.lastVisitedVenue?.category;
+  const transitionNames = getLoyaltyCardTransitionNames(account.id);
+  const titleId = `loyalty-account-${account.id}-title`;
 
   return (
-    <Link
-      aria-labelledby={`loyalty-account-${account.id}-title`}
+    <LoyaltyCardLink
+      ariaLabelledby={titleId}
       className='loyalty-card min-w-0 scroll-mt-6 rounded-dashboard-card border border-line-subtle bg-panel px-4 py-4 shadow-card transition hover:-translate-y-0.5 hover:border-line-hover hover:shadow-card-wide focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus sm:px-8 sm:py-8'
       href={routes.loyaltyAccount(account.id)}
       id={`loyalty-account-${account.id}`}
+      navigationSummary={{
+        loyaltyAccountId: account.id,
+        companyId: account.company.id,
+        companyName: account.company.name,
+      }}
+      transitionName={transitionNames.card}
     >
       <div className='flex items-start justify-between gap-4'>
         <div className='flex min-w-0 items-center gap-4'>
-          <span
-            aria-hidden='true'
-            className={`grid size-14 shrink-0 place-items-center rounded-full text-lg font-black text-white ${loyaltyColor.fillClass}`}
-          >
-            {companyInitials(account.company.name)}
-          </span>
+          <ViewTransition default='none' name={transitionNames.avatar} share='loyalty-card-avatar-morph'>
+            <span
+              aria-hidden='true'
+              className={`grid size-14 shrink-0 place-items-center rounded-full text-lg font-black text-white ${loyaltyColor.fillClass}`}
+            >
+              {companyInitials(account.company.name)}
+            </span>
+          </ViewTransition>
           <div className='min-w-0'>
-            <h2 className='truncate text-base font-black md:text-xl' id={`loyalty-account-${account.id}-title`}>
+            <h2 className='truncate text-base font-black md:text-xl' id={titleId}>
               {account.company.name}
             </h2>
             {venueCategory && (
@@ -65,7 +77,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
           <span>{locationLabel}</span>
         </p>
       )}
-    </Link>
+    </LoyaltyCardLink>
   );
 }
 

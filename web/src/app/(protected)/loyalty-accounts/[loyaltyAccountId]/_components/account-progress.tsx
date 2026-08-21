@@ -9,7 +9,7 @@ export function AccountProgress({ account }: { account: LoyaltyAccountDetail }) 
   const loyaltyColor = getLoyaltyColor(account.company.id);
 
   return (
-    <section className='rounded-dashboard-card border border-line-subtle bg-panel p-5 shadow-card sm:p-8'>
+    <section className='rounded-2xl bg-panel-muted p-5 sm:rounded-dashboard-card sm:border sm:border-line-subtle sm:bg-panel sm:p-8 sm:shadow-card'>
       <div>
         <p className='text-xs font-extrabold uppercase tracking-[0.12em] text-foreground-label'>Loyalty card</p>
         <h2 className='mt-1 text-xl font-black tracking-[-0.03em] sm:text-2xl'>{account.program.name}</h2>

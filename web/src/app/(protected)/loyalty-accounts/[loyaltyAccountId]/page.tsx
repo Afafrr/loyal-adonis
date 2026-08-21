@@ -34,18 +34,18 @@ export default async function LoyaltyAccountPage({
   }
 
   return (
-    <section className='mx-auto max-w-4xl px-4 pb-12 pt-2 min-[380px]:px-5 sm:px-12 sm:pb-16 sm:pt-6 md:px-10'>
+    <>
       <Link
-        className='inline-flex items-center gap-1 text-xs font-bold text-foreground-secondary transition hover:text-foreground sm:text-sm'
+        className='inline-flex items-center gap-1 rounded-full bg-panel-muted px-3 py-2 text-xs font-bold text-foreground-secondary transition hover:text-foreground sm:rounded-none sm:bg-transparent sm:px-0 sm:py-0 sm:text-sm'
         href={routes.dashboard}
       >
         <ChevronRightIcon className='size-4 rotate-180' />
-        Your rewards
+        Your loyalty cards
       </Link>
 
       <CompanyOverview account={account} />
 
-      <div className='mt-4 sm:mt-6'>
+      <div className='mt-6 sm:mt-6'>
         <div>
           <AccountProgress account={account} />
           <AvailableRewards rewards={account.availableRewards} />
@@ -55,6 +55,6 @@ export default async function LoyaltyAccountPage({
           <RecentVisits stamps={account.recentStamps} />
         </div>
       </div>
-    </section>
+    </>
   );
 }

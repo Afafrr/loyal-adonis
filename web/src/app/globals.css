@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './loyalty-card-transitions.css';
 
 @theme {
   /* Backgrounds */
@@ -90,34 +91,4 @@ a {
 a,
 button:not(:disabled) {
   cursor: pointer;
-}
-
-.loyalty-card {
-  outline: 1px solid transparent;
-}
-
-.loyalty-card:target {
-  animation: loyalty-card-highlight 1.2s ease-out;
-}
-
-@keyframes loyalty-card-highlight {
-  0% {
-    border-color: var(--color-reward-olive);
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-reward-olive) 45%, transparent);
-  }
-  25%,
-  70% {
-    border-color: var(--color-reward-olive);
-    box-shadow: 0 0 0 5px color-mix(in oklab, var(--color-reward-olive) 30%, transparent);
-  }
-  100% {
-    border-color: var(--color-line-subtle);
-    box-shadow: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .loyalty-card:target {
-    animation: none;
-  }
 }

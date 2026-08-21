@@ -1,0 +1,81 @@
+.loyalty-card {
+  outline: 1px solid transparent;
+}
+
+.loyalty-card:target {
+  animation: loyalty-card-highlight 1.2s ease-out;
+}
+
+@keyframes loyalty-card-highlight {
+  0% {
+    border-color: var(--color-reward-olive);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-reward-olive) 45%, transparent);
+  }
+  25%,
+  70% {
+    border-color: var(--color-reward-olive);
+    box-shadow: 0 0 0 5px color-mix(in oklab, var(--color-reward-olive) 30%, transparent);
+  }
+  100% {
+    border-color: var(--color-line-subtle);
+    box-shadow: none;
+  }
+}
+
+::view-transition-group(.loyalty-card-morph),
+::view-transition-group(.loyalty-card-avatar-morph) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (width < 40rem) {
+  ::view-transition-group(.loyalty-dashboard-underlay) {
+    animation-duration: 420ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  ::view-transition-group(.loyalty-card-morph),
+  ::view-transition-group(.loyalty-card-avatar-morph) {
+    z-index: 2;
+  }
+
+  ::view-transition-group(.loyalty-dashboard-underlay) {
+    z-index: 1;
+  }
+
+  ::view-transition-old(.loyalty-dashboard-underlay) {
+    animation: loyalty-dashboard-hold 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes loyalty-dashboard-hold {
+    0%,
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loyalty-card:target {
+    animation: none;
+  }
+
+  ::view-transition-group(.loyalty-card-morph),
+  ::view-transition-group(.loyalty-card-avatar-morph) {
+    animation-duration: 1ms;
+  }
+
+  @media (width < 40rem) {
+    ::view-transition-group(.loyalty-dashboard-underlay) {
+      animation-duration: 1ms;
+    }
+
+    ::view-transition-old(.loyalty-dashboard-underlay) {
+      animation: none;
+    }
+  }
+}
