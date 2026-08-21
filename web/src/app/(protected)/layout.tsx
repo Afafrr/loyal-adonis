@@ -3,6 +3,7 @@ import { getCurrentUser, userDisplayName, userInitial } from '@/features/auth/ap
 import { routes } from '@/lib/api/routes';
 import { brandOutfit } from '@/lib/fonts';
 import { LoyaltyCardNavigationProvider } from './_components/loyalty-card-navigation-context';
+import { LoyaltyAccountScrollReset } from './_components/loyalty-account-scroll-reset';
 
 function Brand() {
   return (
@@ -22,6 +23,7 @@ export default async function ProtectedLayout({ children }: Readonly<{ children:
 
   return (
     <LoyaltyCardNavigationProvider>
+      <LoyaltyAccountScrollReset />
       <main className='min-h-screen bg-canvas text-foreground'>
         <nav className='mx-auto flex max-w-4xl items-center justify-between gap-3 px-2 py-2 min-[380px]:px-3 sm:px-8 sm:py-5 md:max-w-355 md:px-10 lg:py-6'>
           <div className='shrink-0'>
