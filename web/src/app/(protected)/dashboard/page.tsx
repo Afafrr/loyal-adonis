@@ -1,6 +1,7 @@
 import { ViewTransition } from 'react';
 import { PageTitle } from '@/components/ui/page-title';
 import { DesktopDashboardSummary } from './_components/desktop-dashboard-summary';
+import { DashboardScrollRestoration } from './_components/dashboard-scroll-restoration';
 import { LatestActivity } from './_components/latest-activity';
 import { LoyaltyAccounts } from './_components/loyalty-accounts';
 import { RewardBalance } from './_components/reward-balance';
@@ -15,6 +16,7 @@ export default async function DashboardPage() {
       default='none'
       exit={{ 'loyalty-card-expand': 'loyalty-dashboard-underlay', default: 'none' }}
     >
+      <DashboardScrollRestoration />
       <section className='mx-auto max-w-2xl px-2 pb-10 pt-2 min-[380px]:px-4 sm:px-12 sm:pb-16 sm:pt-6 md:max-w-355 md:px-10 md:pt-8'>
         <PageTitle>Your rewards</PageTitle>
 

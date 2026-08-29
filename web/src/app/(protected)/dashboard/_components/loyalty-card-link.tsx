@@ -6,6 +6,7 @@ import {
   useLoyaltyCardNavigation,
   type LoyaltyCardNavigationSummary,
 } from '../../_components/loyalty-card-navigation-context';
+import { saveDashboardScrollPosition } from './dashboard-scroll-restoration';
 
 interface LoyaltyCardLinkProps {
   ariaLabelledby: string;
@@ -35,7 +36,10 @@ export function LoyaltyCardLink({
         className={`${className} relative`}
         href={href}
         id={id}
-        onNavigate={() => selectCard(navigationSummary)}
+        onNavigate={() => {
+          saveDashboardScrollPosition();
+          selectCard(navigationSummary);
+        }}
         transitionTypes={['loyalty-card-expand']}
       >
         {children}

@@ -38,6 +38,7 @@ export default async function LoyaltyAccountPage({
       <Link
         className='inline-flex items-center gap-1 rounded-full bg-panel-muted px-3 py-2 text-xs font-bold text-foreground-secondary transition hover:text-foreground sm:rounded-none sm:bg-transparent sm:px-0 sm:py-0 sm:text-sm'
         href={routes.dashboard}
+        scroll={false}
       >
         <ChevronRightIcon className='size-4 rotate-180' />
         Your loyalty cards

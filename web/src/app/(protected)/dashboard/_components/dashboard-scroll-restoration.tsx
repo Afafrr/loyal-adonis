@@ -4,6 +4,10 @@ import { useLayoutEffect } from 'react';
 
 const dashboardScrollPositionKey = 'loyalty-dashboard-scroll-position';
 
+export function saveDashboardScrollPosition() {
+  sessionStorage.setItem(dashboardScrollPositionKey, String(window.scrollY));
+}
+
 export function DashboardScrollRestoration() {
   useLayoutEffect(() => {
     const savedScrollPosition = sessionStorage.getItem(dashboardScrollPositionKey);
