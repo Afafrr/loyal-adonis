@@ -1,4 +1,8 @@
-import { isVenueMembershipRole, type VenueMembershipRole } from '#authorization/roles'
+import {
+  isVenueMembershipRole,
+  membershipRoles,
+  type VenueMembershipRole,
+} from '#authorization/roles'
 import type Company from '#models/company'
 import type Membership from '#models/membership'
 import type User from '#models/user'
@@ -12,7 +16,7 @@ import { inject } from '@adonisjs/core'
 
 function belongsToCompany(membership: Membership, company: Company) {
   return (
-    membership.role === 'company_owner' &&
+    membership.role === membershipRoles.companyOwner &&
     membership.companyId !== null &&
     String(membership.companyId) === String(company.id)
   )
@@ -39,7 +43,7 @@ export default class MembershipPolicy extends BasePolicy {
   }
 
   assignCompanyOwner(user: User, company: Company): Promise<AuthorizerResponse> {
-    return this.access.canManageRoles(user, 'membership.assign', ['company_owner'], {
+    return this.access.canManageRoles(user, 'membership.assign', [membershipRoles.companyOwner], {
       type: 'company',
       companyId: company.id,
     })
@@ -97,7 +101,7 @@ export default class MembershipPolicy extends BasePolicy {
       return false
     }
 
-    return this.access.canManageRoles(user, 'membership.revoke', ['company_owner'], {
+    return this.access.canManageRoles(user, 'membership.revoke', [membershipRoles.companyOwner], {
       type: 'company',
       companyId: company.id,
     })

@@ -1,5 +1,12 @@
 import { permissions, type Permission } from '#authorization/permissions'
 
+export const membershipRoles = {
+  admin: 'admin',
+  companyOwner: 'company_owner',
+  venueManager: 'venue_manager',
+  venueStaff: 'venue_staff',
+} as const
+
 /**
  * The keys must match the role values stored in the memberships table.
  * Permissions describe what a role may do. Membership scope describes where.

@@ -1,5 +1,6 @@
 import Company from '#models/company'
 import Membership from '#models/membership'
+import { membershipRoles } from '#authorization/roles'
 import CompanyPolicy from '#policies/company_policy'
 import { getOwnerDashboard } from '#services/owner/get_owner_dashboard_service'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -9,7 +10,7 @@ export default class OwnerDashboardController {
     const user = auth.getUserOrFail()
     const membership = await Membership.query()
       .where('user_id', Number(user.id))
-      .where('role', 'company_owner')
+      .where('role', membershipRoles.companyOwner)
       .first()
 
     if (!membership?.companyId) {

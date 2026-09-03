@@ -1,4 +1,5 @@
 import Company from '#models/company'
+import { membershipRoles } from '#authorization/roles'
 import EarnedReward from '#models/earned_reward'
 import LoyaltyAccount from '#models/loyalty_account'
 import LoyaltyProgram from '#models/loyalty_program'
@@ -52,7 +53,7 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
       {
         userId: owner.id,
         companyId: company.id,
-        role: 'company_owner',
+        role: membershipRoles.companyOwner,
       },
       { client: this.client }
     )

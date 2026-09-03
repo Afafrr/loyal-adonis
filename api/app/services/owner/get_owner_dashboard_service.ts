@@ -1,4 +1,5 @@
 import db from '@adonisjs/lucid/services/db'
+import { membershipRoles } from '#authorization/roles'
 import Company from '#models/company'
 import LoyaltyProgram from '#models/loyalty_program'
 import Membership from '#models/membership'
@@ -13,10 +14,10 @@ function countValue(row: CountRow | undefined) {
 export async function getOwnerDashboard(userId: number) {
   const membership = await Membership.query()
     .where('user_id', userId)
-    .where('role', 'company_owner')
+    .where('role', membershipRoles.companyOwner)
     .first()
 
-    if (!membership?.companyId) {
+  if (!membership?.companyId) {
     return null
   }
 
