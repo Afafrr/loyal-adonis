@@ -81,7 +81,12 @@ services:
     depends_on:
       backend:
         condition: service_started
-
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
 volumes:
   backend_node_modules:
   frontend_node_modules:
