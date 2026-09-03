@@ -2,6 +2,7 @@ import Company from '#models/company'
 import EarnedReward from '#models/earned_reward'
 import LoyaltyAccount from '#models/loyalty_account'
 import LoyaltyProgram from '#models/loyalty_program'
+import Membership from '#models/membership'
 import NfcTag from '#models/nfc_tag'
 import Stamp from '#models/stamp'
 import User from '#models/user'
@@ -14,6 +15,7 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
     const member = await this.seedMember()
     const coffeeShop = await this.seedCoffeeShop()
     const bakery = await this.seedBakery()
+    await this.seedOwner(coffeeShop.company)
 
     const coffeeAccount = await this.seedAccount(member, coffeeShop.program)
     const bakeryAccount = await this.seedAccount(member, bakery.program)
@@ -33,6 +35,29 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
       },
       { client: this.client }
     )
+  }
+
+  private async seedOwner(company: Company) {
+    const owner = await User.updateOrCreate(
+      { email: 'owner@example.com' },
+      {
+        encryptedPassword: 'password123',
+        firstName: 'Owner',
+      },
+      { client: this.client }
+    )
+
+    await Membership.updateOrCreate(
+      { userId: owner.id, companyId: company.id },
+      {
+        userId: owner.id,
+        companyId: company.id,
+        role: 'company_owner',
+      },
+      { client: this.client }
+    )
+
+    return owner
   }
 
   private async seedCoffeeShop() {
@@ -105,7 +130,7 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
       { client: this.client }
     )
 
-    return { program, tags: { downtown: downtownTag, oldTown: oldTownTag } }
+    return { company, program, tags: { downtown: downtownTag, oldTown: oldTownTag } }
   }
 
   private async seedBakery() {

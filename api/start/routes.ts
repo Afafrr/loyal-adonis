@@ -22,6 +22,7 @@ const ProfileController = () => import('#controllers/profile_controller')
 const SessionsController = () => import('#controllers/sessions_controller')
 const TagScanController = () => import('#controllers/tag_scan_controller')
 const UsersController = () => import('#controllers/users_controller')
+const OwnerDashboardController = () => import('#controllers/owner_dashboard_controller')
 
 router.get('/up', [HealthController, 'show']).as('health')
 
@@ -34,20 +35,32 @@ router
     router
       .group(() => {
         router.delete('users/sign_out', [SessionsController, 'destroy']).as('users.signOut')
-        router.get('me', [UsersController, 'show']).as('users.me')
-        router.get('me/profile', [ProfileController, 'show']).as('profile.show')
+
         router
-          .get('me/latest_activity', [LatestActivityController, 'show'])
-          .as('latestActivity.show')
+          .group(() => {
+            router.get('/', [UsersController, 'show']).as('users.me')
+            router.get('profile', [ProfileController, 'show']).as('profile.show')
+            router
+              .get('latest_activity', [LatestActivityController, 'show'])
+              .as('latestActivity.show')
+            router
+              .get('loyalty_accounts', [LoyaltyAccountsController, 'index'])
+              .as('loyaltyAccounts.index')
+            router
+              .get('loyalty_accounts/:loyaltyAccountId', [LoyaltyAccountDetailsController, 'show'])
+              .as('loyaltyAccounts.show')
+            router
+              .get('loyalty_rewards', [LoyaltyRewardsController, 'index'])
+              .as('loyaltyRewards.index')
+          })
+          .prefix('me')
+
         router
-          .get('me/loyalty_accounts', [LoyaltyAccountsController, 'index'])
-          .as('loyaltyAccounts.index')
-        router
-          .get('me/loyalty_accounts/:loyaltyAccountId', [LoyaltyAccountDetailsController, 'show'])
-          .as('loyaltyAccounts.show')
-        router
-          .get('me/loyalty_rewards', [LoyaltyRewardsController, 'index'])
-          .as('loyaltyRewards.index')
+          .group(() => {
+            router.get('dashboard', [OwnerDashboardController, 'show']).as('owner.dashboard')
+          })
+          .prefix('owner')
+
         router
           .post('dev/nfc_tags/inspect', [DevelopmentNfcTagsController, 'inspect'])
           .as('developmentNfcTags.inspect')
