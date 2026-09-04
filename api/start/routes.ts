@@ -23,6 +23,7 @@ const SessionsController = () => import('#controllers/sessions_controller')
 const TagScanController = () => import('#controllers/tag_scan_controller')
 const UsersController = () => import('#controllers/users_controller')
 const OwnerDashboardController = () => import('#controllers/owner_dashboard_controller')
+const OwnerDashboardStatsController = () => import('#controllers/owner_dashboard_stats_controller')
 
 router.get('/up', [HealthController, 'show']).as('health')
 
@@ -58,6 +59,9 @@ router
         router
           .group(() => {
             router.get('dashboard', [OwnerDashboardController, 'show']).as('owner.dashboard')
+            router
+              .get('dashboard/stats', [OwnerDashboardStatsController, 'show'])
+              .as('owner.dashboard.stats')
           })
           .prefix('owner')
 

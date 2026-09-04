@@ -33,6 +33,12 @@ X-CSRF-Token: {{csrf.response.headers.X-CSRF-Token}}
 GET {{baseUrl}}/owner/dashboard
 Accept: application/json
 
+### Get owner dashboard stats (expected: 200)
+# Stats are loaded independently from the main dashboard data.
+# @name ownerDashboardStats
+GET {{baseUrl}}/owner/dashboard/stats
+Accept: application/json
+
 ### Get the owner dashboard without owner access (expected: 403)
 # Sign in as a regular customer before sending this request.
 # @name ownerDashboardForbidden

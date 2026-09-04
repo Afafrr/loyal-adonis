@@ -49,14 +49,21 @@ test.group('Owner dashboard', () => {
     response.assertStatus(200)
     response.assertBodyContains({
       company: { id: Number(company.id), name: 'Dashboard Coffee' },
+      venues: [{ id: Number(venue.id), name: 'Main venue', city: 'Kraków' }],
+    })
+
+    const statsResponse = await client
+      .get('/api/v1/owner/dashboard/stats')
+      .header('Cookie', sessionCookie(login))
+
+    statsResponse.assertStatus(200)
+    statsResponse.assertBodyContains({
       stats: {
-        venueCount: 1,
         customerCount: 1,
         stampCount: 1,
         earnedRewardCount: 0,
         activeTagCount: 1,
       },
-      venues: [{ id: Number(venue.id), name: 'Main venue', city: 'Kraków' }],
     })
   })
 
