@@ -12,18 +12,19 @@ import { middleware } from '#start/kernel'
 
 const HealthController = () => import('#controllers/health_controller')
 const LatestActivityController = () => import('#controllers/latest_activity_controller')
-const LoyaltyAccountsController = () => import('#controllers/loyalty_accounts_controller')
+const LoyaltyAccountsController = () => import('#controllers/loyalty/accounts_controller')
 const LoyaltyAccountDetailsController = () =>
-  import('#controllers/loyalty_account_details_controller')
-const LoyaltyRewardsController = () => import('#controllers/loyalty_rewards_controller')
-const DevelopmentNfcTagsController = () => import('#controllers/development_nfc_tags_controller')
-const RegistrationsController = () => import('#controllers/registrations_controller')
+  import('#controllers/loyalty/account_details_controller')
+const LoyaltyRewardsController = () => import('#controllers/loyalty/rewards_controller')
+const DevelopmentNfcTagsController = () =>
+  import('#controllers/nfc/development_nfc_tags_controller')
+const RegistrationsController = () => import('#controllers/auth/registrations_controller')
 const ProfileController = () => import('#controllers/profile_controller')
-const SessionsController = () => import('#controllers/sessions_controller')
-const TagScanController = () => import('#controllers/tag_scan_controller')
+const SessionsController = () => import('#controllers/auth/sessions_controller')
+const TagScanController = () => import('#controllers/nfc/tag_scan_controller')
 const UsersController = () => import('#controllers/users_controller')
-const OwnerDashboardController = () => import('#controllers/owner_dashboard_controller')
-const OwnerDashboardStatsController = () => import('#controllers/owner_dashboard_stats_controller')
+const OwnerDashboardController = () => import('#controllers/owner/dashboard_controller')
+const OwnerDashboardStatsController = () => import('#controllers/owner/dashboard_stats_controller')
 
 router.get('/up', [HealthController, 'show']).as('health')
 
