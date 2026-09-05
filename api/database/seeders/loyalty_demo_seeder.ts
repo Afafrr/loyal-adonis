@@ -1,5 +1,5 @@
 import Company from '#models/company'
-import { membershipRoles } from '#authorization/roles'
+import { membershipRoles, type VenueMembershipRole } from '#authorization/roles'
 import EarnedReward from '#models/earned_reward'
 import LoyaltyAccount from '#models/loyalty_account'
 import LoyaltyProgram from '#models/loyalty_program'
@@ -16,13 +16,48 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
     const member = await this.seedMember()
     const coffeeShop = await this.seedCoffeeShop()
     const bakery = await this.seedBakery()
+    await this.seedAdmin()
     await this.seedOwner(coffeeShop.company)
+    await this.seedVenueEmployee(
+      'manager@example.com',
+      'KP Manager',
+      coffeeShop.venues.downtown,
+      membershipRoles.venueManager
+    )
+    await this.seedVenueEmployee(
+      'staff@example.com',
+      'KP Staff',
+      coffeeShop.venues.oldTown,
+      membershipRoles.venueStaff
+    )
 
     const coffeeAccount = await this.seedAccount(member, coffeeShop.program)
     const bakeryAccount = await this.seedAccount(member, bakery.program)
 
     await this.seedReward(coffeeAccount, coffeeShop.program)
     await this.seedStamps(coffeeAccount, bakeryAccount, coffeeShop.tags, bakery.tag)
+  }
+
+  private async seedAdmin() {
+    const admin = await User.updateOrCreate(
+      { email: 'admin@example.com' },
+      {
+        encryptedPassword: 'password123',
+        firstName: 'Admin',
+      },
+      { client: this.client }
+    )
+
+    await Membership.updateOrCreate(
+      { userId: admin.id, role: membershipRoles.admin },
+      {
+        userId: admin.id,
+        role: membershipRoles.admin,
+      },
+      { client: this.client }
+    )
+
+    return admin
   }
 
   private seedMember() {
@@ -43,7 +78,7 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
       { email: 'owner@example.com' },
       {
         encryptedPassword: 'password123',
-        firstName: 'Owner',
+        firstName: 'KP Owner',
       },
       { client: this.client }
     )
@@ -59,6 +94,34 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
     )
 
     return owner
+  }
+
+  private async seedVenueEmployee(
+    email: string,
+    firstName: string,
+    venue: Venue,
+    role: VenueMembershipRole
+  ) {
+    const employee = await User.updateOrCreate(
+      { email },
+      {
+        encryptedPassword: 'password123',
+        firstName,
+      },
+      { client: this.client }
+    )
+
+    await Membership.updateOrCreate(
+      { userId: employee.id, venueId: venue.id },
+      {
+        userId: employee.id,
+        venueId: venue.id,
+        role,
+      },
+      { client: this.client }
+    )
+
+    return employee
   }
 
   private async seedCoffeeShop() {
@@ -131,7 +194,12 @@ export default class LoyaltyDemoSeeder extends BaseSeeder {
       { client: this.client }
     )
 
-    return { company, program, tags: { downtown: downtownTag, oldTown: oldTownTag } }
+    return {
+      company,
+      program,
+      venues: { downtown: downtownVenue, oldTown: oldTownVenue },
+      tags: { downtown: downtownTag, oldTown: oldTownTag },
+    }
   }
 
   private async seedBakery() {
