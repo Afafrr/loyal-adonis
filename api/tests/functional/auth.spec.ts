@@ -55,7 +55,12 @@ test.group('Authentication', () => {
 
     const me = await client.get('/api/v1/me').header('Cookie', sessionCookie(login))
     me.assertStatus(200)
-    me.assertBody({ id: Number(user.id), email: user.email, firstName: 'Marta' })
+    me.assertBody({
+      id: Number(user.id),
+      email: user.email,
+      firstName: 'Marta',
+      memberships: [],
+    })
   })
 
   test('rejects invalid credentials', async ({ client }) => {
