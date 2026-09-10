@@ -11,6 +11,8 @@ function apiRoutesFor(origin: string) {
     loyaltyAccounts: `${apiBaseUrl}/me/loyalty_accounts`,
     loyaltyAccount: (loyaltyAccountId: number) => `${apiBaseUrl}/me/loyalty_accounts/${loyaltyAccountId}`,
     loyaltyRewards: `${apiBaseUrl}/me/loyalty_rewards`,
+    businessDashboard: `${apiBaseUrl}/business/dashboard`,
+    businessDashboardStats: `${apiBaseUrl}/business/dashboard/stats`,
     register: `${apiBaseUrl}/users`,
     signIn: `${apiBaseUrl}/users/sign_in`,
     signOut: `${apiBaseUrl}/users/sign_out`,

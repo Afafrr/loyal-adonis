@@ -23,8 +23,8 @@ const ProfileController = () => import('#controllers/profile_controller')
 const SessionsController = () => import('#controllers/auth/sessions_controller')
 const TagScanController = () => import('#controllers/nfc/tag_scan_controller')
 const UsersController = () => import('#controllers/users_controller')
-const OwnerDashboardController = () => import('#controllers/owner/dashboard_controller')
-const OwnerDashboardStatsController = () => import('#controllers/owner/dashboard_stats_controller')
+const DashboardController = () => import('#controllers/dashboard/dashboard_controller')
+const DashboardStatsController = () => import('#controllers/dashboard/dashboard_stats_controller')
 
 router.get('/up', [HealthController, 'show']).as('health')
 
@@ -59,12 +59,12 @@ router
 
         router
           .group(() => {
-            router.get('dashboard', [OwnerDashboardController, 'show']).as('owner.dashboard')
+            router.get('dashboard', [DashboardController, 'show']).as('business.dashboard.show')
             router
-              .get('dashboard/stats', [OwnerDashboardStatsController, 'show'])
-              .as('owner.dashboard.stats')
+              .get('dashboard/stats', [DashboardStatsController, 'show'])
+              .as('business.dashboard.stats')
           })
-          .prefix('owner')
+          .prefix('business')
 
         router
           .post('dev/nfc_tags/inspect', [DevelopmentNfcTagsController, 'inspect'])

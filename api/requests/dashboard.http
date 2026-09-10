@@ -1,0 +1,165 @@
+###
+# Business dashboard API — VS Code REST Client
+#
+# Run `docker compose exec backend node ace db:seed` before using these requests.
+# Execute a role's sign-in request first, then its dashboard and stats requests.
+# REST Client retains the authenticated session cookie for localhost, so running
+# another sign-in request switches the active account.
+
+@baseUrl = http://localhost:3333/api/v1
+@password = password123
+
+###############################################################################
+# Admin — company selection because the demo contains several companies
+###############################################################################
+
+### Refresh CSRF token before admin sign-in
+# @name adminCsrf
+GET http://localhost:3333/up
+Accept: application/json
+
+### Sign in as admin
+# @name adminLogin
+POST {{baseUrl}}/users/sign_in
+Content-Type: application/json
+Accept: application/json
+X-CSRF-Token: {{adminCsrf.response.headers.X-CSRF-Token}}
+
+{
+  "user": {
+    "email": "admin@example.com",
+    "password": "{{password}}"
+  }
+}
+
+### Get dashboard as admin
+GET {{baseUrl}}/business/dashboard
+Accept: application/json
+
+### Get dashboard stats as admin (expected: 409 until a company is selected)
+GET {{baseUrl}}/business/dashboard/stats
+Accept: application/json
+
+###############################################################################
+# KP Owner — the whole Kawiarnia Północ company
+###############################################################################
+
+### Refresh CSRF token before owner sign-in
+# @name ownerCsrf
+GET http://localhost:3333/up
+Accept: application/json
+
+### Sign in as company owner
+# @name ownerLogin
+POST {{baseUrl}}/users/sign_in
+Content-Type: application/json
+Accept: application/json
+X-CSRF-Token: {{ownerCsrf.response.headers.X-CSRF-Token}}
+
+{
+  "user": {
+    "email": "owner@example.com",
+    "password": "{{password}}"
+  }
+}
+
+### Get dashboard as company owner (expected: one company with its venues)
+GET {{baseUrl}}/business/dashboard
+Accept: application/json
+
+### Get dashboard stats as company owner (expected: stats for Kawiarnia Północ)
+GET {{baseUrl}}/business/dashboard/stats
+Accept: application/json
+
+###############################################################################
+# KP Manager — Kawiarnia Północ, only the Śródmieście venue
+###############################################################################
+
+### Refresh CSRF token before manager sign-in
+# @name managerCsrf
+GET http://localhost:3333/up
+Accept: application/json
+
+### Sign in as venue manager
+# @name managerLogin
+POST {{baseUrl}}/users/sign_in
+Content-Type: application/json
+Accept: application/json
+X-CSRF-Token: {{managerCsrf.response.headers.X-CSRF-Token}}
+
+{
+  "user": {
+    "email": "manager@example.com",
+    "password": "{{password}}"
+  }
+}
+
+### Get dashboard as venue manager
+GET {{baseUrl}}/business/dashboard
+Accept: application/json
+
+### Get dashboard stats as venue manager
+GET {{baseUrl}}/business/dashboard/stats
+Accept: application/json
+
+###############################################################################
+# KP Staff — Kawiarnia Północ, only the Stare Miasto venue
+###############################################################################
+
+### Refresh CSRF token before staff sign-in
+# @name staffCsrf
+GET http://localhost:3333/up
+Accept: application/json
+
+### Sign in as venue staff
+# @name staffLogin
+POST {{baseUrl}}/users/sign_in
+Content-Type: application/json
+Accept: application/json
+X-CSRF-Token: {{staffCsrf.response.headers.X-CSRF-Token}}
+
+{
+  "user": {
+    "email": "staff@example.com",
+    "password": "{{password}}"
+  }
+}
+
+### Get dashboard as venue staff
+GET {{baseUrl}}/business/dashboard
+Accept: application/json
+
+### Get dashboard stats as venue staff
+GET {{baseUrl}}/business/dashboard/stats
+Accept: application/json
+
+###############################################################################
+# Customer — no business membership, both requests should return 403
+###############################################################################
+
+### Refresh CSRF token before customer sign-in
+# @name customerCsrf
+GET http://localhost:3333/up
+Accept: application/json
+
+### Sign in as customer
+# @name customerLogin
+POST {{baseUrl}}/users/sign_in
+Content-Type: application/json
+Accept: application/json
+X-CSRF-Token: {{customerCsrf.response.headers.X-CSRF-Token}}
+
+{
+  "user": {
+    "email": "member@example.com",
+    "password": "{{password}}"
+  }
+}
+
+### Get business dashboard as customer (expected: 403)
+GET {{baseUrl}}/business/dashboard
+Accept: application/json
+
+### Get business dashboard stats as customer (expected: 403)
+GET {{baseUrl}}/business/dashboard/stats
+Accept: application/json

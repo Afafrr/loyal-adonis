@@ -65,6 +65,10 @@ export const roleGrants = {
   venue_staff: [],
 } as const satisfies Record<MembershipRole, readonly MembershipRole[]>
 
+export function roleHasPermission(role: MembershipRole, permission: Permission) {
+  return (rolePermissions[role] as readonly Permission[]).includes(permission)
+}
+
 export function isVenueMembershipRole(role: MembershipRole): role is VenueMembershipRole {
   return role === 'venue_manager' || role === 'venue_staff'
 }

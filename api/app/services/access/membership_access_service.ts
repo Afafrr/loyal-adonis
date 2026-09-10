@@ -1,5 +1,10 @@
 import type { Permission } from '#authorization/permissions'
-import { roleGrants, rolePermissions, roleScopes, type MembershipRole } from '#authorization/roles'
+import {
+  roleGrants,
+  roleHasPermission,
+  roleScopes,
+  type MembershipRole,
+} from '#authorization/roles'
 import Membership from '#models/membership'
 import type User from '#models/user'
 
@@ -16,7 +21,7 @@ export default class MembershipAccessService {
 
     return memberships.some(
       (membership) =>
-        this.roleHasPermission(membership.role, permission) &&
+        roleHasPermission(membership.role, permission) &&
         this.membershipMatchesScope(membership, scope)
     )
   }
@@ -34,7 +39,7 @@ export default class MembershipAccessService {
 
     return memberships.some(
       (membership) =>
-        this.roleHasPermission(membership.role, permission) &&
+        roleHasPermission(membership.role, permission) &&
         this.membershipMatchesScope(membership, scope) &&
         targetRoles.every((targetRole) => this.roleCanGrant(membership.role, targetRole))
     )
@@ -42,10 +47,6 @@ export default class MembershipAccessService {
 
   private forUser(user: User) {
     return Membership.query().where('user_id', String(user.id))
-  }
-
-  private roleHasPermission(role: MembershipRole, permission: Permission) {
-    return (rolePermissions[role] as readonly Permission[]).includes(permission)
   }
 
   private roleCanGrant(actorRole: MembershipRole, targetRole: MembershipRole) {
