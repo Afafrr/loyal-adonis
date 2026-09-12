@@ -1,5 +1,9 @@
 import db from '@adonisjs/lucid/services/db'
-import { getDashboardAccess } from '#services/dashboard/get_dashboard_access_service'
+import {
+  getDashboardAccess,
+  getDashboardScope,
+  type DashboardFilters,
+} from '#services/dashboard/get_dashboard_access_service'
 
 type CountRow = { count: number | string }
 type StatResult = { value: number | null; error?: string }
@@ -12,8 +16,8 @@ function toStatResult(result: PromiseSettledResult<CountRow | undefined>): StatR
   return { value: Number(result.value?.count ?? 0) }
 }
 
-export async function getDashboardStats(userId: number) {
-  const access = await getDashboardAccess(userId)
+export async function getDashboardStats(userId: number, filters: DashboardFilters = {}) {
+  const access = await getDashboardAccess(userId, filters)
   if (!access) {
     return null
   }
@@ -36,53 +40,36 @@ export async function getDashboardStats(userId: number) {
   }
 
   const companyId = access.companyIds[0]
-  const hasCompanyWideAccess =
-    access.hasPlatformAccess || access.ownedCompanyIds.includes(companyId)
 
   const customerCountQuery = db
     .from('loyalty_accounts')
     .join('loyalty_programs', 'loyalty_programs.id', 'loyalty_accounts.loyalty_program_id')
+    .where('loyalty_programs.company_id', companyId)
     .countDistinct('loyalty_accounts.user_id as count')
 
   const earnedRewardCountQuery = db
     .from('earned_rewards')
     .join('loyalty_accounts', 'loyalty_accounts.id', 'earned_rewards.loyalty_account_id')
     .join('loyalty_programs', 'loyalty_programs.id', 'loyalty_accounts.loyalty_program_id')
+    .where('loyalty_programs.company_id', companyId)
     .countDistinct('earned_rewards.id as count')
 
-  if (!access.hasPlatformAccess) {
-    customerCountQuery.where((query) => {
-      if (access.ownedCompanyIds.length > 0) {
-        query.whereIn('loyalty_programs.company_id', access.ownedCompanyIds)
-      }
-      if (access.directlyAssignedVenueIds.length > 0) {
-        const method = access.ownedCompanyIds.length > 0 ? 'orWhereExists' : 'whereExists'
-        query[method]((stampQuery) => {
-          stampQuery
-            .select(db.raw('1'))
-            .from('stamps')
-            .join('nfc_tags', 'nfc_tags.id', 'stamps.nfc_tag_id')
-            .whereColumn('stamps.loyalty_account_id', 'loyalty_accounts.id')
-            .whereIn('nfc_tags.venue_id', access.directlyAssignedVenueIds)
-        })
-      }
+  if (access.dataScope === 'venue') {
+    customerCountQuery.whereExists((query) => {
+      query
+        .select(db.raw('1'))
+        .from('stamps')
+        .join('nfc_tags', 'nfc_tags.id', 'stamps.nfc_tag_id')
+        .whereColumn('stamps.loyalty_account_id', 'loyalty_accounts.id')
+        .whereIn('nfc_tags.venue_id', access.venueIds)
     })
-
-    earnedRewardCountQuery.where((query) => {
-      if (access.ownedCompanyIds.length > 0) {
-        query.whereIn('loyalty_programs.company_id', access.ownedCompanyIds)
-      }
-      if (access.directlyAssignedVenueIds.length > 0) {
-        const method = access.ownedCompanyIds.length > 0 ? 'orWhereExists' : 'whereExists'
-        query[method]((stampQuery) => {
-          stampQuery
-            .select(db.raw('1'))
-            .from('stamps')
-            .join('nfc_tags', 'nfc_tags.id', 'stamps.nfc_tag_id')
-            .whereColumn('stamps.earned_reward_id', 'earned_rewards.id')
-            .whereIn('nfc_tags.venue_id', access.directlyAssignedVenueIds)
-        })
-      }
+    earnedRewardCountQuery.whereExists((query) => {
+      query
+        .select(db.raw('1'))
+        .from('stamps')
+        .join('nfc_tags', 'nfc_tags.id', 'stamps.nfc_tag_id')
+        .whereColumn('stamps.earned_reward_id', 'earned_rewards.id')
+        .whereIn('nfc_tags.venue_id', access.venueIds)
     })
   }
 
@@ -112,9 +99,7 @@ export async function getDashboardStats(userId: number) {
 
   return {
     view: 'company' as const,
-    scope: hasCompanyWideAccess
-      ? { type: 'company' as const, companyId }
-      : { type: 'venue' as const, companyId, venueIds: access.venueIds },
+    scope: getDashboardScope(access, companyId),
     stats: {
       customerCount: customerCount.value,
       stampCount: stampCount.value,

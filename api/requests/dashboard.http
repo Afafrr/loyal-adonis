@@ -8,6 +8,9 @@
 
 @baseUrl = http://localhost:3333/api/v1
 @password = password123
+# Replace with IDs returned by the dashboard for the signed-in business user.
+@companyId = 1
+@venueId = 1
 
 ###############################################################################
 # Admin — company selection because the demo contains several companies
@@ -162,4 +165,27 @@ Accept: application/json
 
 ### Get business dashboard stats as customer (expected: 403)
 GET {{baseUrl}}/business/dashboard/stats
+Accept: application/json
+
+###############################################################################
+# Optional selection — replace IDs with values returned by your dashboard.
+# Both endpoints accept companyId, venueId, or both (the venue must belong to
+# that company). Unknown/inaccessible IDs and mismatched pairs return 403.
+# Invalid IDs return 422. Without filters the existing automatic selection applies.
+###############################################################################
+
+### Selected company dashboard
+GET {{baseUrl}}/business/dashboard?companyId={{companyId}}
+Accept: application/json
+
+### Selected company statistics
+GET {{baseUrl}}/business/dashboard/stats?companyId={{companyId}}
+Accept: application/json
+
+### Selected venue dashboard (company resolved by API)
+GET {{baseUrl}}/business/dashboard?venueId={{venueId}}
+Accept: application/json
+
+### Selected venue statistics
+GET {{baseUrl}}/business/dashboard/stats?venueId={{venueId}}
 Accept: application/json

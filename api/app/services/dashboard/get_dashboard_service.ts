@@ -3,20 +3,13 @@ import LoyaltyProgram from '#models/loyalty_program'
 import Venue from '#models/venue'
 import {
   type DashboardAccess,
+  type DashboardFilters,
+  getDashboardScope,
   type DashboardGrant,
   getDashboardAccess,
   grantsForCompany,
   grantsForVenue,
 } from '#services/dashboard/get_dashboard_access_service'
-
-function getDashboardScope(access: DashboardAccess, companyId: number) {
-  const hasCompanyWideAccess =
-    access.hasPlatformAccess || access.ownedCompanyIds.includes(companyId)
-
-  return hasCompanyWideAccess
-    ? { type: 'company' as const, companyId }
-    : { type: 'venue' as const, companyId, venueIds: access.venueIds }
-}
 
 function toDashboardVenue(venue: Venue, access: DashboardAccess, companyId: number) {
   const venueId = Number(venue.id)
@@ -60,8 +53,8 @@ function toDashboardProgram(
   }
 }
 
-export async function getDashboard(userId: number) {
-  const access = await getDashboardAccess(userId)
+export async function getDashboard(userId: number, filters: DashboardFilters = {}) {
+  const access = await getDashboardAccess(userId, filters)
   if (!access) {
     return null
   }
@@ -81,7 +74,7 @@ export async function getDashboard(userId: number) {
       })),
     }
   }
-  
+
   const company = companies[0]
   const companyId = Number(company.id)
   const [program, venues] = await Promise.all([
