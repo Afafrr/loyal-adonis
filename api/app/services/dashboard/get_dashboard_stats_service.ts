@@ -90,10 +90,10 @@ export async function getDashboardStats(userId: number, filters: DashboardFilter
       .first() as Promise<CountRow | undefined>,
   ])
 
-  const [customerCount, stampCount, earnedRewardCount, activeTagCount] = results.map(toStatResult)
+  const statResults = results.map(toStatResult)
+  const [customerCount, stampCount, earnedRewardCount, activeTagCount] = statResults
   const fields = ['customerCount', 'stampCount', 'earnedRewardCount', 'activeTagCount'] as const
-  const warnings = results.flatMap((result, index) => {
-    const stat = toStatResult(result)
+  const warnings = statResults.flatMap((stat, index) => {
     return stat.error ? [{ field: fields[index], message: stat.error }] : []
   })
 

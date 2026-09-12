@@ -14,6 +14,7 @@ This file supplements the repository-level `AGENTS.md` for work in `web/`.
 * Authentication is the AdonisJS `_loyal_session` cookie. Do not add Auth.js/NextAuth or a second session system.
 * Browser API requests must use `credentials: 'include'`. Use `app/csrf.ts` for CSRF-aware mutations.
 * Put API URLs in `app/routes.ts`; do not scatter hard-coded API origins.
+* Keep shared UI components, icons, and image assets in `src/components/ui/`.
 * Pages that read `headers()` or cookies are dynamic by design. Do not force-cache personalized output.
 * Do not expose secrets, database credentials, or NFC keys through `NEXT_PUBLIC_*` environment variables.
 * Run `npm run lint` after frontend changes, and run `npm run build` when the change affects rendering, routing, or configuration.

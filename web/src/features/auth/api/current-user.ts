@@ -2,10 +2,20 @@ import { cache } from 'react';
 import { serverRoutes } from '@/lib/api/routes';
 import { authenticatedFetch } from '@/lib/api/server-fetch';
 
+export type MembershipRole = 'admin' | 'company_owner' | 'venue_manager' | 'venue_staff';
+
+export interface UserMembership {
+  role: MembershipRole;
+  companyId: number | null;
+  venueId: number | null;
+  permissions: string[];
+}
+
 export interface CurrentUser {
   id: number;
   email: string;
   firstName: string | null;
+  memberships: UserMembership[];
 }
 
 export const getCurrentUser = cache(async (): Promise<CurrentUser> => {
