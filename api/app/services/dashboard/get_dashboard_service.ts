@@ -59,13 +59,13 @@ export async function getDashboard(userId: number, filters: DashboardFilters = {
     return null
   }
 
-  const companies = await Company.query().whereIn('id', access.companyIds).orderBy('name', 'asc')
-
-  if (companies.length === 0) {
+  if (access.companyIds.length === 0) {
     return { view: 'empty' as const, companies: [] }
   }
 
-  if (companies.length > 1) {
+  if (access.companyIds.length > 1) {
+    const companies = await Company.query().whereIn('id', access.companyIds).orderBy('name', 'asc')
+
     return {
       view: 'company_selection' as const,
       companies: companies.map((company) => ({
@@ -75,12 +75,16 @@ export async function getDashboard(userId: number, filters: DashboardFilters = {
     }
   }
 
-  const company = companies[0]
-  const companyId = Number(company.id)
-  const [program, venues] = await Promise.all([
+  const companyId = access.companyIds[0]
+  const [company, program, venues] = await Promise.all([
+    Company.query().where('id', companyId).first(),
     LoyaltyProgram.query().where('company_id', companyId).first(),
     Venue.query().whereIn('id', access.venueIds).orderBy('name', 'asc'),
   ])
+
+  if (!company) {
+    return { view: 'empty' as const, companies: [] }
+  }
 
   const companyGrants = grantsForCompany(access, companyId)
   const dashboardVenues = venues.map((venue) => toDashboardVenue(venue, access, companyId))
