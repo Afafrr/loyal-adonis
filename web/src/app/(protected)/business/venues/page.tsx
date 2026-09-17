@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { PageTitle } from '@/components/ui/page-title';
 import { routes } from '@/lib/api/routes';
 import { VenueSearch } from './_components/venue-search';
-import { dashboardFilters, getDashboard } from '../dashboard/_lib/owner-dashboard';
+import { dashboardFilters, getDashboard } from '../dashboard/_lib/dashboard';
 
 export default async function BusinessVenuesPage({ searchParams }: PageProps<'/business/venues'>) {
   const filters = dashboardFilters(await searchParams);

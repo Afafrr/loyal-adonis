@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { MapPinIcon } from '@/components/ui/icons';
-import type { BusinessVenue } from '../../dashboard/_lib/owner-dashboard';
+import type { BusinessVenue } from '../../dashboard/_lib/dashboard';
 
 export function VenueSearch({ venues }: { venues: BusinessVenue[] }) {
   const [query, setQuery] = useState('');
