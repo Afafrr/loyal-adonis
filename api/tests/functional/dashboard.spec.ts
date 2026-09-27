@@ -111,7 +111,7 @@ test.group('Business dashboard', () => {
       .header('Cookie', sessionCookie(login))
 
     statsResponse.assertStatus(200)
-    assert.deepEqual(statsResponse.body(), {
+    statsResponse.assertBodyContains({
       view: 'company',
       scope: { type: 'company', companyId: Number(company.id) },
       stats: {
@@ -418,6 +418,15 @@ for (const role of ['admin', 'company_owner', 'venue_manager', 'venue_staff'] as
         },
         warnings: [],
       })
+      assert.equal(
+        stats
+          .body()
+          .series.stamps!.reduce(
+            (total: number, point: { count: number }) => total + point.count,
+            0
+          ),
+        expectedVenues.length
+      )
       if ('venueId' in filters) {
         assert.deepEqual(stats.body().scope, {
           type: 'venue',
@@ -520,6 +529,12 @@ for (const role of ['company_owner', 'venue_manager', 'venue_staff'] as const) {
       },
       warnings: [],
     })
+    assert.equal(
+      stats
+        .body()
+        .series.stamps!.reduce((total: number, point: { count: number }) => total + point.count, 0),
+      expectedCount
+    )
 
     const forbiddenSelections = [
       { companyId: Number(foreignCompany.id) },

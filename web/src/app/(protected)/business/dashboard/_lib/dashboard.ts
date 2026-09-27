@@ -61,6 +61,16 @@ export interface DashboardStats {
     field: string;
     message: string;
   }>;
+  period: {
+    range: DashboardStatsRange;
+    from: string;
+    to: string;
+    timezone: 'UTC';
+    interval: 'day';
+  };
+  series: {
+    stamps: Array<{ date: string; count: number }> | null;
+  };
 }
 
 export const getDashboard = cache(async (filters: DashboardFilters = {}): Promise<Dashboard> => {
@@ -68,7 +78,7 @@ export const getDashboard = cache(async (filters: DashboardFilters = {}): Promis
   return response.json() as Promise<Dashboard>;
 });
 
-export const getDashboardStats = cache(async (filters: DashboardFilters): Promise<DashboardStats> => {
+export const getDashboardStats = cache(async (filters: DashboardStatsFilters): Promise<DashboardStats> => {
   const response = await authenticatedFetch(serverRoutes.api.businessDashboardStats(filters));
   return response.json() as Promise<DashboardStats>;
 });
@@ -76,6 +86,12 @@ export const getDashboardStats = cache(async (filters: DashboardFilters): Promis
 export interface DashboardFilters {
   companyId?: number;
   venueId?: number;
+}
+
+export type DashboardStatsRange = '7d' | '30d' | '90d';
+
+export interface DashboardStatsFilters extends DashboardFilters {
+  range?: DashboardStatsRange;
 }
 
 export function dashboardFilters(searchParams: {
@@ -88,10 +104,27 @@ export function dashboardFilters(searchParams: {
   };
 }
 
+export function dashboardStatsFilters(searchParams: {
+  companyId?: string | string[];
+  venueId?: string | string[];
+  range?: string | string[];
+}): DashboardStatsFilters {
+  const range = firstValue(searchParams.range);
+
+  return {
+    ...dashboardFilters(searchParams),
+    ...(range === '7d' || range === '30d' || range === '90d' ? { range } : {}),
+  };
+}
+
 function positiveInteger(value: string | string[] | undefined) {
-  const input = Array.isArray(value) ? value[0] : value;
+  const input = firstValue(value);
   if (!input || !/^\d+$/.test(input)) return undefined;
 
   const parsed = Number(input);
   return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : undefined;
+}
+
+function firstValue(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
 }

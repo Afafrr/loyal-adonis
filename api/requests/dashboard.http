@@ -189,3 +189,26 @@ Accept: application/json
 ### Selected venue statistics
 GET {{baseUrl}}/business/dashboard/stats?venueId={{venueId}}
 Accept: application/json
+
+###############################################################################
+# Stamp activity — range=7d|30d|90d, default 30d; invalid ranges return 422.
+# range affects only series.stamps; stats remains all-time.
+# period.from and period.to are inclusive UTC calendar dates (today included).
+# period.timezone is UTC; period.interval is day. Today's bucket is incomplete.
+# series.stamps contains exactly 7/30/90 ascending { date, count } points,
+# including zero days. All accepted stamps count, including inactive tags.
+# A failed series is null with a series.stamps warning, never a zero-filled success.
+# Existing authentication, company/venue selection and access restrictions apply.
+###############################################################################
+
+### Company stamp activity for the last 30 days
+GET {{baseUrl}}/business/dashboard/stats?companyId={{companyId}}&range=30d
+Accept: application/json
+
+### Venue stamp activity for the last 7 days
+GET {{baseUrl}}/business/dashboard/stats?venueId={{venueId}}&range=7d
+Accept: application/json
+
+### Company stamp activity for the last 90 days
+GET {{baseUrl}}/business/dashboard/stats?companyId={{companyId}}&range=90d
+Accept: application/json

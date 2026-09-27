@@ -1,4 +1,10 @@
 import db from '@adonisjs/lucid/services/db'
+import type { DashboardStatsRange } from '#validators/dashboard'
+import {
+  fillStampSeries,
+  getDashboardStampSeries,
+  getDashboardStatsPeriod,
+} from '#services/dashboard/get_dashboard_stamp_series_service'
 import {
   getDashboardAccess,
   getDashboardScope,
@@ -16,11 +22,15 @@ function toStatResult(result: PromiseSettledResult<CountRow | undefined>): StatR
   return { value: Number(result.value?.count ?? 0) }
 }
 
-export async function getDashboardStats(userId: number, filters: DashboardFilters = {}) {
+type DashboardStatsFilters = DashboardFilters & { range?: DashboardStatsRange }
+
+export async function getDashboardStats(userId: number, filters: DashboardStatsFilters = {}) {
   const access = await getDashboardAccess(userId, filters)
   if (!access) {
     return null
   }
+
+  const period = getDashboardStatsPeriod(filters.range)
 
   if (access.companyIds.length === 0) {
     return {
@@ -31,6 +41,8 @@ export async function getDashboardStats(userId: number, filters: DashboardFilter
         earnedRewardCount: 0,
         activeTagCount: 0,
       },
+      period,
+      series: { stamps: fillStampSeries(period, []) },
       warnings: [],
     }
   }
@@ -73,29 +85,34 @@ export async function getDashboardStats(userId: number, filters: DashboardFilter
     })
   }
 
-  const results = await Promise.allSettled([
-    customerCountQuery.first() as Promise<CountRow | undefined>,
-    db
-      .from('stamps')
-      .join('nfc_tags', 'nfc_tags.id', 'stamps.nfc_tag_id')
-      .whereIn('nfc_tags.venue_id', access.venueIds)
-      .count('stamps.id as count')
-      .first() as Promise<CountRow | undefined>,
-    earnedRewardCountQuery.first() as Promise<CountRow | undefined>,
-    db
-      .from('nfc_tags')
-      .whereIn('venue_id', access.venueIds)
-      .where('active', true)
-      .count('id as count')
-      .first() as Promise<CountRow | undefined>,
-  ])
+  const [customerResult, stampResult, rewardResult, tagResult, seriesResult] =
+    await Promise.allSettled([
+      customerCountQuery.first() as Promise<CountRow | undefined>,
+      db
+        .from('stamps')
+        .join('nfc_tags', 'nfc_tags.id', 'stamps.nfc_tag_id')
+        .whereIn('nfc_tags.venue_id', access.venueIds)
+        .count('stamps.id as count')
+        .first() as Promise<CountRow | undefined>,
+      earnedRewardCountQuery.first() as Promise<CountRow | undefined>,
+      db
+        .from('nfc_tags')
+        .whereIn('venue_id', access.venueIds)
+        .where('active', true)
+        .count('id as count')
+        .first() as Promise<CountRow | undefined>,
+      getDashboardStampSeries(access.venueIds, period),
+    ])
 
-  const statResults = results.map(toStatResult)
+  const statResults = [customerResult, stampResult, rewardResult, tagResult].map(toStatResult)
   const [customerCount, stampCount, earnedRewardCount, activeTagCount] = statResults
   const fields = ['customerCount', 'stampCount', 'earnedRewardCount', 'activeTagCount'] as const
-  const warnings = statResults.flatMap((stat, index) => {
+  const warnings: Array<{ field: string; message: string }> = statResults.flatMap((stat, index) => {
     return stat.error ? [{ field: fields[index], message: stat.error }] : []
   })
+  if (seriesResult.status === 'rejected') {
+    warnings.push({ field: 'series.stamps', message: 'Unable to load stamp activity.' })
+  }
 
   return {
     view: 'company' as const,
@@ -106,6 +123,8 @@ export async function getDashboardStats(userId: number, filters: DashboardFilter
       earnedRewardCount: earnedRewardCount.value,
       activeTagCount: activeTagCount.value,
     },
+    period,
+    series: { stamps: seriesResult.status === 'fulfilled' ? seriesResult.value : null },
     warnings,
   }
 }

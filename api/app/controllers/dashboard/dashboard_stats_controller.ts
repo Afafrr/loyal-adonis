@@ -1,4 +1,4 @@
-import { dashboardQueryValidator } from '#validators/dashboard'
+import { dashboardStatsQueryValidator } from '#validators/dashboard'
 import { getDashboardStats } from '#services/dashboard/get_dashboard_stats_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -8,7 +8,7 @@ import type { HttpContext } from '@adonisjs/core/http'
  */
 export default class DashboardStatsController {
   async show({ auth, request, response }: HttpContext) {
-    const filters = await dashboardQueryValidator.validate(request.qs())
+    const filters = await dashboardStatsQueryValidator.validate(request.qs())
     const dashboard = await getDashboardStats(Number(auth.getUserOrFail().id), filters)
 
     if (!dashboard) {

@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { routes } from '@/lib/api/routes';
 import { DashboardOverview } from './_components/dashboard-overview';
 import { CompanySelection, EmptyDashboard, VenueSelection } from './_components/dashboard-selection';
-import { dashboardFilters, getDashboard, getDashboardStats } from './_lib/dashboard';
+import { dashboardFilters, dashboardStatsFilters, getDashboard, getDashboardStats } from './_lib/dashboard';
 
 export const metadata: Metadata = {
   title: 'Business dashboard | Loyal Nest',
@@ -11,7 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default async function BusinessDashboardPage({ searchParams }: PageProps<'/business/dashboard'>) {
-  const filters = dashboardFilters(await searchParams);
+  const query = await searchParams;
+  const filters = dashboardFilters(query);
   const dashboard = await getDashboard(filters);
 
   if (dashboard.view === 'company_selection') {
@@ -30,7 +31,7 @@ export default async function BusinessDashboardPage({ searchParams }: PageProps<
     return <VenueSelection company={dashboard.company} venues={dashboard.venues} />;
   }
 
-  const statsResult = await getDashboardStats(filters);
+  const statsResult = await getDashboardStats(dashboardStatsFilters(query));
   const selectedVenue = filters.venueId
     ? dashboard.venues.find((venue) => venue.id === filters.venueId)
     : undefined;
