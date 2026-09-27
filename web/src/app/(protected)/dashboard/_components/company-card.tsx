@@ -41,7 +41,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
             </span>
           </ViewTransition>
           <div className='min-w-0'>
-            <h2 className='truncate text-base font-black md:text-xl' id={titleId}>
+            <h2 className='wrap-break-word line-clamp-2 text-base font-black md:text-xl' id={titleId}>
               {account.company.name}
             </h2>
             {venueCategory && (
@@ -59,7 +59,7 @@ export function CompanyCard({ account }: { account: LoyaltyAccount }) {
       <div className='mt-5 flex items-center gap-4 rounded-3xl bg-panel-muted px-6 py-3'>
         <GiftIcon className={`size-5 shrink-0`} />
         <div className='min-w-0'>
-          <p className='truncate text-[15px] font-semibold tracking-[-0.02em] text-foreground sm:text-base lg:text-[14px]'>
+          <p className='wrap-break-word line-clamp-2 text-[15px] font-semibold tracking-[-0.02em] text-foreground sm:text-base lg:text-[14px]'>
             {account.program.rewardTitle}
           </p>
         </div>

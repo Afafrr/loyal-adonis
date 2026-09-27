@@ -26,7 +26,7 @@ export function CompanyOverview({ account }: { account: LoyaltyAccountDetail }) 
           <p className='text-[10px] font-extrabold uppercase tracking-[0.14em] text-foreground-label sm:text-xs'>
             {category ? formatCategory(category) : 'Local business'}
           </p>
-          <h1 className='mt-1 text-3xl font-black tracking-[-0.045em] sm:text-4xl'>{account.company.name}</h1>
+          <h1 className='mt-1 text-3xl font-black tracking-[-0.045em] wrap-break-word sm:text-4xl'>{account.company.name}</h1>
         </div>
 
         <div className='col-span-2 sm:col-start-2'>
