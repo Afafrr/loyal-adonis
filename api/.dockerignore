@@ -1,8 +1,11 @@
-.env
-.env.*
-!.env.example
+# Secrets and local environment files
+.env*
+
+# Local tooling and generated output
 .git
-build
 node_modules
-npm-debug.log
+build
 tmp
+coverage
+npm-debug.log*
+.DS_Store

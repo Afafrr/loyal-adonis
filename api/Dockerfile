@@ -19,7 +19,7 @@ RUN chmod +x /usr/local/bin/docker-entrypoint && npm ci --omit=dev
 
 USER node
 
-EXPOSE 3000
+EXPOSE 3333
 
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["node", "bin/server.js"]

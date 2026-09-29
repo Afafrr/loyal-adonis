@@ -1,4 +1,5 @@
 .env
+.env.prod
 
 api/build/
 api/node_modules/

@@ -1,4 +1,5 @@
-const browserApiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN ?? 'http://localhost:3333';
+const browserApiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN ??
+  (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3333');
 const serverApiOrigin = process.env.API_ORIGIN ?? browserApiOrigin;
 
 type BusinessDashboardFilters = { companyId?: number; venueId?: number };

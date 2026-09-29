@@ -1,0 +1,15 @@
+.git
+
+# Local dependencies and build output
+node_modules
+.next
+out
+coverage
+
+# Secrets and local environment files
+.env*
+
+# Local tooling artifacts
+npm-debug.log*
+*.tsbuildinfo
+.DS_Store

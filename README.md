@@ -46,13 +46,15 @@ such as API request and route handling, belongs in `lib/`.
 
 ## Running with Docker
 
+For a first live deployment on one VPS, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 1. Copy `.env.example` to `.env` and set secure `APP_KEY` and `NFC_MASTER_KEY`
    values.
 2. Run `docker compose up --build`.
 
 Services:
 
-- API: `http://localhost:3000`
+- API: `http://localhost:3333`
 - PostgreSQL: `localhost:5433`
 - NFC service: `http://localhost:5000`
 
