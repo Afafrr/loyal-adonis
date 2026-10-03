@@ -34,6 +34,7 @@ services:
       SESSION_DRIVER: cookie
       DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
       FRONTEND_URL: https://${DOMAIN:?DOMAIN is required}
+      NFC_SERVICE_URL: http://nfc
     ports:
       - '127.0.0.1:3333:3333'
     healthcheck:
@@ -45,6 +46,33 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      nfc:
+        condition: service_healthy
+
+  nfc:
+    image: icedevml/sdm-backend@sha256:1d7d881e17a81d60ba98962cc8b33d45a6c23edbfd5f59c2a9f73893b7dec91e
+    restart: unless-stopped
+    environment:
+      MASTER_KEY: ${NFC_MASTER_KEY:?NFC_MASTER_KEY is required}
+      DERIVE_MODE: legacy
+      UWSGI_DISABLE_LOGGING: '1'
+    volumes:
+      - ./docker/nfc/nginx.conf:/app/nginx.conf:ro
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import os, urllib.request; key = bytes.fromhex(os.environ['MASTER_KEY']); assert len(key) == 16 and any(key), 'Expected a nonzero 16-byte NFC key'; urllib.request.urlopen('http://127.0.0.1/', timeout=3).close()"
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+    logging:
+      driver: local
+      options:
+        max-size: '10m'
+        max-file: '3'
 
   db:
     image: postgres:17-alpine
@@ -60,6 +88,18 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  adminer:
+    image: adminer:6.1.1
+    profiles: ['tools']
+    restart: 'no'
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    ports:
+      - '127.0.0.1:8080:8080'
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:
